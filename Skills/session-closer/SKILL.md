@@ -7,8 +7,8 @@ description: >-
   pick up where we left off' in a new thread and there's no log entry for the
   previous session.
 type: skill
-updated: '2026-06-22'
-version: '4.0'
+updated: '2026-06-29'
+version: '4.2'
 edit_log:
   - DW-S158 2026-06-08
   - DW-S159 2026-06-08
@@ -20,6 +20,10 @@ edit_log:
   - "DW-S196 2026-06-22 - v4.0 ceremony diet: D88 thresholds table, D98
     session-lite tier, D93 protocol-version drop, orphan 3.7 + Step 2.5 edit_log
     fixes, S179 stub guard, renumber"
+  - "DW-S198 2026-06-23 - v4.1: defer shell embed to close + strip claim_id
+    (verify-after-claim)"
+  - "DW-S211 2026-06-29 - v4.2: Active Threads ledger maintenance (D105);
+    in-place + entry pointer, legacy in-entry roster kept as fallback"
 ---
 
 # Session Closer Skill
@@ -110,7 +114,18 @@ Before presenting the draft, verify all required frontmatter fields are present.
 
 `seed_version` is read from VERSION.md during orientation -- never hardcode it from template examples. The former `datawizard_protocol_version` pin is retired per D93; do not add it. If any field is missing from the draft, add it before proceeding. Do not present a draft with missing required fields. This is especially important for `operator`, which powers team dashboards and authorship queries but is easy to omit when pattern-matching from older session logs that predate this requirement. `seed_version` makes team Seed currency visible -- when scanning session logs, a stale Seed version is immediately apparent.
 
-### Step 2.6: Active quest threads
+### Step 2.6: Active Threads ledger
+
+If the project maintains an **Active Threads ledger** -- a vantage-independent roster of open parallel arcs kept as its own file (DataWizard: `{home}/_Sections - {Project}/Active Threads - {Project}.md`, embedded in the `0.5` action-items shell) -- maintain it **in place**. Do not regenerate it from scratch, and do not write the roster into the session-log entry. Re-read the ledger, then for each arc:
+
+- **Touched this session:** patch its block -- update `status:`, set `last:` to this session, refresh `next:`, append this session to `history:`.
+- **Untouched:** leave the block unchanged.
+- **Resolved this session:** cut the block and write a one-liner under the current `#### YYYY-MM` heading in the Resolved archive (`Active Threads Resolved - {Project}.md`), creating the month heading if new. Format: `- T# <name> - resolved S### -> <where it landed>`.
+- **New arc this session:** add a `### T{N}` block (next free number) with all fields; set `home:` to its durable backstop (an empty `home:` flags an arc with no task-level home -- a coverage gap).
+
+Patch in place and verify each change landed (Working Rule 5). The ledger lists **all** open arcs regardless of this session's focus -- do **not** deduplicate it against "What's next" (that vantage-dependence is the carry-forward flicker the ledger fixes; D105). In the session-log entry, the roster is replaced by a one-line pointer (see Output Format).
+
+**Legacy in-entry roster (projects without a ledger).** If the project has no Active Threads ledger, fall back to the in-entry roster maintained inside the session-log entry, described below.
 
 Read the previous session's "Active quest threads" section (if it exists). For each thread:
 - If work was done on it this session, update its status and remaining work
@@ -133,8 +148,8 @@ The quest threads section prevents long-running workstreams from falling off the
 Present the draft. The user may want to edit, add context, or adjust priorities. Once approved:
 1. Re-read the session log shell to get the current section number and embed list
 2. Write the new section file with the final title to the session log folder. Solo-operator: `99.0 Session 113 - Brief Title.md` (use section number as prefix). Multi-operator: `WV_2026-06-10_AA_01 - Brief Title.md` (session ID as prefix). See Session Identifier Format for full details.
-3. **If a session stub exists from orientation** (a section file with `status: in-progress` and "in progress" in the filename): **first confirm the stub is yours** -- match its focus line and `operator` to this session. Never delete or overwrite a parallel instance's in-progress stub (the S178/S179 collision); if the content doesn't match your session, leave it and claim the next available identifier. Once confirmed yours, delete it using `delete_note`. The stub and the final entry have different filenames, so writing the final entry does NOT remove the stub -- you must explicitly delete it.
-4. Patch the shell embed to reference the final filename. If the shell already embeds the stub filename, replace it with the final filename. If no stub existed, add the embed as usual.
+3. **If a session stub exists from orientation** (a section file with `status: in-progress` and "in progress" in the filename): **first confirm the stub is yours** -- match its `claim_id` to the one you stamped at orientation (or, if absent, its focus line and `operator`). Never delete or overwrite a parallel instance's in-progress stub (the S178/S179 collision); if it isn't yours, leave it and claim the next available identifier. Once confirmed yours, delete it using `delete_note`. The stub and the final entry have different filenames, so writing the final entry does NOT remove the stub -- you must explicitly delete it. The final entry does not carry `claim_id` -- it is a claim-time field only (see [[YAML Schema]] Session Log Fields).
+4. Add the session embed to the shell. Under verify-after-claim (PI Orientation Step 3) the stub is NOT embedded at claim, so you are normally adding the embed fresh at close -- patch it into the shell in reverse-chronological position. (Legacy fallback: if an older workflow already left a stub embed in the shell, replace it with the final filename rather than adding a duplicate.)
 
 > **Parallel instance check:** Before writing, re-list the session log
 > section folder and verify the target identifier doesn't already exist
@@ -142,8 +157,9 @@ Present the draft. The user may want to edit, add context, or adjust priorities.
 > Multi-operator: check the session ID (e.g., `WV_2026-06-10_AA_01`).
 > If another instance has claimed it since orientation, increment to
 > the next available number. Multiple instances may work in parallel.
-> Compare stub *content*, not just filenames -- match the focus line
-> to your session before reusing or replacing any in-progress stub.
+> Compare stub *content*, not just filenames -- match the `claim_id`
+> (or focus line) to your session before reusing or replacing any
+> in-progress stub.
 
 > **Flat-file fallback:** If the project's session log hasn't been migrated to shell + sections yet, skip the section file and embed steps. Instead, patch the entry directly into the flat session log file -- insert below the header, above existing entries.
 
@@ -414,19 +430,12 @@ Adapt detail to the work type:
 - Design: what prior decisions constrain the space, what the deliverable is
 - Debugging: what's broken, what was tried, where the evidence is
 
-### Active quest threads
+### Active threads
 
-Threads of ongoing work across recent sessions. Included so future
-instances don't lose sight of parallel workstreams. See Step 2.6 for
-how to maintain this section.
-
-**1. Thread name** (session range, e.g. S152-S157 or WV_2026-06-01_AA_01 through WV_2026-06-10_JC_02)
-Remaining work summary. Key doc: `path/to/spec.md`.
-
-**2. Thread name** (session range)
-Remaining work summary. Key doc: `path/to/spec.md`.
-
-[Repeat for each active thread. Remove when completed.]
+Open parallel arcs live in the Active Threads ledger: [[Active Threads - {Project}]]
+(maintained in place at close -- not duplicated in the entry). For projects without
+a ledger, keep the roster inline here instead -- see Step 2.6 for the legacy format
+(bold numbered name, session range, 2-3 sentences of remaining work, key doc paths).
 ```
 
 ## Structured Format for Complex Sessions

@@ -2,12 +2,13 @@
 title: Anti-Patterns
 type: protocol
 created: '2026-06-13'
-updated: '2026-06-13'
+updated: '2026-06-28'
 operator: Andrew
 priority: high
 maturity: working
 edit_log:
   - DW-S182 2026-06-13
+  - "DW-S206 2026-06-28: codified the bang-prefix filename retirement"
 ---
 
 Explicit anti-patterns. If you catch yourself doing any of these, stop.
@@ -31,5 +32,7 @@ Explicit anti-patterns. If you catch yourself doing any of these, stop.
 **Don't re-run expensive operations without checking.** Before running LLM classification or enrichment on a file, check its YAML first. If it already has a valid `type:` or `harvest_status:`, it may not need reprocessing.
 
 **Don't rewrite massive files when you only need to edit a section.** If a file is too large for surgical edits via patch, check with the user about chunking it into shell + sections first. Full-file rewrites of large documents risk accidentally dropping content.
+
+**Don't use the retired `!` filename prefix.** Prefixing note filenames with `!` to force sort order was retired (S116 / PI v4.0). Use the `0.x` infrastructure slots or a plain descriptive title - see the [[Conventions Registry]] file-naming rule.
 
 *Extracted from the DataWizard Universal Protocol (section 12.0) in the S182 demolition (D94). Structural conventions live in the [[Conventions Registry]].*

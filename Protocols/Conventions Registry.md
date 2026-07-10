@@ -2,7 +2,7 @@
 title: Conventions Registry
 type: protocol
 created: '2026-06-13'
-updated: '2026-06-22'
+updated: '2026-07-09'
 operator: Andrew
 priority: high
 maturity: working
@@ -13,6 +13,9 @@ edit_log:
   - DW-S183 2026-06-14
   - "DW-S191 2026-06-21: move_note wikilink claim corrected"
   - "DW-S197 2026-06-22: added action-items priority tiers (Urgent)"
+  - "DW-S206 2026-06-28: codified the bang-prefix filename retirement"
+  - "DW-S218 2026-07-09: added the Tracking Model section (D108 - one canonical
+    surface per fact class)"
 ---
 
 The single home for DataWizard's structural and formatting conventions. When a convention is stated here, every other document points to this entry instead of restating it.
@@ -89,6 +92,7 @@ The `_` prefix sorts active meta-folders to the top and is shell-safe (no escapi
 - **Domain folders** take the project name as a prefix when the project has a dominant name (`Weave Events/`, `Weave Resources/`), clustering them in search and Finder. (D74)
 - **Project guidelines** is always `0.0 Project Guidelines - ProjectName.md`.
 - **START HERE files are retired** (D62). Human onboarding lives in 0.0; Claude setup lives in a Seed guide. Do not create new ones.
+- **The `!` filename prefix is retired** (S116 / PI v4.0). Do not prefix note filenames with `!` to force sort order; use the `0.x` infrastructure slots or a plain descriptive title. This does not affect the `_!nbox/` intake folder or the optional inline `!!` / `!` urgency markers in 0.5 - those are a folder name and in-doc markers, not note-name sort prefixes.
 - Use descriptive titles, not codes. Hyphens for multi-word YAML values (`video-transcript`). ISO dates in filenames (`YYYY-MM-DD`).
 
 For the full cross-platform character map (forbidden characters, replacements, sanitization), see the **Filename Safety guide** - that is the one home for filename character rules. This entry covers structure and numbering only.
@@ -142,7 +146,7 @@ For the full cross-platform character map (forbidden characters, replacements, s
 
 ## Citation format
 
-**Rule:** cite with a trailing parenthetical wikilink whose anchor deep-links to a `##` heading in the source:
+**Rule:** cite with a trailing parenthetical wikilink whose anchor deep-links to a `##` heading (or a `^block-id`) in the source:
 
 ```
 ([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]])
@@ -164,7 +168,14 @@ Rules: citations go at the **end** of a statement; one per claim is usually enou
 
 **Source tags (optional):** for documents that cite many sources repeatedly, register short uppercase tags (`[MAR3]`, `[SP]`) in the project's source-reference doc and use them inline. Tags supplement wikilink citations, they don't replace them. Adopt only when full wikilinks become unwieldy.
 
-**Block-ID variant (canonization candidate):** for corpus and RAG contexts that need a stable per-block anchor, an Obsidian block ID (`^block-id`) can serve as the citation anchor instead of a `##` heading, surviving re-segmentation. Not yet a vault-wide standard - under test and flagged for promotion.
+**Block-ID anchors (standard).** Section (`##`) anchors are the default granularity. When a citation must point at a *specific paragraph or transcript turn* - the breadcrumb from a synthesis or harvest claim back to its exact source - that block gets an Obsidian block ID and the citation targets it:
+
+```
+([[SourceFileName#^b7|§]])        document block (glyph display)
+([[SourceFileName#^t15|@22:15]])  transcript turn (timestamp display)
+```
+
+Conventions: `^bN` for document blocks, `^tN` for transcript turns. The visible label is a `§` glyph for blocks and the `@mm:ss` timestamp for transcript turns; multiple blocks in one bullet repeat the glyph, each its own link (`(§, §)`). Blocks are stamped **on cite, not in bulk** - during enrichment or harvest, only where something actually references them - so sources accumulate IDs only where they have been cited, and header-less prose (bold dividers, no `##`) goes straight to block-level. Assign the next unused integer per file; never renumber, and never re-stamp a block that already has an ID (re-stamping breaks live citations - S173). IDs are sparse, so `^b9` is a stable handle, not "the 9th block." Block IDs are hidden in Obsidian reading mode and are the human breadcrumb layer; where a RAG index exists a block ID aligns with its chunk coordinate, but the index computes full coordinates independently. Whole-section synthesis uses the section-anchor form. Full spec: [[Citation Mechanism - Block-Level Provenance]].
 
 **Example:** `regenerative finance shifts the unit of account ([[2026-03-04 Strategy Call#Unit of Account|2026-03-04 — Unit of Account]] — Jordan).`
 
@@ -252,6 +263,34 @@ Meaningful design/architecture choice     -> decision log + session log (brief n
 **Rule:** the 0.5 Action Items file orders work by urgency tier, top to bottom: **Urgent** (drop everything - address next session at the latest; use sparingly) -> **This Session / Next Session** (the hot list) -> **Soon** (~2-5 sessions out; sub-tiered P1 / P2 / P3, P1 highest) -> **Blocked / Waiting** (note the blocker) -> **Done** (dated, with brief resolution; archive when long). An item's tier is its section; the inline `!!` / `!` markers are an optional secondary signal, not a replacement. **Urgent** is distinct from the Seed Assessment Action Plan's P0-P6 phase labels - those are project-overhaul phases, a different axis from backlog urgency.
 
 **Example:** the S197 session-claiming-collision fix sits under Urgent; a 5-sessions-out idea sits under Soon / P3.
+
+---
+
+## Tracking Model
+
+**Rule:** work tracking follows the same discipline as knowledge tracking: **one canonical surface per fact class; everything else points, nothing restates.** A fact written on two surfaces will drift (D105, D108). The registry of fact classes:
+
+| Fact class | Canonical surface | Everything else |
+|---|---|---|
+| An arc exists / where its truth lives | Active Threads ledger row | session logs point |
+| Step state within a driver-doc arc | the driver doc's **State Board** | ledger `next:` points; backlog item slims to a pointer |
+| Tactical next 1-3 sessions | 0.5 Backlog | - |
+| Recommended entry point for the next session | the session log's "What's next" (one-session TTL) | everything else in "What's next" points, never restates |
+| Carried side/native task lists | a durable queue doc (e.g. a Native Run Queue) | "What's next" points |
+| Stream position (perpetual threads) | the stream-state note (D107) | db mirror optional, derived |
+
+Sub-rules:
+
+- **State Boards:** one table per driver doc - step / status / remaining / runtime / last touched. Status is an enum (`not started | in progress | blocked | done`); commentary lives outside the Status cell. Maintained **on advance** (patch the row the moment a step's state changes), **verified** at session close - the same argument that made stamp-on-cite beat bulk-stamping.
+- **Commit-moment rule:** every thread class anchors tracking updates to its own commit moment - normal sessions at close; perpetual threads at the batch/cursor write (they never close).
+- **Orientation follows the pointer:** when the active arc's ledger row points at a State Board, orientation reads the board. Pointer-following is reliable only when a protocol step forces it.
+- **Hand-maintained canonical surfaces get machine drift-checks** - they lack the generated-view protection knowledge surfaces have (lint checks; reconsolidation passes carry the diff until a check exists).
+- **Retirement is detected, not scheduled:** a driver doc whose board is all-terminal but whose `status:` is still active triggers a retirement ceremony in the next reconsolidation pass - reconcile the board, rehome residuals, flip status, archive satellite queue docs.
+- **Model-gap findings land here:** when a reconsolidation or design review surfaces a fact class with no canonical surface (or two surfaces claiming one fact), amend this table - do not scatter the finding into tactical backlogs.
+
+(D105, D107, D108; design: [[RTI Federation and Tracking Model - Stress Test S218]], [[RTI Federation - T1 Design Review S217]])
+
+**Example:** the T1 arc - ledger row says the arc is active and points at [[RTI Federation - Substrate Coherence Build Plan]]'s State Board; the board holds step state; the Backlog carries a pointer item; the Native Run Queue holds the carried native tasks; "What's next" says which of these to start on and points.
 
 ---
 
