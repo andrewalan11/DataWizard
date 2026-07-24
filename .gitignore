@@ -13,3 +13,6 @@ task-manager-config.md
 Scripts/.env
 Scripts/*.session
 Scripts/output/
+
+Seed\ Sync\ Log.md
+Seed/
