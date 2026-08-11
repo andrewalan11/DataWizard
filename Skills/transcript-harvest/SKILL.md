@@ -6,7 +6,7 @@ description: >-
   transcripts with harvest_status: pending, or any transcript with harvest_for
   YAML set. Covers video, podcast, meeting, and voice memo transcripts.
 type: skill
-updated: '2026-06-25'
+updated: '2026-08-08'
 version: '0.9'
 edit_log:
   - DW-S158 2026-06-08
@@ -16,6 +16,9 @@ edit_log:
     lexicon criteria); repointed See Also to post-demolition homes"
   - "DW-S202 2026-06-25: added Block-Level Citations section (stamp-on-cite,
     ^tN/@mm:ss) pointing at block-stamper + Conventions Registry"
+  - "DW-S232 2026-08-04: added companion-vs-harvest default-granularity pointer
+    (D112)"
+  - "DW-S262 2026-08-08: added Harvest via embeddable synth note pointer (D116)"
 ---
 
 # Transcript Harvest Skill
@@ -95,10 +98,16 @@ When harvesting from transcripts, watch for a phrase or framing that:
 Section anchors (the `## Section Header` citations in Step 7) are the default. When a harvest claim points at a **specific transcript turn** rather than a whole section, cite the turn directly with a block ID:
 
 - Stamp as you cite: use the block-stamper skill to give that turn an ID (reuse the existing one if present; otherwise the next unused `^tN`), then link to it. Don't pre-stamp the whole transcript -- stamping is the act of citing.
-- Format: `([[TranscriptName#^t15|@22:15]])` -- the visible label is the `@mm:ss` timestamp from the turn's section header.
+- Format: `([[TranscriptName#^t15|@22:15]])` -- the visible label is the **cited turn's own `@mm:ss`** timestamp. Use the `§` glyph as the label only when the turn has no derivable timestamp (an unsegmented or headerless transcript with no per-turn times). (Confirmed S236; supersedes the earlier section-header-derived rule.)
 - Whole-section synthesis keeps the section-anchor form from Step 7.
 
 Mechanic: block-stamper skill. Full format canon: [[Conventions Registry]].
+
+Harvest destinations keep section anchors as their default *by design* - this differs from companions, which are block-default (D112, S232). See the Conventions Registry citation section for why the two regimes differ; it is the canonical statement, not a contradiction to resolve.
+
+## Harvest via embeddable synth note
+
+When a harvest routes to **multiple destinations, or to a destination that is contested or not yet ready** (mid-edit under concurrent operation, or awaiting a team decision), don't synthesize straight into those docs. Harvest once into a `c_` synth note built from self-contained, embeddable `##` sections, add an Embed Map near the top, and let each destination transclude the section it needs (`![[synth-note#Section]]`) when its thread is ready. The full convention -- synth-note structure, Embed Map with per-section embed-vs-native routing, team-download header, sensitivity marking, graduation, and the on-disk heading-parity close step -- is the canonical statement in [[Conventions Registry]] (Harvest via embeddable synth note); the `embed_targets` provenance field is in [[YAML Schema]]. For a single ready destination the instance owns, the standard direct synthesis above is simpler.
 
 ## Common Mistakes
 

@@ -2,12 +2,17 @@
 title: DataWizard Guides
 type: project-doc
 created: '2026-06-22'
-updated: '2026-06-22'
+updated: '2026-08-06'
 operator: Andrew
 edit_log:
-  - >-
-    DW-S195 2026-06-22 - created the guides catalog and named the Platform and
+  - DW-S195 2026-06-22 - created the guides catalog and named the Platform and
     Environment Behaviors cluster
+  - DW-S242 2026-08-05 - Git Guide row now notes the commit guard
+  - DW-S244 2026-08-05 - added the Browser and File System Access Behaviors
+    guide to the Platform cluster
+  - DW-S245 2026-08-05 - added the Git Hook and CI Behaviors guide to the
+    Platform cluster
+  - DW-S250 2026-08-06 - added the Review Automation guide
 ---
 # DataWizard Guides
 
@@ -24,13 +29,15 @@ These learnings rot faster than any other kind because they have no design-doc h
 | **Cowork Scheduled Tasks** | Running DW automation as Cowork scheduled tasks: timezone/`fireAt`, one model per run, cron jitter, idempotency and the requirements for reliable unattended runs, runtime-URL limits. |
 | **MCP Reliability and Write Verification** | Obsidian MCP failure modes (ghost writes, phantom/stale reads, frontmatter wipe), the write-verification protocol, concurrency practice, and sandbox/git gotchas. |
 | **Editing the Claude Desktop Config** | Finding and safely editing `claude_desktop_config.json` to add MCP servers or grant folder access; JSON pitfalls and recovery. |
+| **Browser and File System Access Behaviors** | Runtime gotchas for a single-file browser tool that reads/writes local files: File System Access API (Chromium-only, `file://`, IndexedDB handle persistence, read→readwrite upgrade, user-gesture rule, folder-scoped grants), artifact contexts blocking local storage, DOM/CSS gotchas (`hidden` vs class `display`, `color-scheme`), and headless mock-adapter verification. |
+| **Git Hook and CI Behaviors** | Where guard/automation scripts run across a git-synced repo's environments: local hooks (install-per-clone, `core.hooksPath` supersedes `.git/hooks/`), mobile Obsidian Git (isomorphic-git runs no hooks - CI is the only mobile net), and awk-in-CI being mawk (interval + grouped-alternation panic; write mawk-safe). Git how-to stays in the Git Guide; this covers execution-environment facts. |
 
 ## Other Guides
 
 ### Git and sync
 | Guide | Covers |
 |---|---|
-| **Git Guide** | Git for the vault and DW projects: repo setup, nested vs standalone repos, push workflows, DW Save. Sectioned - see `Git Guide/`. |
+| **Git Guide** | Git for the vault and DW projects: repo setup, nested vs standalone repos, push workflows, DW Save, and the commit guard (conflict-marker + Windows-unsafe-filename pre-commit hook and CI). Sectioned - see `Git Guide/`. |
 | **Seed Install and Update** | Installing the Seed into a vault and updating it via `update_seed.sh`. |
 
 ### Vault structure and content
@@ -42,6 +49,7 @@ These learnings rot faster than any other kind because they have no design-doc h
 | **Harvest Workflow Guide** | The harvest pipeline end to end: routing, provenance, and execution. |
 | **Obsidian Bases Reference** | Using Obsidian Bases for DW dashboards and filtered views. |
 | **Working Principles** | The reasoning behind the Working Rules - the "why" under the behavioral contract. |
+| **Review Automation** | The three periodic reviews (health audit, meta-learning, Content Interests): the pending-report model, the cadence table (single home), and how scheduled automation detects staleness so the session-closer only surfaces waiting reports. |
 
 ### Onboarding and integrations
 | Guide | Covers |
