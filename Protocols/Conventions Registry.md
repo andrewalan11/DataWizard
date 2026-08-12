@@ -2,7 +2,7 @@
 title: Conventions Registry
 type: protocol
 created: '2026-06-13'
-updated: '2026-06-22'
+updated: '2026-08-10'
 operator: Andrew
 priority: high
 maturity: working
@@ -13,6 +13,21 @@ edit_log:
   - DW-S183 2026-06-14
   - "DW-S191 2026-06-21: move_note wikilink claim corrected"
   - "DW-S197 2026-06-22: added action-items priority tiers (Urgent)"
+  - "DW-S206 2026-06-28: codified the bang-prefix filename retirement"
+  - "DW-S218 2026-07-09: added the Tracking Model section (D108 - one canonical
+    surface per fact class)"
+  - "DW-S232 2026-08-04: citation section restructured block-first (D112);
+    path-qualification + fetch-before-cite + convention-flip sweep rule added"
+  - "DW-S232 2026-08-04: Tracking Model sub-rule 'act at commit moment for
+    state, defer decisions for evidence' (insight-capture plant)"
+  - "DW-S246 2026-08-05: distribution-layer 'copied state rots' paragraph (D111)
+    + Seed-depersonalization one-liner (meta-learning review S221-S230)"
+  - "DW-S262 2026-08-08: added Harvest via embeddable synth note section (D116;
+    Weave FR adoption) + Change-governance merge-gate (D111) + Catalogs
+    conventions; fixed OPSEC/D25 miscitation"
+  - "WV_2026-08-10_AA_01 2026-08-10: added Operator personal / scratch folders
+    section (Weave-origin, generalized + depersonalized; DW decision-log entry
+    pending)"
 ---
 
 The single home for DataWizard's structural and formatting conventions. When a convention is stated here, every other document points to this entry instead of restating it.
@@ -22,6 +37,8 @@ The single home for DataWizard's structural and formatting conventions. When a c
 **Rule:** Every convention has exactly one canonical home. Everywhere else links to it rather than repeating it. A rule stated in two places will drift; a rule stated once and linked to cannot.
 
 This registry is that home for the conventions below. Skills, guides, and project docs that touch these topics should link here (e.g., "companion naming: see the Conventions Registry") rather than carrying their own copy. The same principle governs the rest of the Seed: the YAML Schema owns field definitions, the Filename Safety guide owns the character map, the session-closer owns cadence numbers, the Content Type Taxonomy owns `type:` values. When you find a convention restated somewhere, replace the copy with a pointer.
+
+The same law governs the **distribution layer**: copied state rots; only pointers stay true. A value copied out of its canonical home -- a version number restated in a collaborator doc, a "pinned" claim in a README, a recommended method repeated in setup instructions -- will eventually lie, because nothing forces the copy to update when the source changes. Point at the canonical source (VERSION.md, the config itself, this registry); where a copy is unavoidable, treat it as a release artifact the convention-flip sweep (below) must reconcile. Named from three instances in one arc, then re-demonstrated inside that same arc when a "pinned >=0.12.5" claim was found false across three docs while the running config said `@latest`. (D111; S226, S227, S230)
 
 **Example:** Before this registry, the 0.x slot table appeared in three docs with three different slot lists. Now it appears once (below); the Protocol shell, the health-audit skill, and the project-guidelines skill link to it.
 
@@ -80,6 +97,22 @@ The `_` prefix sorts active meta-folders to the top and is shell-safe (no escapi
 
 ---
 
+## Operator personal / scratch folders
+
+**Rule:** An operator may keep a personal, eponymous folder at the project root as a scratchpad / notebook. It holds anything not meant for the shared vault: **ephemeral** docs (meeting- or event-scoped, stale afterward), **private** notes (not intended for anyone else to read), and **not-yet-ready** drafts (unshared work in progress). The point is less clutter in the shared vault - the personal folder absorbs low-stakes and in-progress material so the shared strategy and workflow folders stay reserved for durable, shareable content. Ephemeral items carry `maturity: ephemeral`; unfinished ones use `maturity: draft`. A note can **graduate** out of the personal folder into the wider vault when it is ready to share (move with `move_note` and fix references). Durable synthesis, companions, and decisions route to their normal shared homes directly, never via the personal folder. (Weave, 2026-08)
+
+**Example:** an operator's `<Name>/` folder holds a meeting running-order (ephemeral), a rough idea not yet shared, and a team draft not ready for review; when the draft is ready it graduates into the appropriate shared folder.
+
+---
+
+## Catalogs
+
+**Rule:** The Seed keeps two parallel catalogs, each the single index for its kind: **`SKILLS.md`** lists every skill (triggered workflows) and **`GUIDES.md`** lists every guide (operational and platform/environment references). A new skill or guide is registered in its catalog on creation; the catalog is the discovery surface, not a place to restate the item's content. Guides that retire keep an `xArchive -` filename prefix and drop out of the catalog. Protocols (this registry, the YAML Schema, the taxonomy) live in `Protocols/` and are not catalogued the same way -- they are few and cross-referenced directly.
+
+**Example:** the Platform and Environment Behaviors guide cluster is enumerated in `GUIDES.md`; a new platform-gotcha guide is added there so instances can find it. (S195)
+
+---
+
 ## File naming
 
 **Rule:**
@@ -89,6 +122,7 @@ The `_` prefix sorts active meta-folders to the top and is shell-safe (no escapi
 - **Domain folders** take the project name as a prefix when the project has a dominant name (`Weave Events/`, `Weave Resources/`), clustering them in search and Finder. (D74)
 - **Project guidelines** is always `0.0 Project Guidelines - ProjectName.md`.
 - **START HERE files are retired** (D62). Human onboarding lives in 0.0; Claude setup lives in a Seed guide. Do not create new ones.
+- **The `!` filename prefix is retired** (S116 / PI v4.0). Do not prefix note filenames with `!` to force sort order; use the `0.x` infrastructure slots or a plain descriptive title. This does not affect the `_!nbox/` intake folder or the optional inline `!!` / `!` urgency markers in 0.5 - those are a folder name and in-doc markers, not note-name sort prefixes.
 - Use descriptive titles, not codes. Hyphens for multi-word YAML values (`video-transcript`). ISO dates in filenames (`YYYY-MM-DD`).
 
 For the full cross-platform character map (forbidden characters, replacements, sanitization), see the **Filename Safety guide** - that is the one home for filename character rules. This entry covers structure and numbering only.
@@ -121,6 +155,32 @@ For the full cross-platform character map (forbidden characters, replacements, s
 
 ---
 
+## Harvest via embeddable synth note
+
+**Rule:** When a harvest routes to **multiple destinations, or to a destination that is contested or not yet ready** (mid-edit under concurrent operation, or awaiting a team decision), harvest once into a single `c_` companion built from self-contained, **embeddable** `##` sections, and let each destination transclude the section it needs (`![[synth-note#Section Name]]`) rather than copying the content in. This is "link, don't restate" applied to harvest output -- the content lives in one place, propagation is by embed, and editing a section updates every doc that embeds it. When a harvest routes cleanly to a single ready destination the instance owns, direct synthesis (the standard harvest skills) is simpler -- reach for this pattern only when fan-out or a not-ready destination earns it.
+
+**Structure of the synth note:**
+
+- **Weave-in sections.** Each `##` section reads cleanly when transcluded on its own and carries a one-line source/provenance tag, so provenance travels with the embed.
+- **Embed Map.** A table near the top: one row per weave-in section giving its destination doc, the exact `![[synth-note#Section Name]]` string to paste, and a **route** marker -- `embed` (transclude into a working doc) or `native` (write the content in directly, then keep the synth-note section as provenance). Logs, decision records, and trackers are `native` by default -- they want to be self-contained and append-only.
+- **Team-download header.** A synopsis section at the very top -- 2-3 plain-language sentences on the source plus a "where it landed" list linking each destination. Flag *this synth note* for the team (a file-level flag whose `flag_note` points at the synopsis), not the raw source.
+- **`embed_targets` YAML** on the synth note lists the onward destinations so the flow is machine-scannable -- the second provenance hop after the source's `harvested_into`. Field definition: [[YAML Schema]]. Provenance model: [[Harvest Provenance Architecture]].
+
+**Workflow:**
+
+1. **Overlap check first.** Before adding a section, check whether the destination already covers it (the target-section overlap check design-harvest uses). If it does, a cross-reference beats an embed.
+2. **Harvest into the synth note** as weave-in sections, build the Embed Map, write the team-download header, and flag the synth note.
+3. **Per-section sensitivity.** Mark any confidential section inline -- a confidential section is never embedded or graduated into a funder-facing or public doc, per the project's confidentiality rules.
+4. **Destinations transclude when their owning thread is ready** -- placement is separated from the act of harvesting and can wait.
+5. **Resolves-open-questions cross-link.** When a section closes open questions living in a destination, the embed lead-in names which items it resolves, and the resolved items are struck in place.
+6. **Graduate when a destination must be self-contained** (e.g. a funder-facing export): replace the embed with native content, then retire the embed -- the synth note remains as provenance.
+
+**Heading stability.** A section-embed breaks silently if the synth-note heading changes -- an empty transclusion still looks fine in the destination. Weave-in headings must be stable and filename-safe (no em-dashes, curly quotes, or colons -- same discipline as patch anchors, Working Rule 8). **Close step:** verify on disk (a filesystem read, not the MCP reader -- Working Rule 10) that every `##` heading in the synth note exactly matches its `![[synth-note#Section Name]]` string in every destination.
+
+**Example:** a call harvested into `c_2026-08 Team Sync` routes a "Fundraising status" section (`embed`) into a working plan via `![[c_2026-08 Team Sync#Fundraising status]]`, and a "Decision - entity choice" section (`native`) into the Decision Log; the synth note carries `embed_targets` listing both and is flagged for the team while the raw transcript is not. (D116; validated twice -- Weave, 2026-08.)
+
+---
+
 ## Archiving
 
 **Rule:** when a file is superseded or retired, **move it, don't delete it** (delete only empty stubs, with human confirmation).
@@ -142,31 +202,35 @@ For the full cross-platform character map (forbidden characters, replacements, s
 
 ## Citation format
 
-**Rule:** cite with a trailing parenthetical wikilink whose anchor deep-links to a `##` heading in the source:
+**Rule:** cite with a trailing parenthetical wikilink whose anchor deep-links into the source. For all new material the **default granularity is the block** - `^bN` for a document paragraph, `^tN` for a transcript turn - so a citation points at the specific paragraph or turn that backs the claim, not the whole section:
 
 ```
-([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]])
+([[SourceFileName#^b7|§]])        document block (glyph display)
+([[SourceFileName#^t15|@22:15]])  transcript turn (timestamp display)
 ```
 
-With speaker attribution:
+Block-default changes *which anchor you reach for*, not *when you stamp*: stamping stays **on cite, sparse, never in bulk** - a block gets its ID only when something actually cites it, never a pre-stamp pass (S173). Assign the next unused integer per file; never renumber, and never re-stamp a block that already has an ID. IDs are sparse, so `^b9` is a stable handle, not "the 9th block." The visible label is a `§` glyph for document blocks and the cited turn's own `@mm:ss` timestamp for transcript turns (confirmed S236; the `§` fallback applies only when the turn has no derivable timestamp, e.g. an unsegmented or headerless transcript); multiple blocks in one bullet repeat the glyph, each its own link (`(§, §)`). Block IDs are hidden in Obsidian reading mode and are the human breadcrumb layer; where a RAG index exists a block ID aligns with its chunk coordinate, but the index computes full coordinates independently.
+
+**Scope.** The block-default governs new material citing an *in-vault source at claim granularity* - companion bullets and synthesis claims. It does not govern whole-document backlinks (`source:` YAML), `harvested_into:` routing, Message Log citations, external URLs, or citations to a source the instance cannot stamp (read-only mounts, PDFs, other vaults) - those keep their own forms.
+
+**Section-anchor fallback.** A `#Section` anchor is the named fallback, for exactly two cases: (1) the claim genuinely synthesizes a whole section (a legitimate whole-section citation, not false precision), or (2) the source is not block-addressable at cite time (an unsegmented transcript, or a source out of stamping reach). Whole-section companion synthesis uses the `§` label; harvest destinations keep their date-and-section label:
 
 ```
-([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]] — Speaker)
+([[NoteTitle#Section Header|§]])                                    whole-section companion synthesis
+([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]])             harvest destination
+([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]] — Speaker)   harvest destination with speaker
+([[NoteTitle|YYYY-MM-DD — Note Name]])                              no-header fallback (note title only)
 ```
 
-No-header fallback (cite the note title only):
+Companions are block-default; **harvest destinations keep section-default with block/turn-when-specific** (their label-format precision is a separate open question). This section is the canonical statement of why the two regimes differ - skills point here rather than restating it.
 
-```
-([[NoteTitle|YYYY-MM-DD — Note Name]])
-```
-
-Rules: citations go at the **end** of a statement; one per claim is usually enough; ISO dates; the `#anchor` must exactly match a heading in the source (this is why transcripts are segmented before harvesting).
+Rules: citations go at the **end** of a statement; one per claim is usually enough; ISO dates; a `#anchor` must exactly match a heading in the source (this is why transcripts are segmented before harvesting). **Cite only what you have read** - a citation asserts the cited block was actually read, not recalled. **Colliding basenames:** when two files share a basename, path-qualify the link so Obsidian resolves deterministically - `([[Folder/Name#^b7|§]])`.
 
 **Source tags (optional):** for documents that cite many sources repeatedly, register short uppercase tags (`[MAR3]`, `[SP]`) in the project's source-reference doc and use them inline. Tags supplement wikilink citations, they don't replace them. Adopt only when full wikilinks become unwieldy.
 
-**Block-ID variant (canonization candidate):** for corpus and RAG contexts that need a stable per-block anchor, an Obsidian block ID (`^block-id`) can serve as the citation anchor instead of a `##` heading, surviving re-segmentation. Not yet a vault-wide standard - under test and flagged for promotion.
+Full spec: [[Citation Mechanism - Block-Level Provenance]].
 
-**Example:** `regenerative finance shifts the unit of account ([[2026-03-04 Strategy Call#Unit of Account|2026-03-04 — Unit of Account]] — Jordan).`
+**Example:** `the unit of account shifts from currency to contribution ([[2026-03-04 Strategy Call#Unit of Account|§]]).`
 
 ---
 
@@ -236,6 +300,14 @@ Meaningful design/architecture choice     -> decision log + session log (brief n
 
 ---
 
+## Change-governance merge-gate
+
+**Rule:** A pull request or collaborator change that alters a **recommended tool, connection method, architecture, or operator-facing setup instruction** requires a **logged decision before merge** -- it must not ride in as a documentation edit. Merging such a change silently adopts a de facto architecture or tooling decision; the decision log is where that choice is made deliberately and greppably, not the diff. Kin to "change the value, check the rationale" (a value change is visible everywhere it is used, but its justification lives in one doc and dies silently) and to the Tracking Model's act-at-the-commit-moment discipline. (D111)
+
+**Example:** a docs PR that switches the recommended MCP connection method is gated -- log the decision (rationale plus the alternatives rejected) first, then merge. The failure mode this guards against: an unlogged method switch that stood as a doc/reality divergence for roughly 40 sessions before anyone caught it.
+
+---
+
 ## Priority and maturity vocabularies
 
 **Rule:** two distinct vocabularies; do not mix them.
@@ -255,6 +327,35 @@ Meaningful design/architecture choice     -> decision log + session log (brief n
 
 ---
 
+## Tracking Model
+
+**Rule:** work tracking follows the same discipline as knowledge tracking: **one canonical surface per fact class; everything else points, nothing restates.** A fact written on two surfaces will drift (D105, D108). The registry of fact classes:
+
+| Fact class | Canonical surface | Everything else |
+|---|---|---|
+| An arc exists / where its truth lives | Active Threads ledger row | session logs point |
+| Step state within a driver-doc arc | the driver doc's **State Board** | ledger `next:` points; backlog item slims to a pointer |
+| Tactical next 1-3 sessions | 0.5 Backlog | - |
+| Recommended entry point for the next session | the session log's "What's next" (one-session TTL) | everything else in "What's next" points, never restates |
+| Carried side/native task lists | a durable queue doc (e.g. a Native Run Queue) | "What's next" points |
+| Stream position (perpetual threads) | the stream-state note (D107) | db mirror optional, derived |
+
+Sub-rules:
+
+- **State Boards:** one table per driver doc - step / status / remaining / runtime / last touched. Status is an enum (`not started | in progress | blocked | done`); commentary lives outside the Status cell. Maintained **on advance** (patch the row the moment a step's state changes), **verified** at session close - the same argument that made stamp-on-cite beat bulk-stamping.
+- **Act at the commit moment for state; defer decisions for evidence.** The rule the State Board and stamp-on-cite both instantiate, generalized: state that must stay consistent with reality - display labels, version pins, board state, breadcrumbs, indexes - is updated at the moment it changes; deferring it to a later bulk pass costs in proportion to what accumulates in between. This is *not* "never defer" - *decisions* correctly wait until evidence exists (open questions, dry-run-then-apply, deferred indexing). The tell: if leaving it stale makes a live surface **lie**, it is state - act now; if acting early would commit you to an unvalidated choice, it is a decision - wait. (Named S232.)
+- **Commit-moment rule:** every thread class anchors tracking updates to its own commit moment - normal sessions at close; perpetual threads at the batch/cursor write (they never close).
+- **Orientation follows the pointer:** when the active arc's ledger row points at a State Board, orientation reads the board. Pointer-following is reliable only when a protocol step forces it.
+- **Hand-maintained canonical surfaces get machine drift-checks** - they lack the generated-view protection knowledge surfaces have (lint checks; reconsolidation passes carry the diff until a check exists).
+- **Retirement is detected, not scheduled:** a driver doc whose board is all-terminal but whose `status:` is still active triggers a retirement ceremony in the next reconsolidation pass - reconcile the board, rehome residuals, flip status, archive satellite queue docs.
+- **Model-gap findings land here:** when a reconsolidation or design review surfaces a fact class with no canonical surface (or two surfaces claiming one fact), amend this table - do not scatter the finding into tactical backlogs.
+
+(D105, D107, D108; design: [[RTI Federation and Tracking Model - Stress Test S218]], [[RTI Federation - T1 Design Review S217]])
+
+**Example:** the T1 arc - ledger row says the arc is active and points at [[RTI Federation - Substrate Coherence Build Plan]]'s State Board; the board holds step state; the Backlog carries a pointer item; the Native Run Queue holds the carried native tasks; "What's next" says which of these to start on and points.
+
+---
+
 ## Cadence
 
 **Rule:** periodic-review cadence numbers (health audit, meta-learning review, content-interest refresh) live in **exactly one place: the session-closer's thresholds table**. Every other doc describes the nudge without quoting a number. To change a cadence, edit that table; don't restate the value here. (D88)
@@ -268,6 +369,8 @@ Meaningful design/architecture choice     -> decision log + session log (brief n
 - **Bulk vault edits:** for batch YAML or filename changes, use MCP tools (`obsidian:update_frontmatter`, `obsidian:move_note`) directly rather than Obsidian plugins. Full rationale: Decision Log **D44**.
 - **Check `harvest_status` before reading a source:** before harvesting or processing a source file, read its `harvest_status` (and related provenance YAML) first, so already-processed material isn't re-harvested. A cheap guard against duplicate work in the pipeline.
 - **Git push before batch ops:** before running any script that bulk-moves or modifies vault files, commit and push first. `git checkout .` is then the undo if a batch run goes wrong.
+- **Sweep on a convention flip:** when a convention or default here changes, grep the Seed and project docs for the *old* rule's signature phrases and reconcile each hit - convert it to a pointer, fix the stale value, or consciously retain it (retention is the last resort, and record the retained ones). Patching only the sections you remember misses drift. (S225 Build 3.)
+- **Seed content ships depersonalized:** the Seed goes to other users, so Seed-bound content stays generic -- no vault names, collaborator names, or operator initials. Render provenance as `(project, date)` -- e.g. `(Weave, 2026-08)` -- matching the environment guides' existing style. Frontmatter-provenance policy and the legacy sweep are tracked in the DW Backlog's Seed de-personalization sweep item. (S227, S243)
 
 ---
 

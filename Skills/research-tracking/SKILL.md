@@ -8,8 +8,11 @@ description: >-
   accumulating without a tracking system, or any time you are about to evaluate
   a tool, repo, framework, or external resource.
 type: skill
-updated: '2026-06-01'
-version: '1.3'
+updated: '2026-08-05'
+version: '1.5'
+edit_log:
+  - "DW-S243 2026-08-05 - v1.5: After Fan-Out routing subsection (routing loop
+    for fan-out outputs)"
 ---
 
 # Research Tracking
@@ -36,9 +39,15 @@ methodology itself.
 
 ## The Tracking Index
 
-The tracking index is a single note that serves as the master lookup
-for all evaluated items. See `references/tracking-index-template.md`
-for the full template and column guide.
+The tracking index is a markdown index -- the master lookup for all
+evaluated items. It starts as a single note and, once it grows to
+hundreds of items, sections into a shell + section-folder (one section
+per batch or session); see the shell + section pattern in the
+[[Conventions Registry]]. The markdown is always canonical: a project
+may add a database or other derived index for fast queries, but that
+index is rebuilt from the markdown, never hand-edited as a parallel
+source of truth. See `references/tracking-index-template.md` for the
+full template and column guide.
 
 **Core columns:** Name, URL, Date, Depth (light/moderate/deep),
 Relevance (high/medium/low/none), and Output.
@@ -99,6 +108,16 @@ link the research note in the Output column.
 Hold all tracking updates until the batch is complete. This prevents
 context-switching and lets you capture batch-level observations.
 Commit all entries to the Evaluated table at once after the batch.
+
+### After Fan-Out -- Route Each Output
+
+When a parallel fan-out (see tools-research, Parallel Fan-Out) produces many
+outputs at once, each usually needs to land on more than the tracking index.
+A repeatable routing loop for outside-project research, validated across
+several passes: write the research note, add the tracker pointer (the RTI
+row), index it in the relevant MOC, add a harvest-log row if it fed a
+harvest, and refresh any stale stub the item updates. Run the same loop per
+output so nothing lands in only one place.
 
 ### Where Patterns Go
 

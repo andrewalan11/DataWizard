@@ -7,13 +7,17 @@ description: >-
   pending, or hand-highlighted documents. NOT for transcripts - use
   transcript-harvest instead.
 type: skill
-updated: '2026-06-13'
-version: '0.4'
+updated: '2026-08-08'
+version: '0.5'
 edit_log:
-  - >-
-    MMM meta-learning plant 2026-06-09: added Step 3 (triage before fetching),
-    renumbered
-  - 'DW-S182 2026-06-13: repointed See Also to post-demolition homes (D94)'
+  - "MMM meta-learning plant 2026-06-09: added Step 3 (triage before fetching),
+    renumbered"
+  - "DW-S182 2026-06-13: repointed See Also to post-demolition homes (D94)"
+  - "DW-S202 2026-06-25: added Block-Level Citations section (stamp-on-cite,
+    ^bN/§) pointing at block-stamper + Conventions Registry"
+  - "DW-S232 2026-08-04: added companion-vs-harvest default-granularity pointer
+    (D112)"
+  - "DW-S262 2026-08-08: added Harvest via embeddable synth note pointer (D116)"
 ---
 
 # Document Harvest Skill
@@ -47,6 +51,22 @@ Harvest content from non-transcript sources — articles, clippings, research do
 6. **Update source YAML** -- set `harvest_status`, `harvested_into` (with section-level anchors), `harvest_date`, and `harvest_notes`. For re-harvests, append to `harvested_into` and convert `harvest_date` to an array (most recent last). Or set `harvest_status: reviewed` with `harvest_notes` explaining why nothing was harvested.
 7. **Update Harvest Ledger** -- add or update a row in `0.4 Harvest Ledger - [Project].md` with source, harvest date, destinations, and agent.
 8. **Session log** -- add harvest details to `0.2 Session Log.md` at the end of the session as part of normal session logging -- not after each individual source.
+
+## Block-Level Citations (stamp-on-cite)
+
+Section anchors (the `## Section` citations in Step 5) are the default. When a harvest claim points at a **specific paragraph** rather than a whole section, cite the paragraph directly with a block ID:
+
+- Stamp as you cite: use the block-stamper skill to give that paragraph an ID (reuse the existing one if present; otherwise the next unused `^bN`), then link to it. Don't pre-stamp the whole source -- stamping is the act of citing.
+- Format: `([[SourceFileName#^b7|§]])` -- the visible label is a `§` glyph; repeat it for multiple blocks (`(§, §)`).
+- Whole-section synthesis keeps the section-anchor form from Step 5.
+
+Mechanic: block-stamper skill. Full format canon: [[Conventions Registry]].
+
+Harvest destinations keep section anchors as their default *by design* - this differs from companions, which are block-default (D112, S232). See the Conventions Registry citation section for why the two regimes differ; it is the canonical statement, not a contradiction to resolve.
+
+## Harvest via embeddable synth note
+
+When a harvest routes to **multiple destinations, or to a destination that is contested or not yet ready** (mid-edit under concurrent operation, or awaiting a team decision), don't synthesize straight into those docs. Harvest once into a `c_` synth note built from self-contained, embeddable `##` sections, add an Embed Map near the top, and let each destination transclude the section it needs (`![[synth-note#Section]]`) when its thread is ready. The full convention -- synth-note structure, Embed Map with per-section embed-vs-native routing, team-download header, sensitivity marking, graduation, and the on-disk heading-parity close step -- is the canonical statement in [[Conventions Registry]] (Harvest via embeddable synth note); the `embed_targets` provenance field is in [[YAML Schema]]. For a single ready destination the instance owns, the standard direct synthesis above is simpler.
 
 ## Common Mistakes
 

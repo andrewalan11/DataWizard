@@ -7,8 +7,8 @@ description: >-
   pick up where we left off' in a new thread and there's no log entry for the
   previous session.
 type: skill
-updated: '2026-06-22'
-version: '4.0'
+updated: '2026-08-08'
+version: '4.4.1'
 edit_log:
   - DW-S158 2026-06-08
   - DW-S159 2026-06-08
@@ -20,6 +20,24 @@ edit_log:
   - "DW-S196 2026-06-22 - v4.0 ceremony diet: D88 thresholds table, D98
     session-lite tier, D93 protocol-version drop, orphan 3.7 + Step 2.5 edit_log
     fixes, S179 stub guard, renumber"
+  - "DW-S198 2026-06-23 - v4.1: defer shell embed to close + strip claim_id
+    (verify-after-claim)"
+  - "DW-S211 2026-06-29 - v4.2: Active Threads ledger maintenance (D105);
+    in-place + entry pointer, legacy in-entry roster kept as fallback"
+  - "DW-S235 2026-08-04 - v4.2.1: Step 2.6 no-ledger fallback made explicit and
+    mandatory (mode-selector line + REQUIRED lead-in; field failure in a
+    multi-operator project)"
+  - "DW-S235 2026-08-04 - v4.2.1 (cont.): Step 3.12 re-flag merge rule (flag_for
+    is a shared unread-queue; never overwrite pending state)"
+  - "DW-S243 2026-08-05 - v4.2.2: Step 3.5 header-variant tolerance note (###
+    Findings learnings-equivalent)"
+  - "DW-S250 2026-08-06 - v4.3.0: Step 3.10 threshold nudges retired ->
+    pending-review-report surfacing only; cadence numbers moved to Review
+    Automation guide (D114 supersedes D88 home)"
+  - "DW-S258 2026-08-08 - v4.4.0: Step 4.5 next-session recap + suggested-model
+    send-off, delivered just before the thread name (Step 5 unchanged)"
+  - "DW-S258 2026-08-08 - v4.4.1: Step 5 presents the thread name in a fenced
+    code block (renders as a one-click-to-copy box in chat)"
 ---
 
 # Session Closer Skill
@@ -75,7 +93,7 @@ Throughout this skill, examples use solo-operator format. For multi-operator pro
 
 Pick **lite** or **full**, and state which you chose (D98).
 
-- **Lite close** -- for sessions with no new conventions, no harvest, and few file touches. Do only: the log entry (What happened / Learnings-if-any / What's next), frontmatter validation (Step 2.5), write + embed (Step 3, including the section-shell sync), metadata verification (Step 3.8), and the thread name (Step 5). Skip the knowledge-transfer / convention / residual triage (Steps 3.5-3.7), the periodic threshold checks (Step 3.10), the file-size check (Step 3.11), and the team-flag prompt (Step 3.12) -- the lite preconditions make these no-ops. You may still check off an action item you completed.
+- **Lite close** -- for sessions with no new conventions, no harvest, and few file touches. Do only: the log entry (What happened / Learnings-if-any / What's next), frontmatter validation (Step 2.5), write + embed (Step 3, including the section-shell sync), metadata verification (Step 3.8), and the thread name (Step 5). Skip the knowledge-transfer / convention / residual triage (Steps 3.5-3.7), the pending-review report check (Step 3.10), the file-size check (Step 3.11), and the team-flag prompt (Step 3.12) -- the lite preconditions make these no-ops. You may still check off an action item you completed.
 - **Full close** -- everything below. Use it whenever the session established or changed a convention, did harvest, made decisions, or touched many files.
 
 When in doubt, go full. State the chosen tier in one line before proceeding (e.g. "Closing S196 as a full close -- touched the closer skill plus several infra files").
@@ -110,7 +128,20 @@ Before presenting the draft, verify all required frontmatter fields are present.
 
 `seed_version` is read from VERSION.md during orientation -- never hardcode it from template examples. The former `datawizard_protocol_version` pin is retired per D93; do not add it. If any field is missing from the draft, add it before proceeding. Do not present a draft with missing required fields. This is especially important for `operator`, which powers team dashboards and authorship queries but is easy to omit when pattern-matching from older session logs that predate this requirement. `seed_version` makes team Seed currency visible -- when scanning session logs, a stale Seed version is immediately apparent.
 
-### Step 2.6: Active quest threads
+### Step 2.6: Active Threads ledger
+
+Every close maintains the roster of open parallel arcs somewhere. There are exactly two modes, and dropping the roster is never an option: **(a) the project has a ledger** -- maintain it in place, below; **(b) no ledger exists** -- you MUST write the legacy in-entry roster (further below). Detecting that no ledger exists selects mode (b); it does not discharge the roster obligation.
+
+If the project maintains an **Active Threads ledger** -- a vantage-independent roster of open parallel arcs kept as its own file (DataWizard: `{home}/_Sections - {Project}/Active Threads - {Project}.md`, embedded in the `0.5` action-items shell) -- maintain it **in place**. Do not regenerate it from scratch, and do not write the roster into the session-log entry. Re-read the ledger, then for each arc:
+
+- **Touched this session:** patch its block -- update `status:`, set `last:` to this session, refresh `next:`, append this session to `history:`.
+- **Untouched:** leave the block unchanged.
+- **Resolved this session:** cut the block and write a one-liner under the current `#### YYYY-MM` heading in the Resolved archive (`Active Threads Resolved - {Project}.md`), creating the month heading if new. Format: `- T# <name> - resolved S### -> <where it landed>`.
+- **New arc this session:** add a `### T{N}` block (next free number) with all fields; set `home:` to its durable backstop (an empty `home:` flags an arc with no task-level home -- a coverage gap).
+
+Patch in place and verify each change landed (Working Rule 5). The ledger lists **all** open arcs regardless of this session's focus -- do **not** deduplicate it against "What's next" (that vantage-dependence is the carry-forward flicker the ledger fixes; D105). In the session-log entry, the roster is replaced by a one-line pointer (see Output Format).
+
+**Legacy in-entry roster (projects without a ledger) -- REQUIRED, not optional.** If the project has no Active Threads ledger, you MUST maintain the in-entry roster inside the session-log entry, described below. (Field failure, 2026-07, multi-operator project: three consecutive closes correctly detected the missing ledger, then dropped the roster entirely -- leaving that operator's open arcs invisible to the rest of the team.)
 
 Read the previous session's "Active quest threads" section (if it exists). For each thread:
 - If work was done on it this session, update its status and remaining work
@@ -133,8 +164,8 @@ The quest threads section prevents long-running workstreams from falling off the
 Present the draft. The user may want to edit, add context, or adjust priorities. Once approved:
 1. Re-read the session log shell to get the current section number and embed list
 2. Write the new section file with the final title to the session log folder. Solo-operator: `99.0 Session 113 - Brief Title.md` (use section number as prefix). Multi-operator: `WV_2026-06-10_AA_01 - Brief Title.md` (session ID as prefix). See Session Identifier Format for full details.
-3. **If a session stub exists from orientation** (a section file with `status: in-progress` and "in progress" in the filename): **first confirm the stub is yours** -- match its focus line and `operator` to this session. Never delete or overwrite a parallel instance's in-progress stub (the S178/S179 collision); if the content doesn't match your session, leave it and claim the next available identifier. Once confirmed yours, delete it using `delete_note`. The stub and the final entry have different filenames, so writing the final entry does NOT remove the stub -- you must explicitly delete it.
-4. Patch the shell embed to reference the final filename. If the shell already embeds the stub filename, replace it with the final filename. If no stub existed, add the embed as usual.
+3. **If a session stub exists from orientation** (a section file with `status: in-progress` and "in progress" in the filename): **first confirm the stub is yours** -- match its `claim_id` to the one you stamped at orientation (or, if absent, its focus line and `operator`). Never delete or overwrite a parallel instance's in-progress stub (the S178/S179 collision); if it isn't yours, leave it and claim the next available identifier. Once confirmed yours, delete it using `delete_note`. The stub and the final entry have different filenames, so writing the final entry does NOT remove the stub -- you must explicitly delete it. The final entry does not carry `claim_id` -- it is a claim-time field only (see [[YAML Schema]] Session Log Fields).
+4. Add the session embed to the shell. Under verify-after-claim (PI Orientation Step 3) the stub is NOT embedded at claim, so you are normally adding the embed fresh at close -- patch it into the shell in reverse-chronological position. (Legacy fallback: if an older workflow already left a stub embed in the shell, replace it with the final filename rather than adding a duplicate.)
 
 > **Parallel instance check:** Before writing, re-list the session log
 > section folder and verify the target identifier doesn't already exist
@@ -142,14 +173,17 @@ Present the draft. The user may want to edit, add context, or adjust priorities.
 > Multi-operator: check the session ID (e.g., `WV_2026-06-10_AA_01`).
 > If another instance has claimed it since orientation, increment to
 > the next available number. Multiple instances may work in parallel.
-> Compare stub *content*, not just filenames -- match the focus line
-> to your session before reusing or replacing any in-progress stub.
+> Compare stub *content*, not just filenames -- match the `claim_id`
+> (or focus line) to your session before reusing or replacing any
+> in-progress stub.
 
 > **Flat-file fallback:** If the project's session log hasn't been migrated to shell + sections yet, skip the section file and embed steps. Instead, patch the entry directly into the flat session log file -- insert below the header, above existing entries.
 
 ### Step 3.5: Knowledge transfer check
 
 **Before moving to infrastructure updates, triage each learning from this session.**
+
+> **Header variant.** Some sessions record learnings under a `### Findings` header (with inline `finding:` / `pattern-discovered:` tags) instead of `### Learnings`. Treat it as learnings-equivalent -- triage those items the same way, and downstream meta-learning scans do too. Prefer `### Learnings` for new entries, but don't rewrite an inherited `### Findings` entry just to rename the header.
 
 For each finding, decision, or detailed context that emerged during the session, classify it:
 
@@ -233,23 +267,19 @@ For each section file created or renamed this session, verify its parent shell c
 
 This catches the most common drift pattern -- adding sections without updating the shell -- at the point of creation. Skip this step if no section files were created or renamed this session.
 
-### Step 3.10: Periodic threshold checks (full closes only)
+### Step 3.10: Pending review reports (full closes only)
 
 > **Lite closes skip this step** (see Step 0). Run it only in a full close.
 
-Check the project's `0.0 Project Guidelines` frontmatter against the cadence table below. This step is the **single home** for these cadence numbers (D88) -- SKILLS.md, the PI, and other docs describe the nudges without quoting numbers. None of these block session close.
+The session-closer does **not** compute review staleness or nudge on session/day thresholds. Detecting that a health audit, meta-learning review, or Content Interests refresh is due -- and running the scan that produces a report -- is the job of the scheduled review automation (see the **Review Automation** guide). This step's only job is to surface reports those scans have already left waiting. None of this blocks session close.
 
-| Check | Frontmatter field | Threshold | On trigger |
-|---|---|---|---|
-| Project health audit | `last_health_audit` | 30+ sessions since, or never recorded | Prompt: "It's been [N] sessions since the last health audit (or: none on record). Want me to run a DW review?" If yes, load `project-health-audit`; after it runs, stamp `last_health_audit` to the current session ID. |
-| Meta-learning review | `last_meta_learning_review` | 30+ sessions since, or never recorded | Nudge in "What's next": "A meta-learning review is due ([N] sessions since last). Load the meta-learning-review skill." |
-| Content Interests | `last_content_interests_review` | 30+ days since, OR 10+ sessions since, OR field absent | Nudge in "What's next": "Content Interests may need refreshing ([N] days). Load content-interests-review." |
+List the project's Learning Reports folder (`{home}/Workshop - {ProjectName}/Learning Reports/` for full-convention projects; `{home}/Learning Reports/` for flat). For any report file with `status: pending-review` (`Meta-Learning Report - *`, `Health Audit Report - *`, `Content Interests Report - *`), add one line to "What's next":
 
-**Gap arithmetic:** solo-operator projects subtract session numbers; multi-operator projects list the session-log folder and count files dated after the reference session.
+"A [review type] report is waiting for your review: [filename]."
 
-**Meta-learning pending-report trigger (independent of the table).** Regardless of session count, list the Learning Reports folder (`{home}/Workshop - {ProjectName}/Learning Reports/` for full-convention projects; `{home}/Learning Reports/` for flat). If any `Meta-Learning Report - *.md` has `status: pending-review`, nudge: "A meta-learning scan report is waiting for review: [filename]." This catches reports the nightly scan produces between sessions.
+Name the file; do not summarize it. If no reports are pending, say nothing.
 
-**Silence rule (health audit).** Do not mention the health audit in "What's next," during orientation, or anywhere outside this step -- no "approaching threshold" or "getting close" language. The audit nudge exists only here, only when the threshold is met. (The meta-learning and content-interests nudges, by contrast, are designed to land in "What's next" when their thresholds fire.)
+**Silence rule.** Outside this step -- in orientation, elsewhere in "What's next," anywhere -- never say a review is "due," "approaching," or "getting close," and never quote a cadence number. The session-closer holds no cadence numbers; they live only in the Review Automation guide (D114). Silence is the default; a named pending report is the only surfacing.
 
 ### Step 3.11: File size check
 
@@ -289,6 +319,8 @@ For each file the user selects:
 3. Ask for a one-line `flag_note`, or suggest a default based on the file title/context
 4. Add `flag_for:` as a YAML list of all other team operators (e.g. if Andrew flags it: `flag_for: [Kaliya, Jay, Kevin]`). The user can adjust the list if it's only relevant to specific people.
 
+**Re-flagging a file that already carries an unresolved flag: merge, never overwrite.** Union the existing `flag_for` list with the new recipients (preserving names who haven't dismissed yet), keep or combine the `flag_note` so both notices survive, and update `flag`/`flag_by` to the newer flagging. `flag_for` is a shared unread-queue -- overwriting it silently erases other operators' pending notifications. (Field catch, 2026-08: a re-flag would have erased two operators' unread state on a Decision Log flag; the closing session merged instead.)
+
 **On ungraceful session close** (context exhausted before the user can confirm): auto-flag any `priority: high` files created this session using `flag_by: "FirstName (auto)"` and `flag_for:` listing all other team operators. The human can review and remove auto-flags in a subsequent session.
 
 **Team read dismiss (multi-operator projects only).** During orientation or at any point in the session when the operator reads a file that has a `flag_for` list containing their name, remove their name from the `flag_for` list using `update_frontmatter`. When the list is empty, all operators have seen the item -- anyone can then clear the `flag`, `flag_by`, `flag_note`, and `flag_for` fields to remove it from the dashboard entirely.
@@ -316,9 +348,20 @@ Session-close action item updates are incremental -- check off what's done, add 
 
 Full triage is a periodic activity, not a session-close requirement. The session-closer's job is incremental maintenance; the triage patterns above apply when the backlog has grown unwieldy. (RW S9, S142)
 
+### Step 4.5: Next-session recap and suggested model
+
+Just before suggesting the thread name, give a brief, action-oriented recap -- never a generic "nice work, see you next time." Two or three sentences at most, spoken in chat only (not written to the vault):
+
+- **Next up:** one line naming the single most valuable thing to pick up next session. Pull it from "What's next" Priority 1 -- the specific task with its key file path, not a vague topic.
+- **Suggested model:** name the Claude model tier that best fits that task, with a 3-5 word reason. Match model to task shape -- a high-capability reasoning model (Opus-tier) for deep design, synthesis, architecture, or hard debugging; a faster model (Sonnet-tier) for mechanical, harvest, or well-specified execution work. Keep it tier-generic (Opus-tier / Sonnet-tier) rather than pinning a version number, which goes stale.
+
+Keep it tight -- the recap and model line are the last thing the user reads before the thread name, so they should land as a clear "here's where to restart and what to run it on."
+
 ### Step 5: Suggest final thread name
 
 Suggest a final thread name for the session. Solo-operator format: `checkmark ProjectAbbrev SNN - brief description` (e.g., `√ DW S43 - Weave git migration final stage`). Multi-operator format: `checkmark PROJ_YYYY-MM-DD_INITIALS_NN - description` (e.g., `√ WV_2026-06-10_AA_01 - session ID convention update`). The checkmark prefix signals the session is complete. Base the description on what actually happened, not the provisional name from orientation.
+
+Present the final thread name on its own line inside a fenced code block (triple backticks) with nothing else in the block, so it renders as a one-click-to-copy box in chat.
 
 This step is intentionally last. The thread name is the signal that all session-close work is complete -- the user copies it, and the session is done.
 
@@ -414,19 +457,12 @@ Adapt detail to the work type:
 - Design: what prior decisions constrain the space, what the deliverable is
 - Debugging: what's broken, what was tried, where the evidence is
 
-### Active quest threads
+### Active threads
 
-Threads of ongoing work across recent sessions. Included so future
-instances don't lose sight of parallel workstreams. See Step 2.6 for
-how to maintain this section.
-
-**1. Thread name** (session range, e.g. S152-S157 or WV_2026-06-01_AA_01 through WV_2026-06-10_JC_02)
-Remaining work summary. Key doc: `path/to/spec.md`.
-
-**2. Thread name** (session range)
-Remaining work summary. Key doc: `path/to/spec.md`.
-
-[Repeat for each active thread. Remove when completed.]
+Open parallel arcs live in the Active Threads ledger: [[Active Threads - {Project}]]
+(maintained in place at close -- not duplicated in the entry). For projects without
+a ledger, keep the roster inline here instead -- see Step 2.6 for the legacy format
+(bold numbered name, session range, 2-3 sentences of remaining work, key doc paths).
 ```
 
 ## Structured Format for Complex Sessions

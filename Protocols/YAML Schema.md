@@ -2,7 +2,7 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: '2026-06-21'
+updated: '2026-08-08'
 operator: Andrew
 priority: high
 maturity: working
@@ -10,6 +10,9 @@ edit_log:
   - DW-S182 2026-06-13
   - DW-S183 2026-06-14
   - "DW-S191 2026-06-21: added stream: session-log field"
+  - "DW-S198 2026-06-23: added claim_id stub field"
+  - "DW-S262 2026-08-08: added embed_targets field (embeddable synth-note
+    harvest; D116)"
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. Obsidian resolves wikilinks by filename regardless of folder path, so the short form is sufficient and more robust than full paths.
@@ -85,6 +88,8 @@ Fields specific to session-log entry files, beyond the birth metadata every file
 |---|---|
 | `side-quest` | Entry is a tangent from the main arc; its "What's next" does not carry the main-arc handoff |
 | *(absent)* | Normal main-arc session entry |
+
+**`claim_id`**: A short random token (e.g. a 6-8 char hex nonce) stamped on a session-log *stub* at claim time to make session-claiming collision-evident under concurrency. After writing the stub, the claiming instance re-reads it and checks `claim_id`: if the on-disk value is not the one it wrote, a parallel instance won the slot, so it claims the next free identifier instead (PI Orientation Step 3, verify-after-claim). Ephemeral - present only while `status: in-progress`; the session-closer strips it when it overwrites the stub with the full entry at close. Design: [[Session Claiming Under Concurrency]].
 
 ### Infrastructure File Frontmatter
 
@@ -201,6 +206,18 @@ harvest_notes: "Initial enrichment. Manual harvest extracted bonding curves fram
 - **`fathom_id`**: The Fathom recording ID (integer). Bridges between the Fathom Meeting Index and transcript files. Add to any Fathom-sourced transcript.
 
 **Backward compatibility.** Existing source files don't need migration -- they gain new fields when next harvested. `harvested_date` (old) and `harvest_date` (new) are the same concept; instances should accept either when reading. `last_agent` (old) maps to session log entries; no YAML migration needed.
+
+### Embed Targets (synth-note harvest)
+
+**`embed_targets`** lives on a *synth note* -- the `c_` companion a multi-destination harvest is written into under the embeddable synth-note pattern -- not on the source. It is an array of wikilinks to the destination docs that transclude the synth note's sections, recording the second provenance hop after the source's `harvested_into` points at the synth note. This keeps the onward embed flow machine-scannable.
+
+```yaml
+embed_targets:
+  - "[[Working Plan Doc]]"
+  - "[[Decision Log]]"
+```
+
+Present only on synth notes built for this pattern; absent on ordinary companions and sources. The synth note stays `type: companion`. Convention and full workflow (Embed Map, team-download header, heading-parity close step): [[Conventions Registry]] (Harvest via embeddable synth note). Provenance model: [[Harvest Provenance Architecture]].
 
 ### Federation Fields
 
