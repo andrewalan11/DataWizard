@@ -11,6 +11,9 @@ SYNC-BLOCKED.md
 # User-specific config
 Vault Config.md
 task-manager-config.md
+_to_delete/
+Seed\ Sync\ Log.md
+Seed/
 
 # Telegram harvester artifacts (credentials and session files - never commit)
 Scripts/.env

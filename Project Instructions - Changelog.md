@@ -16,6 +16,7 @@ edit_log:
 
 Version history for the DataWizard Project Instructions (`DataWizard Project Instructions.md`). The live instructions stay lean and `@import`-clean; their history lives here. VERSION.md is the canonical version source.
 
+
 ## Version Tracker
 
 | What | Version | Last changed |
