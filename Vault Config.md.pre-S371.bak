@@ -1,0 +1,48 @@
+---
+title: Vault Config
+type: project-doc
+created: '2026-03-21'
+updated: '2026-09-07'
+status: active
+tags:
+  - datawizard
+  - config
+---
+
+# Vault Config
+
+User-specific settings for this vault. Claude instances read this file during orientation to find local paths and preferences.
+
+This file is NOT shared — each user maintains their own. It is NOT published to GitHub with the Seed.
+
+## Paths
+
+| Key | Value |
+|---|---|
+| vault_root | `~/Vaults/Regen Vault` |
+| scripts_dir | `_DataWizard/Workshop - DataWizard/Scripts/` (primary; dw_ops, Reddit tools, migrated scripts) |
+| scripts_dir_legacy | `~/Library/CloudStorage/Dropbox/Scripts/DataWizard` (pipeline scripts: classify.py, segment_transcript.py; rabbit_whole/) |
+| dw_seed_git | `_DataWizard/Seed/` (nested repo, https://github.com/andrewalan11/DataWizard) |
+| seed_role | `upstream` (this machine is the Seed source of truth - update_seed.sh refuses to sync or install auto-sync here) |
+| ollama_host | `http://localhost:11434` |
+| dw_save_logs | active: `~/.datawizard-sync.log` (last 1,000 lines) - full history: `~/.datawizard-sync.log.archive` (rotated, never discarded) - one-time snapshot: `~/.datawizard-sync.log.pre-trim` (63,599 lines, taken 2026-09-06 before the first rotation; S336) - vault copy of that snapshot: `_DataWizard/xArchive - DataWizard/DW Save Log - pre-rotation snapshot 2026-09-06.log` |
+
+## User
+
+| Key | Value |
+|---|---|
+| name | Andrew Hasse |
+| email | andrewhasse@gmail.com |
+
+## Garden Sources
+
+Used by the `garden-synthesis` skill to resolve where seeds, gardens, and research layers live. Paths are relative to `vault_root` unless absolute. See `Seed/Skills/garden-synthesis/SKILL.md`.
+
+| Key | Value |
+|---|---|
+| seed_sources | `_Seeds/`, `_SeedPods/` |
+| garden_home | Per-concept folder at vault root -- each garden gets its own `_<Concept>/` folder (e.g. `_Glowing Futures/`, `_SeedsWell/`). Not a central `_Gardens/`. |
+| research_layers | 1. local vault (`~/Vaults/Regen Vault`) -> 2. archive/transcript (`~/Documents/Claude/Projects/DataWizard/Recall Vault`) -> 3. web |
+| planter | `_DataWizard/Seed/Scripts/plant_garden_seeds.py` (ships with the Seed) |
+| companion_base | `_Bases/` (one `.base` per garden, named `<Garden Name>.base`); generator `_DataWizard/Seed/Scripts/generate_garden_base.py` |
+
