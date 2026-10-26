@@ -1,5 +1,5 @@
 
-seed: 1.11.11
+seed: 1.11.12
 protocol: 1.8
 project_instructions: 4.9
 
@@ -72,6 +72,16 @@ Design, edit its plist to point at the new root path.
 This notice can be removed from VERSION.md after 2026-09. The recovery
 procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
 Clone (Remote-Agnostic)") and survives this notice's retirement.
+
+## What's New in 1.11.12
+
+**Patch release: four tool behaviors from two partner projects (Future Visions, Rootland), all about reading outside sources.** One DataWizard session (2026-10-26). Shipped in the Seed:
+
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0 web_fetch Behaviors.md`: WebFetch can serve an old snapshot of a GitHub repo page (old star and commit counts) - read raw files and the API instead; `api.github.com/repos/...` can be blocked or stale for a sub-agent while the commits, releases and search routes answer; Kickstarter project pages are unreadable by the web tools (header data only, HTTP 403 from curl).
+- `Guides/Cowork Build Environment/5.0 Network and GitHub Data.md`: the repo landing page is no longer named a reliable source for counts without a cross-check (pointer to the bullet above).
+- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: a research sub-agent's `curl` to a site's public API was refused by the permission check before it ran - plan a browser check or a call by the lead.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.11.11
 
