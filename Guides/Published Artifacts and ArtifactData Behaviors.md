@@ -2,7 +2,7 @@
 title: Published Artifacts and ArtifactData Behaviors
 type: guide
 created: 2026-10-12
-updated: 2026-10-20
+updated: 2026-10-26
 operator: Andrew
 origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects); backfilled DW-S428'
 scope: seed
@@ -23,6 +23,7 @@ edit_log:
   - 'DW-S427 2026-10-19 - tool behaviors B-0181, B-0182 (side-panel page window and fit pass; new section Page runtime calls: sample takes a size, and the second-HTML-page bullet moved there unchanged from Rendering constraints; platform comment panel and the two link forms; publish result sharing line; new artifact as the answer to clearing comments)'
   - 'DW-S427 2026-10-19 - tool behaviors B-0190 (Page runtime calls: a page starts a scheduled task through the mcp capability, owner only; count every live subscription before checking the cap)'
   - 'DW-S428 2026-10-20 - Publishing: Artifact list scope files does not count as viewed; second sighting of the refused, refused, publishes sequence (board B-0192, LocationScout)'
+  - 'Seed 1.11.11 2026-10-26 - large-read bullet - a read of an artifact this session did not publish saves the full HTML to a local file that sub-agents can read (board B-0226, ReWoven)'
 ---
 # Published Artifacts and ArtifactData Behaviors
 
@@ -60,7 +61,7 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 
 **`Artifact read` needs the full `https://claude.ai/artifact/<id>` URL.** A bare `claude.ai/artifact/<id>` (or a bare id) is refused as "not an artifact URL". (Evolutionary Media Commons, 2026-10)
 
-**A large read is saved to a tool-results file; only the head shows inline.** A ~700 KB page came back head-only, with the full HTML in a tool-results file; extract what you need (e.g. a baked data constant) from that file with a script rather than re-reading. (Holonic Canvas, 2026-10)
+**A large read is saved to a tool-results file; only the head shows inline.** A ~700 KB page came back head-only, with the full HTML in a tool-results file; extract what you need (e.g. a baked data constant) from that file with a script rather than re-reading. An `Artifact` read of an artifact this session did not publish saves the full HTML to a local file (the result names it, as `.../tool-results/artifact-<id>-<version>.html`). Sub-agents in the same container can read that path, so a large page (an 870 KB deck here) can go to a reviewer agent without passing through the lead's context. (Holonic Canvas, 2026-10; ReWoven, 2026-10)
 
 **A Slides-type artifact keeps its speaker notes in each slide's `<aside>`, not in the store.** The notes sit in `project/slides/<id>.html` (slide order in `project/deck.json`). The ArtifactData `notes` collection was empty in both decks read. Read all slide files in one `Artifact read` call with `paths`. (MetaMyth, 2026-10)
 

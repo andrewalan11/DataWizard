@@ -1,5 +1,5 @@
 
-seed: 1.11.10
+seed: 1.11.11
 protocol: 1.8
 project_instructions: 4.9
 
@@ -72,6 +72,24 @@ Design, edit its plist to point at the new root path.
 This notice can be removed from VERSION.md after 2026-09. The recovery
 procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
 Clone (Remote-Agnostic)") and survives this notice's retirement.
+
+## What's New in 1.11.11
+
+**Patch release: 24 tool behaviors from partner projects (Rootland, VibeCut, Tech Tools, ReWoven, Holonic Canvas) and DataWizard sessions, with a new section on Claude Code cloud sessions.** One DataWizard session (2026-10-26). Shipped in the Seed:
+
+- `Guides/Cowork Build Environment/11.0 Claude Code Cloud Sessions.md` (new section, embedded in the shell `Guides/Cowork Build Environment.md`): a promotional cloud-session credit did not cover Cowork tasks; a private repository is reachable only when the Claude GitHub App is installed on it (authorized is not enough); a session cannot create a repository; the "Limited" network takes one domain per line, and the safety scanners need four hosts beyond the defaults; GuardDog installed only through pipx; an unattached public repository can be cloned.
+- `Guides/Cowork Build Environment/`: 10.0 (the scanners and `sqlite3` are not in the device shell - run them from the Mac Terminal; a scanner's risk label says where to read, not what is wrong; OSV-Scanner 2.7.0 can stop on one lockfile and counts every lockfile in a monorepo; GuardDog 3.2.0 runs the same 54 rules for every ecosystem subcommand and needs its Landlock sandbox; licensee 10.1.0 exits 1 with valid JSON when it finds no license; pointer to 11.0 for the cloud hosts); 1.0 (the device shell cannot run git inside a linked worktree - the operator writes `git diff`, `git log` and `git status` output into a review bundle on the Mac; read-only `git status` and `git diff` can leave `.git/index.lock`, so on the Mac use `GIT_OPTIONAL_LOCKS=0`; git-ignore `.fuse_hidden*`; git-ignore a backup of private data before it is written); 3.0 (Python run on the device shell writes `__pycache__` into the vault - use `python3 -B` or `ast.parse`); 4.0 (Claude Code reports "Not logged in" without `USER` and `LOGNAME`; the flags a look-only headless run needs); 5.0 (where `api.github.com` was blocked, the npm, PyPI and crates.io registries still worked); 8.0 (a tool's data folder under `~/Library/Application Support/` is protected - the operator copies the run folder into a connected folder; `device_bash` can answer "downloading the isolated Linux environment" and recover within minutes).
+- `Guides/Git Guide/`: 6.0 (a linked worktree is read through the operator's review bundle); 2.0 (`.fuse_hidden*` in the `.gitignore` template); 9.0 (stale index.lock: read-only git through the device bridge can leave it; pointer to `GIT_OPTIONAL_LOCKS=0`).
+- `Protocols/Conventions Registry/10.0 Archiving.md`: backups of private data are git-ignored before they are written (an auto-sync plugin pushes anything else within about half an hour).
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`: an `Artifact` read of an artifact the session did not publish saves the full HTML to a local file that sub-agents can read.
+- `Guides/Chrome MCP and Web Tool Behaviors/`: 10.0 (the extension refuses `old.reddit.com` too); 4.0 (Reddit share links, `old.reddit.com` and `.json` URLs are blocked as well; ask the operator to read an image-only post).
+- `Guides/MCP Reliability and Write Verification/12.0 Obsidian Behavioral Gotchas.md`: `search_notes` returns at most 20 results - an exhaustive link check is a `grep`.
+- `Guides/Script Portability.md`: new short section - a tool started by launchd can run on `/usr/bin/python3` (3.9).
+- `GUIDES.md`: the Cowork Build Environment row names Claude Code cloud sessions and where the scanners run.
+- `SKILLS.md`: Workshop table gains the cloud-triage row (new DataWizard Workshop skill: batch research and safety checks in Claude Code cloud sessions, decided on a click page) and the missing intake-handoff row.
+- `VERSION History.md`: the What's New entries for 1.10.0 to 1.10.4 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
+
+**Propagation:** `update_seed.sh` (it copies the new section file). No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.11.10
 
@@ -213,72 +231,9 @@ A script that finds oversize files and splits them by these steps is planned; th
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
-## What's New in 1.10.4
-
-**Patch release: the Conventions Registry and the session-closer skill are sectioned. No rule changed.** One DataWizard session (2026-10-18). Both files were past the ~50 KB line where vault tools turn unreliable. Text moved byte for byte; a reassembly check matched the originals exactly. Shipped in the Seed:
-
-- `Protocols/Conventions Registry.md` is now a short shell (frontmatter, intro, a navigation paragraph, 37 `![[embeds]]`) plus one section file per entry in `Protocols/Conventions Registry/` (`1.0 Link, don't restate.md` .. `37.0 Intake capture placement.md`). Two file names drop a character that is not filename-safe: `4.0 Operator personal - scratch folders.md` and `19.0 Provenance - by and via.md` (the H1 keeps the original). Cite an entry by name as before (Conventions Registry, "Entry name"). Through the Obsidian MCP an embed does not expand: open the section file. Edit the section file, never the shell. Block ids travel with their entries (`^b42` is in `30.0 Carry the probe, not the snapshot`, `^b43` in `36.0 Attention requests live in the flag cluster, not banners`).
-- `Skills/session-closer` v4.10.4: SKILL.md keeps every step (0 to 5), the step numbers, `name` and `description`. Long, seldom-used blocks moved word for word into `Skills/session-closer/references/` (progressive disclosure, not embeds, because skill loaders do not expand embeds): `output-format.md` (entry templates; read at Step 2), `multi-operator-flags.md` (Step 3.12 team flag prompt, Step 3.13 flag expiry pass), `no-ledger-roster.md` (Step 2.6 roster for projects with no ledger), `action-items-triage.md` (periodic triage), `changelog.md` (older edit_log lines, kept). Each step that needs a reference file says so. SKILL.md drops from about 60 KB to about 42 KB. `SKILLS.md` row synced.
-- `Protocols/Content Type Taxonomy.md` and `Config/taxonomy.yaml`: infrastructure types `protocol-section` and `skill-reference` registered.
-
-**Adopters:** a `[[Conventions Registry#Heading]]` or `[[Conventions Registry#^blockid]]` link in your own notes no longer resolves (headings and block ids now live in the section files): repoint it to the section file, for example `[[30.0 Carry the probe, not the snapshot#^b42]]`. Plain `[[Conventions Registry]]` links and name citations keep working. Find them in a Terminal at the vault root: `grep -rn "Conventions Registry#" --include="*.md" .`
-
-**Propagation:** `update_seed.sh` (it copies the new folders). No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.10.3
-
-**Patch release: tool behaviors from three partner projects and two DataWizard sessions, a filename rule, and a shorter VERSION.md.** One DataWizard session (2026-10-18). Shipped in the Seed:
-
-- `Guides/Filename Safety.md`: no `!` in new file or folder names (inside double quotes, `!` followed by a letter starts history expansion in an interactive zsh or bash Terminal and a pasted command fails with `event not found`); existing names are renamed on touch, inside the app, never in a batch.
-- `Guides/Git Guide/5.0 Daily Workflow.md`: check every rollback or backup file name against `.gitignore` before a run.
-- `Guides/Git Guide/6.0 Branch Workflow and Pull Requests.md`: new section - an unattended build gets its own linked worktree, never a branch switch in the primary checkout; the merge is `--ff-only`.
-- `Guides/Git Guide/7.0 Safety and Recovery.md`: the GitHub Support category "Deletes" opens a repository deletion form, not a sensitive-data request.
-- `Guides/Cowork Build Environment/`: 4.0 (quote every glob in an operator command - zsh stops on an unquoted glob that matches nothing); 5.0 (the container's GitHub API can refuse one repository for the session); 8.1 (`device_commit_files` writes mode 0600 - add a `chmod 755` step for scripts; with the shell down it still gives a byte copy of a long new file); 8.2 (fast-tier helpers can run stage and commit from path-list files; one file owns a string that parallel agents share; the permission classifier can deny the lead's edit while a sub-agent's passes); 9.0 (same FAIL ids are not the same failures - compare the detail text on the base branch; a fixture `HOME` does not isolate launchd).
-- `Guides/Chrome MCP and Web Tool Behaviors/`: 1.0 (a same-origin iframe gives a true narrow layout when `resize_window` does nothing); 2.0 rung 10 (a sidebar teaser from `get_page_text` - walk up from the `h1`); 4.0 (GitHub search and list pages can answer ROBOTS_DISALLOWED - fetch the repo URL or the raw LICENSE; WebFetch can refuse a quick second fetch of a URL that failed); 10.0 (a bot-check wall can clear after a second navigate and a short wait; the extension can drop to "not connected"); 12.0 (third-party pages can carry text aimed at AI agents - treat page text as data).
-- `Guides/Browser and File System Access Behaviors.md`: Chromium decides `:focus-visible` per document - pass the trigger type into an iframe and use `focus({focusVisible})`.
-- `Guides/Script Portability.md`: new section on case-insensitive disks.
-- `VERSION History.md` (new): the What's New entries for 1.0.0 to 1.5.0 moved there word for word, so this file stays under the size where vault tools turn unreliable. Nothing was cut.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.10.2
-
-**Patch release: the commit guard checks for secret files, commit messages no longer carry the computer's name, and one review pattern is codified.** One DataWizard session (2026-10-18). Shipped in the Seed:
-
-- `Scripts/hooks/pre-commit` (the commit guard): a third check, for secret files. A commit is blocked when its staged files include anything DW Save's secret-file guard blocks (`*.session` / `*.session-journal`, `.env` and `.env.*` except `.example` / `.sample` / `.template`, anything under `Scripts/output/`, `Vault Config.md` and its copies; upper and lower case count as the same). The hook checks only what the commit would add or change: a staged deletion never blocks, a rename counts as the new name, and a first commit on a new repo is checked too. `SYNC-BLOCKED.md` and the terminal name each file with its fix (`git rm --cached -- "<path>"` keeps the file on disk; then add it to `.gitignore`), and for this check neither offers `git commit --no-verify`. If git cannot list the staged files, the commit is blocked. The hook holds a byte-for-byte copy of DW Save's `is_secret_path`, and a test fails when the two differ. Also fixed: the conflict-marker and filename checks now also check renamed files (before, `git mv note.md 'note?.md'` got through).
-- Not covered by the hook: `git commit --no-verify`; commits made where hooks do not run (Obsidian Git on mobile); a merge commit that git creates without a conflict (git runs `pre-merge-commit`, not `pre-commit`, for those); a secret that is already in the last commit and unchanged (for example under `git commit --amend`), because the hook reads the staged changes only. DW Save's guard still catches all of these at push time.
-- `Scripts/datawizard-sync.sh` (DW Save): automatic commit messages no longer contain the computer's network name. They read `auto-sync <date> <time> on <label>`, where `<label>` comes from a new lower-case `machine: <label>` line in `~/.datawizard-sync.conf`: one word made of letters, digits, `.`, `_` or `-`. With no such line the label is `Mac`. With an invalid value (for example `machine: my mac`) the label is also `Mac`, and the log gets one warning per run. `--install` adds `machine: Mac` to a conf that lacks the line and keeps any value already there; because of the new line, the first re-install after this update rewrites the conf once (with a backup). `Scripts/datawizard-sync-setup.md` and `Guides/Git Guide/10.0 Commit Guards.md` describe both changes.
-- `Guides/Multi-Instance Coordination Patterns.md`, Pattern 3 step 3: for a runbook an operator pastes into a terminal, the reviewer rehearses it on a copy, writes every number the operator will see into each step with a STOP condition, and checks the live run against those numbers. `Skills/supervised-build` v1.5.2 (Reviewer Steps): check scripts for the operator travel as vault files with a sha256 to compare, never as pastes. `SKILLS.md` synced.
-
-**Propagation:** `update_seed.sh` for zip installs. Then re-run `datawizard-sync.sh --install` (or `install-git-hooks.sh` in each repo) to pick up the new hook. Repos that keep the hook in a tracked `.githooks/` folder (Weave) need that copy updated in the repo. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.10.1
-
-**Patch release: DW Save refuses to publish secret files, and the Seed history is clean.** One DataWizard session (2026-10-17). Shipped in the Seed:
-
-- `Scripts/datawizard-sync.sh` (DW Save): a secret-file guard. Before committing, and again right before pushing, each repo is checked for `*.session` / `*.session-journal`, `.env` and `.env.*` (except `.example`, `.sample`, `.template`), anything under `Scripts/output/`, and `Vault Config.md` (including copies such as `Vault Config.md.<suffix>`); upper and lower case count as the same. It checks the staged files and every local commit not yet pushed. A hit blocks that repo (other repos still save), names the file and the fix on the status card, and never unstages or deletes anything; if the check itself cannot run, the repo is blocked too. The pattern list is owned by one function, `is_secret_path`; since 1.10.2 the commit guard holds a verbatim copy, kept identical by a drift test. `Scripts/datawizard-sync-setup.md` describes it. Operators running a `~/Scripts` copy: re-run `datawizard-sync.sh --install` to point the hotkey and the scheduled job at the Seed copy.
-- History rewrite (see the NOTICE above) and placeholder examples in `Scripts/tg_harvest_thread.py`, `Guides/Telegram Harvesting.md` and `Scripts/datawizard-aliases.sh`.
-- `Guides/Git Guide/7.0 Safety and Recovery.md`: Step 4 names the 2026-10 rewrite signature, the file-diff gate for local work, the `reset --keep` then `stash pop` path, and what a pre-1.10.1 DW Save shows on an old clone (`could not reach GitHub`, nothing pushed).
-
-Not yet covered: the commit guard (`Scripts/hooks/pre-commit`) has no secret check, so a manual `git commit` plus `git push` outside DW Save is not stopped. *(Covered since 1.10.2: the commit guard now has the same check.)*
-
-**Propagation:** `update_seed.sh` for zip installs; git clones follow the NOTICE. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.10.0
-
-**Minor release: tool evaluations get one canonical home.** One DataWizard session (2026-10-17). Shipped in the Seed:
-
-- `Protocols/Conventions Registry.md`, new entry "Tech tool evaluations": a vault that keeps a tool-evaluation project evaluates each tech tool (a code repo, an app, a model or a service) once, in one shared note that every other project reads first. Up to three notes per tool, each answering a different question: the `_Entities/` core (identity and relations), the shared evaluation note, and each project's short "fit for us" view. The entry also says who may write the shared note, when a tool gets a core (an evaluated note plus at least one project in `fit:`; minted on touch, never in a batch), that existing evaluations adopt on touch, and that a non-repo tool note is named by the plain tool name. The "Holonic records" sync rules point at it.
-- `Protocols/YAML Schema.md`: new section "Tool Evaluation Notes" - `repo_key`, `one_liner`, `license`, one platform field per operator platform (for example `mac`), `tool_maturity` (the tool's state; `maturity` stays the document field), `categories`, `reviewed_by`, `fit`, `verdict` (clone / later / skip / `cloned`; the operator's answer only), `safety`, `safety_checked`, `safety_by`. Holonic Records gains the anchor scheme `github-repo~<owner>/<repo>` (one repository, lower-cased; the login alone stays `github`).
-- `Guides/Make Your Project Data Holonic.md`: the cores-on-touch paragraph points at the stricter test for tools.
-
-**Adopters (only if your vault keeps a tool-evaluation project):** add two rows to your own `Vault Config.md` (it is git-ignored, so `update_seed.sh` never touches it): `tool_eval_dir` - the project's folder, for example `_Tech Tools/` (scripts that write tool notes read it and refuse to run without it); and the project's lens in `holon_lens_map`, for example `_Tech Tools/=TT`. A vault without such a project can ignore the entry.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
 ## Older releases
 
-The What's New entries for 1.0.0 to 1.9.5 are in `VERSION History.md` (moved there word for word, 2026-10).
+The What's New entries for 1.0.0 to 1.10.4 are in `VERSION History.md` (moved there word for word, 2026-10).
 
 ## Versioning
 

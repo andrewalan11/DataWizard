@@ -2,9 +2,10 @@
 title: DataWizard Skills
 type: project-doc
 created: '2026-03-26'
-updated: 2026-10-21
+updated: 2026-10-26
 origin: DW-S250 2026-08-06
 edit_log:
+  - 'DW-S437 2026-10-26 - Workshop table: cloud-triage row (v0.1.0) and the missing intake-handoff row (v1.0.0)'
   - 'DW-S433 2026-10-21 - session-closer row -> v4.11.2 (proposed decision text kept at close; size check points at Registry 7.0); meta-learning-review row -> v1.5.6, meta-learning-scan row -> v1.4.3 (tracking claims quote the line)'
   - 'DW-S430 2026-10-21 - supervised-build row -> v1.6.1 (exact fix text in the review file; builder output outside the vault)'
   - 'DW-S424 2026-10-19 - session-closer row -> v4.11.1 (look-back reports surfaced); Workshop table: session-lookback row (v0.2.0, draft)'
@@ -140,6 +141,8 @@ Skills that depend on DW infrastructure (tracking index, triage docs, two-vault 
 | **corpus-enrichment** (v1.3) | Enrich corpus source articles into structured companion notes (entities, relationships, lexicon candidates, synthesis) for the Rabbit Whole RAG pipeline. The production enrichment path under the Claude-first strategy (D125). Depends on the DW corpus registry and scheduled-task setup. |
 | **org-federate** (v1.2.2) | One org link in -> one core record (`_Entities/`, `hid` minted through the index, `relations:` records) + a projection per target project, each carrying the four projection fields and the v2 shared-facts block (holonic records, D133/D134). Two modes: federate a URL; project an existing core into one more project. Triggers on 'federate this org <url>'. Direct writes for own projects, exchange note / handoff file for team repos; people strings go to the held list, never to the core; never writes `allies_*`, never rebuilds a map. Seed promotion requested (S382). |
 | **session-lookback** (v0.2.0, draft) | Looks back over the session logs closed since the last look-back and reports open items that slipped (on no tracking list) or sit on a stale line. One short pending-review report; never edits a tracking surface. Runs as a weekly scheduled task (no-op until 10 sessions have closed, or while a report waits for review) or by hand. The between-triage scan for the Review Automation "Backlog + FR triage" row (leak prevention fix 3, S424). Seed promotion after a second vault runs it. |
+| **intake-handoff** (v1.0.0, active) | A project session works its own intake handoff list item by item: the links Andrew confirmed in the Intake Review GUI that intake_apply.py routed to this project. Follows Andrew's reviewer note first; classifies each item and sends it to the right path (Tech Tools look-up and fit view, clone and security scan, org-federate, a harvest skill, or an action item); records each close on the keeper note through `ih_tool.py`, where intake_apply.py never writes. Triggers on 'work the intake handoff', 'work the intake list', 'process the routed links'. |
+| **cloud-triage** (v0.1.0, active) | Unattended research, triage or safety checks on a batch of dozens of links or repos, run in Claude Code cloud sessions from a sanitized private jobs repo; Andrew decides on a click page whose answers a session reads back into the vault. The unattended counterpart of batch-triage; feeds intake-handoff Steps 3-4 (the owning project closes, D158). Depends on the device bridge, `build_pack.py`, a jobs repo with the Claude GitHub App installed, and ArtifactData. Triggers on 'cloud triage', 'run this batch in the cloud', 'use the cloud credit', 'cloud safety checks', 'make a click page for these'. |
 
 ## Skill Format
 

@@ -2,7 +2,7 @@
 title: Script Portability
 type: guide
 created: '2026-09-23'
-updated: '2026-10-21'
+updated: '2026-10-26'
 operator: Andrew
 status: active
 edit_log:
@@ -11,6 +11,7 @@ edit_log:
     encoding, BSD vs GNU, trace-verify)"
   - "DW-S421 2026-10-18 - S419a-2"
   - "DW-S433 2026-10-21 - new section SQLite builds differ: pointer to the WAL read-only failure in Cowork Build Environment 6.0 (meta-learning review S405-S422)"
+  - "Seed 1.11.11 2026-10-26 - new section A launchd job can run the system Python (/usr/bin/python3 3.9; DataWizard backlog)"
 ---
 
 # Script Portability
@@ -38,6 +39,10 @@ A default macOS disk treats `Out/data` and `out/DATA` as one folder. Linux treat
 ## SQLite builds differ
 
 The macOS SQLite (3.51 in one case) refused a read-only open of a WAL-mode database that had no `-shm` file. The container's older SQLite, running as root, allowed it, so the script passed every cloud test. Run a script that reads a shared database on a Mac once before it ships. Symptom and fix: [[6.0 SQLite on the Vault Mount]]. (DataWizard, 2026-10)
+
+## A launchd job can run the system Python
+
+A tool started from a launchd job (a hub, a scheduled job) can run under `/usr/bin/python3` - Python 3.9 on one Mac - not the Homebrew Python that Terminal finds. Code that ran from Terminal failed only when the hub started it: `str | None` type hints need `from __future__ import annotations` under 3.9. Test every tool that launchd starts under `/usr/bin/python3` before it ships. (DataWizard, 2026-10)
 
 ## Trace-verify before shipping
 

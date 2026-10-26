@@ -65,11 +65,11 @@ operator: Andrew
 scope: seed
 title: Cowork Build Environment
 type: guide
-updated: 2026-10-15
+updated: 2026-10-26
 ---
 # Cowork Build Environment
 
-> Guide for Claude instances building real codebases from inside Cowork -- a mounted folder plus a Linux sandbox. Covers the git-on-mount build workflow, language toolchains, shell and file-tool quirks, network workarounds, rendering, and the device bridge.
+> Guide for Claude instances building real codebases from inside Cowork -- a mounted folder plus a Linux sandbox. Covers the git-on-mount build workflow, language toolchains, shell and file-tool quirks, network workarounds, rendering, the device bridge, third-party code scanning and Claude Code cloud sessions.
 >
 > **Scope.** Obsidian MCP failure modes, FUSE-mount write/delete restrictions, and the general write-verification protocol live in **MCP Reliability and Write Verification** -- this guide cross-references rather than restates them. Chrome MCP and web-page reading recipes live in **Chrome MCP and Web Tool Behaviors**.
 >
@@ -100,6 +100,8 @@ Field provenance: the core cluster was re-learned session after session across a
 ![[9.0 Verification Discipline for Builds]]
 
 ![[10.0 Scanning Third-Party Code]]
+
+![[11.0 Claude Code Cloud Sessions]]
 
 ## See Also
 
