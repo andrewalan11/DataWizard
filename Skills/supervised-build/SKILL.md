@@ -11,11 +11,12 @@ description: >-
   (Pattern 3), a build with no reviewer available, or incidental concurrency
   between unrelated sessions.
 type: skill
-version: '1.6.1'
+version: '1.6.2'
 created: '2026-08-30'
-updated: 2026-10-21
+updated: 2026-10-27
 operator: Andrew
 edit_log:
+  - 'DW-S440 2026-10-27 - v1.6.2: Reviewer Steps - private sources, the builder gets the team-safe extract and the reviewer greps the seeds (Seed 1.11.13; MetaMyth)'
   - 'DW-S430 2026-10-21 - v1.6.1: Reviewer Steps - exact current -> replacement text goes in the review file the fixer reads, never only in the hand-back; In-thread variant - device_bash builders write output to an absolute path outside the vault (Seed 1.11.8)'
   - 'DW-S422 2026-10-18 - v1.6.0: Builder 5 chunk done-mark - every leftover becomes its own tracking line before the chunk is marked done, and the chunk report quotes the lines; Reviewer 2 checks they exist (leak prevention fix 2)'
   - 'DW-S419 2026-10-18 - v1.5.2: Reviewer Steps - operator-run check scripts travel as vault files with sha256 checked against the rehearsal copy, never heredoc pastes; in-thread delivery bullet points to it (DW-S418 Seed history purge)'
@@ -110,6 +111,8 @@ Per chunk:
 **Validate the harness against the real tool.** A fixture that stubs, rewrites, or simulates what a tool reports must be checked against what the tool actually prints - configured intent and effective output can differ (e.g. `git remote -v` prints insteadOf-rewritten URLs, not the configured ones). And every scenario asserts its expected message, never just the exit code, so a silently degraded harness cannot pass. Field grounding: a URL-guard regression harness built on insteadOf rewrites silently exercised only the guard's no-match path; per-scenario message assertions caught it, and incidentally proved the degraded path failed closed (2026-09). Same class as the live-distribution check: the measuring instrument measuring itself.
 
 **Probe for silent drops.** Ask of every parser or pipeline the build ships: where does this discard input without a trace? Any input the system drops silently - an unrecognized field, an annotated value, an unresolvable reference or embed, an unmappable record - gets a counter or a lint warning, never silence; the behavior (ignore, degrade, skip) is often right, the invisibility is the defect. Field grounding: two arcs, every review-found defect in this class - a stamper's silent wrong-line write (2026-08), and a status board whose annotated statuses, unknown keys, and missing embeds each vanished from counts until instrumented (2026-08).
+
+**Private sources: give the builder the team-safe extract, then grep the seeds.** When a build draws on a private source (a recorded call, a private chat), the builder gets only the team-safe extract, never the raw source. Make this an explicit review step: the reviewer greps the generated seeds and content for names and remarks that appear only in the private source, and reads every seeded row against its source. In one build the team-safe extract still produced seed rows (a team roster) that carried a call-only name with a ranking remark, a money remark under an investor's name, and an identity guess; the independent reviewer found all three by reading each row against its source. For the redaction itself see `Skills/shared-layer-redaction`. (MetaMyth, 2026-10)
 
 **Force the ordering before accepting "flake".** When the lead calls a failure a flake, the reviewer forces the event ordering - what ran, in what order, with what output - before accepting the label, with a probe that drives the other order. In the field six plain re-runs passed while a forced-order probe proved a real race, which then failed deterministically before the fix and passed after - the third field instance of fresh eyes running code. (Holonic Canvas, 2026-10)
 

@@ -1,5 +1,5 @@
 
-seed: 1.11.12
+seed: 1.11.13
 protocol: 1.8
 project_instructions: 4.9
 
@@ -72,6 +72,22 @@ Design, edit its plist to point at the new root path.
 This notice can be removed from VERSION.md after 2026-09. The recovery
 procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
 Clone (Remote-Agnostic)") and survives this notice's retirement.
+
+## What's New in 1.11.13
+
+**Patch release: 34 tool behaviors from seven partner projects (Rootland, Common Woods, Mesocosm, Kosmosis, VibeCut, ReWoven, MetaMyth) and DataWizard sessions, mostly about folder access, cloud sessions, git in cloud clones and published artifacts.** One DataWizard session (2026-10-27). Shipped in the Seed:
+
+- `Guides/Cowork Build Environment/11.0 Claude Code Cloud Sessions.md`: a cloud clone can be shallow (depth 1) and old commit ids then fail (fix: unshallow or a bounded fetch; pin by sha256 in tests); a branch fetched into a depth-1 clone needs explicit refspecs; `gh` can be installed but not logged in (test with `gh auth status`; make a draft pull request optional); a repo agent type (`.claude/agents/`, `tools: Read`) cuts a sub-agent's start-up text 2 to 5 times and enforces the tool list; `add_repo` for a whole private repository can be refused.
+- `Guides/Cowork Build Environment/`: 8.0 (a folder request can be refused with no prompt - ask in chat first and use the `filesystem` MCP meanwhile; a folder added with "Add folder" can take a long time to reach a running session; the folders under `$HOME/mnt/` may not be the vault; ask for the vault root once for a vault-wide grep; a per-URL grep loop timed out at 180 s, one keys-file pass worked); 8.1 (macOS `tar` sidecars also break a test runner's glob; `move_note` with `overwrite: true`); 8.2 (a container restart stops background sub-agents and jobs - resume the builder by message; keep a checker's batch at 10 or fewer); 6.0 (`immutable=1` also works on rollback-journal databases, with a torn-read caveat); 3.0 (the container's default `python3` was 3.13 - call `python3.12` by name; an openpyxl save drops charts); 1.0 (git on an online-only Dropbox or iCloud clone: "Resource deadlock avoided").
+- `Guides/Chrome MCP and Web Tool Behaviors/`: 7.0 (Google Doc tabs and formatted paste through Chrome; the Drive connector cannot edit); 4.0 (LinkedIn short links via Chrome); 6.0 (a second same-day browser download is saved as `name (1).json` - take the newest file); 12.0 (Fathom summary and transcript calls worked); 1.0 and 10.0 (a resize applied only after a later navigation; screenshots saved in the container can be read by sub-agents).
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`: .xlsx, .docx, .pptx and .zip are not served as supporting files (base64 text plus the `downloads` capability; a live click was still untested); the "declares connector but no successful call observed" warning is per session; a sub-agent can build a page but the lead publishes it.
+- `Guides/MCP Reliability and Write Verification/8.0` and `Protocols/YAML Schema.md`: parse the frontmatter block back after any frontmatter write; free-text fields are the usual source of an unquoted colon; a new `edit_log` line goes after the last line of the last entry (a line inside a wrapped entry breaks the parse or joins two entries). `Protocols/Conventions Registry/7.0` and the YAML Schema `section` row: quote a dotted section number (`'2.10'`).
+- `Guides/Orientation Flag Sweep - Query Spec.md`: a Board block ends at the first blank line, not the next `### ` heading.
+- `Guides/Script Portability.md`: an unmatched glob in zsh leaves a command-substitution result empty; scripts refuse an empty file name.
+- `Skills/supervised-build/SKILL.md` (v1.6.2): Reviewer Steps - when a private source feeds a build, the builder gets only the team-safe extract and the reviewer greps the seeds for names and remarks from the private source. `SKILLS.md` row synced.
+- `GUIDES.md`: three rows name the new topics.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.11.12
 

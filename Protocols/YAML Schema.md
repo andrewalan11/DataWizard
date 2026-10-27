@@ -2,7 +2,7 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: 2026-10-21
+updated: 2026-10-27
 origin: DW-S182 2026-06-13
 operator: Andrew
 priority: high
@@ -36,11 +36,12 @@ edit_log:
   - 'DW-S410 2026-10-16 - Holonic Records: community kind carries founded (B-0116); a retracted relation record keeps its index - append, never remove, splice or re-order (B-0093)'
   - 'DW-S417 2026-10-17 - Holonic Records: github-repo anchor scheme row; new Tool Evaluation Notes section (verdict incl. cloned, fit, platform field e.g. mac, tool_maturity, license, reviewed_by, categories, safety, safety_checked, safety_by; D153 + S417 rulings)'
   - 'DW-S430 2026-10-21 - Holonic Records: stored form of a key (hashed in the operational db; consumers hash the plain anchor before joining)'
+  - 'DW-S440 2026-10-27 - colon-space callout widened to any frontmatter write, with the usual free-text carriers; new edit_log bullet - a new line goes after the last line of the last entry; section row - quote a dotted number (B-0239, B-0250)'
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. One exception: `core_note` on a holonic projection is a plain path (see Holonic Records). Obsidian resolves wikilinks by filename regardless of folder path, so the short form is sufficient and more robust than full paths.
 
-> **Quote any scalar that contains `: `.** A colon-space inside an unquoted frontmatter value (a `url:`, a `title:`, an `edit_log` entry) breaks the whole block: Obsidian `get_frontmatter` returns `{}` silently, while a YAML parser (pyyaml) pinpoints the line. Quote the value, or rewrite the separator as ` - `. After any raw edit of a scalar, parse the frontmatter back before trusting it. Symptom and recovery: the MCP Reliability guide, Read-Tool Overflow and Batch Ceilings. (DataWizard, 2026-09)
+> **Quote any scalar that contains `: `.** A colon-space inside an unquoted frontmatter value (a `url:`, a `title:`, an `edit_log` entry) breaks the whole block: Obsidian `get_frontmatter` returns `{}` silently, while a YAML parser (pyyaml) pinpoints the line. Quote the value, or rewrite the separator as ` - `. After any frontmatter write - a scalar, an `edit_log` line or a list - parse the frontmatter back before trusting it. The usual carriers are free-text fields that sessions fill in: `picked_up_by`, `origin`, `description`, and a `reason` inside a list of objects (5 of 8 parse failures in one scan). Symptom and recovery: the MCP Reliability guide, Read-Tool Overflow and Batch Ceilings. (DataWizard, 2026-09; 2026-10)
 
 ### What "Harvest" Means
 
@@ -151,7 +152,7 @@ The following fields MUST be present in frontmatter when any new file is created
 |---|---|---|
 | `title` | Display title | Shell rendering |
 | `parent` | Wikilink to shell | Structural link |
-| `section` | Number in shell | Position |
+| `section` | Number in shell (quote a dotted number: `'2.10'`; Registry 7.0) | Position |
 
 **Recommended when determinable:**
 
@@ -512,6 +513,7 @@ edit_log:
 - When appending would exceed 5 entries, drop the oldest **in the same write**. Nothing is copied anywhere at trim time: the trimmed history is already recorded in the session log manifests.
 - **Section files:** required. **Infrastructure files (0.x) and standalone docs:** recommended. **Shell files:** none - shells are assembly surfaces; their `updated` field bumps when sections change, but they do not accumulate a log.
 - Preferred writer: `stamp_editlog.py` (quote-on-write, append-and-trim, `--manifest` batch mode). Hand edits are legal under the same contract: pass the full windowed list back in a single write (never a bare append via `update_frontmatter` merge - see the MCP Reliability guide's array-wipe warning).
+- **A new `edit_log` line goes after the last line of the last entry, never after the first line of an older entry.** A long entry wraps onto an indented second line. A line inserted between the first line and its wrapped half leaves the wrapped half with no parent: the block fails to parse, or, when the entry was a plain value, the two halves join and two entries read as one (that case parses, so a parse check does not see it). Both happened in one vault, in two action-items files, always near the top of the list, which points at a writer that inserts at a fixed position. `stamp_editlog.py` inserts at the true tail, after the last continuation line. (DataWizard, 2026-10)
 - SKILL.md files that used edit_log as a version changelog keep that history in a body `## Changelog` section instead; their frontmatter edit_log rolls like everywhere else.
 - Updated at session close via the session-closer (Step 3.8).
 - Migration note: trimming begins only after a project's one-time cleanup pass has archived its pre-D127 history; until then, append-only continues.

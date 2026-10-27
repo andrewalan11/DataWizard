@@ -9,12 +9,13 @@ edit_log:
   - 'DW-S330 2026-09-04 - fallback section: MCP stale-serving of synced-never-opened files (non-empty-but-wrong); flag-load-bearing reads filesystem-only (WV_2026-09-02_JC_02)'
   - 'DW-S388 2026-10-06 - sub-check (d) board sweep + trace fragment (lands with PI 4.9; Coordination Board T20 Chunk 3)'
   - 'DW-S398 2026-10-12 - sub-check (d): hand-edit placement in Unreconciled (render comments)'
+  - 'DW-S440 2026-10-27 - Acting on an ask - a block in Live ends at the first blank line, not the next heading (B-0250)'
 maturity: working
 operator: Andrew
 seed_version: 1.2.0
 title: Orientation Flag Sweep - Query Spec
 type: guide
-updated: 2026-10-12
+updated: 2026-10-27
 origin: 'DW-S272 2026-08-18 - backfilled from the earliest edit_log entry (D127)'
 ---
 # Orientation Flag Sweep - Query Spec
@@ -157,7 +158,7 @@ The coordination board (Conventions Registry, "Coordination board") holds cross-
 
 **Mac-side and Claude Code equivalent:** `python3 "<scripts>/board.py" sweep --project <ABBR>` prints the same lines and the trace fragment from the table. Global options (`--db`, `--vault`, `--board-dir`, `--now`) go BEFORE the subcommand: `python3 "<scripts>/board.py" --db <path> sweep --project <ABBR>`. The table and the mirror agree after every render; between renders the mirror can carry hand rows the table has not folded yet.
 
-**Acting on an ask** (an explicit act, never part of the sweep). By hand, in the mirror (Cowork sessions never write the table - ruling R4 in the Registry entry): edit the block's `status` (`picked-up`, `done`, `declined` or `stale`), add `- picked_by: <session>` or `- closed: <UTC time>` as fits, and set `- updated:` to now (UTC); the next render folds it in. A forgotten `updated` loses to the table and shows as `table wins` on the next render. Mac-side: `python3 "<scripts>/board.py" pickup B-NNNN --by <session>` (likewise `done`, `decline`, `stale`). Hand edits in `## Unreconciled`: a render leaves an HTML comment (`<!-- refused: ... -->`) between a refused block and the next heading; add new fields directly after the block's `updated:` line, never at the block's end, or they land after the comment and read as the next block's. (DataWizard, 2026-10)
+**Acting on an ask** (an explicit act, never part of the sweep). By hand, in the mirror (Cowork sessions never write the table - ruling R4 in the Registry entry): edit the block's `status` (`picked-up`, `done`, `declined` or `stale`), add `- picked_by: <session>` or `- closed: <UTC time>` as fits, and set `- updated:` to now (UTC); the next render folds it in. A forgotten `updated` loses to the table and shows as `table wins` on the next render. Mac-side: `python3 "<scripts>/board.py" pickup B-NNNN --by <session>` (likewise `done`, `decline`, `stale`). Hand edits in `## Unreconciled`: a render leaves an HTML comment (`<!-- refused: ... -->`) between a refused block and the next heading; add new fields directly after the block's `updated:` line, never at the block's end, or they land after the comment and read as the next block's. The same care applies in `## Live`: a block ends at the first blank line after it, not at the next `### ` heading. For the last block under `## Live`, a search for the next `### ` runs past the `## Recently closed` heading, and an appended `updated:` or `resolution:` line then lands under the wrong heading. Find the end by the first blank line (or the next `## ` or `### `, whichever comes first), or add the field directly after the block's `updated:` line. (DataWizard, 2026-10; VibeCut, 2026-10)
 
 ## The compliance trace (always written)
 

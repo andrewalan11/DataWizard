@@ -2,7 +2,7 @@
 title: Published Artifacts and ArtifactData Behaviors
 type: guide
 created: 2026-10-12
-updated: 2026-10-26
+updated: 2026-10-27
 operator: Andrew
 origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects); backfilled DW-S428'
 scope: seed
@@ -24,6 +24,7 @@ edit_log:
   - 'DW-S427 2026-10-19 - tool behaviors B-0190 (Page runtime calls: a page starts a scheduled task through the mcp capability, owner only; count every live subscription before checking the cap)'
   - 'DW-S428 2026-10-20 - Publishing: Artifact list scope files does not count as viewed; second sighting of the refused, refused, publishes sequence (board B-0192, LocationScout)'
   - 'Seed 1.11.11 2026-10-26 - large-read bullet - a read of an artifact this session did not publish saves the full HTML to a local file that sub-agents can read (board B-0226, ReWoven)'
+  - 'DW-S440 2026-10-27 - Publishing - tool behaviors B-0258, B-0257, B-0245 (xlsx and similar not served, base64 plus downloads; per-session connector warning; a sub-agent builds, the lead publishes)'
 ---
 # Published Artifacts and ArtifactData Behaviors
 
@@ -56,6 +57,12 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 **A page that saves itself rewrites its data file under you.** With the `artifact` capability in its files form, every save from the open page rewrites the data file. To merge new records in: re-read the data file right before merging, add records (never rebuild the file), check with a script that every old record is unchanged, then publish. A viewer with the page open gets a conflict on their next save and reloads - tell them to reload. (ReWoven, 2026-10)
 
 **The session's safety check can deny a live-store write or a publish, even after earlier approval.** An `ArtifactData batch` to a live store was denied as "Modify Shared Resources" although the operator had approved it in chat; it passed when the operator approved it again in the session right before the call. An Artifact publish of a new page version was denied as "Production Deploy" and passed after the operator wrote an explicit go-ahead naming the publish ("yes, publish version 7"). Expect it on live writes and publishes: stop and ask the operator for an explicit go-ahead naming the action, never work around it. (Holonic Canvas, 2026-10)
+
+**A publish refuses `.xlsx`, `.docx`, `.pptx` and `.zip` as supporting files, whatever `contentType` you pass.** The refusal lists the served types (html, css, js, json, txt, md, csv, svg, images, fonts, media, pdf). The route that worked on a mock page and in tests: publish the workbook as base64 text (`files/<name>.xlsx.b64.txt`); the page fetches it, decodes it to a Blob and calls the `downloads` capability's `save({filename, data})` (declare `downloads: true`; xlsx is on the save allowlist). A live click on the published page was still untested when this was written, so probe it before you promise the operator a download. (MetaMyth, 2026-10)
+
+**The publish warning "page declares connector X but no successful call to it was observed in this session" is per session.** It appeared on a republish whose connector call had been proven live in an earlier session (a page button that starts a scheduled run through the `mcp` capability, owner only). The declaration was carried forward unchanged and the publish succeeded. Record where the call was last proven; do not read the warning as a sign that the integration broke; and do not re-test a connector that starts a real scheduled run just to silence it. (MetaMyth, 2026-10)
+
+**A sub-agent can build and test an artifact page; the lead publishes it.** A strong-tier sub-agent built a page and tested it (Playwright in the container, files committed back to the device) but did not publish. The lead staged the built file, compared its md5 with the one in the sub-agent's report, read the live artifact in full, diffed, and published (the read gate above applies to the lead, not to the sub-agent). (ReWoven, 2026-10)
 
 ## Reading
 
