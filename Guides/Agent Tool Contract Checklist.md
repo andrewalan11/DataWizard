@@ -3,12 +3,13 @@ title: Agent Tool Contract Checklist
 type: guide
 scope: seed
 created: '2026-10-12'
-updated: '2026-10-12'
+updated: '2026-10-27'
 operator: Andrew
 status: active
 origin: 'DW-S400 2026-10-12 - created'
 edit_log:
   - 'DW-S400 2026-10-12 - created (agent-tool contract checklist; Agent-Facing Engineering Doctrine FR, candidate 1)'
+  - 'DW-S440 2026-10-27 - new group Reads, writes and long jobs - items 12 (index reads say how fresh and complete), 13 (a write names what it read; refuse stale writes), 14 (long jobs return a job ID) (intake lessons, Seed 1.11.14)'
 ---
 # Agent Tool Contract Checklist
 
@@ -51,6 +52,12 @@ It does not apply to human-only interfaces, or to internal functions no agent ca
 **Verification**
 
 11. **Test through the boundary.** Verify a tool end to end: call it as the agent would, then read the state back independently. A success response alone is not proof (see `Working Principles`, "A completion is a disk fact, not a claim").
+
+**Reads, writes and long jobs**
+
+12. **An index read says how fresh and how complete it is.** Check freshness on every query, not once per cache window, and mark generated or macro-made content as generated. When a query finds nothing, say what the index does not cover, so "nothing found" is not read as "nothing exists". (DataWizard, 2026-10)
+13. **A write names what it read.** A write tool takes the revision, hash or text the agent read and refuses the write if the file changed since; it never overwrites a manual edit. A conflict goes to a human, and a lower-rank change (pulled content over an agent edit, an agent edit over a human edit) becomes a proposal, not an overwrite. This is the agent-tool form of the concurrency guard in `FSAccess GUI Pattern`. (DataWizard, 2026-10)
+14. **A long job returns a job ID.** A tool whose work outlasts one call returns a job ID at once, plus a status tool that bounds its own wait and says when to stop polling, so the agent never blocks on one long call. (DataWizard, 2026-10)
 
 ## Worked example
 

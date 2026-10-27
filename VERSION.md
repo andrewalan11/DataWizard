@@ -1,5 +1,5 @@
 
-seed: 1.11.13
+seed: 1.11.14
 protocol: 1.8
 project_instructions: 4.9
 
@@ -72,6 +72,18 @@ Design, edit its plist to point at the new root path.
 This notice can be removed from VERSION.md after 2026-09. The recovery
 procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
 Clone (Remote-Agnostic)") and survives this notice's retirement.
+
+## What's New in 1.11.14
+
+**Patch release: eight lessons from a review of outside agent tools and write-ups, about stale writes, index reads, long jobs, claims and failing visibly.** One DataWizard session (2026-10-27). Shipped in the Seed:
+
+- `Guides/Agent Tool Contract Checklist.md`: a new group, "Reads, writes and long jobs", with items 12 to 14 - an index read says how fresh and how complete it is (a query that finds nothing says what the index does not cover); a write names the revision it read and refuses a stale write; a long job returns a job ID and a status tool.
+- `Guides/Working Principles.md`: "A completion is a disk fact, not a claim" gains its failure-side twin - fail closed and fail visibly, and a check that could not run is UNKNOWN, never a pass. "Verify the drift before scheduling its fix" now covers memory, notes and search hits as claims - keep the source, label how strong it is, say what was not checked.
+- `Protocols/YAML Schema.md`: the "Wikilinks everywhere" callout says to quote the link, because an unquoted `[[Note Name]]` parses as a nested list.
+- `Guides/Cowork Build Environment/10.0 Scanning Third-Party Code.md`: AI scan reports are candidate findings that a person triages before a fix or a disclosure.
+- `Guides/MCP Reliability and Write Verification/11.0`: at apply time, re-check that the input still matches what the dry run previewed, and refuse on a mismatch.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.11.13
 
