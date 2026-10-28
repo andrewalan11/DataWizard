@@ -2,7 +2,7 @@
 title: Telegram Harvesting
 type: guide
 created: '2026-05-31'
-updated: '2026-10-17'
+updated: '2026-10-28'
 status: active
 tags:
   - protocol
@@ -14,6 +14,7 @@ edit_log:
   - "DW-S284 2026-08-24 - Tips: why the API over Export Chat History / Telegram
     Web copy-paste (S128 learning, meta-learning review)"
   - "DW-S418 2026-10-17 - group-id example replaced with a placeholder (privacy purge)"
+  - "DW-S443 2026-10-28 - First Run: a pipe hides the phone prompt; run the first login without one (Events Map)"
 ---
 
 # Telegram Harvesting
@@ -63,6 +64,8 @@ The first time you run the script, Telethon will prompt for:
 2. A confirmation code sent via Telegram (not SMS)
 
 After this, a session file is created next to the script. Subsequent runs authenticate automatically.
+
+Run the first login without a pipe. `tg_harvester.py --list | grep ...` hides Telethon's phone prompt, so the command looks stuck while it waits for input. Log in once with the plain command, then pipe later runs. (Events Map, 2026-10)
 
 ## Usage
 

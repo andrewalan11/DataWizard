@@ -2,10 +2,11 @@
 title: VERSION History
 type: guide
 created: 2026-10-18
-updated: 2026-10-26
+updated: 2026-10-28
 operator: Andrew
 origin: DW-S421 2026-10-18 - What's New entries 1.0.0 to 1.5.0 moved from VERSION.md word for word (size rotation, archivist rule)
 edit_log:
+  - 'DW-S443 2026-10-28 - draft entry 1.11.15 (in progress) added: tool-behavior plants from five partner projects'
   - Seed 1.11.11 2026-10-26 - What's New 1.10.0 to 1.10.4 moved in from VERSION.md word for word (size rotation before 1.11.11)
   - DW-S428 2026-10-20 - What's New 1.9.1 to 1.9.5 moved in from VERSION.md word for word (size rotation before 1.11.7)
   - DW-S427 2026-10-19 - What's New 1.9.0 moved in from VERSION.md word for word (size rotation before 1.11.5)
@@ -18,6 +19,29 @@ edit_log:
 # VERSION History
 
 Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newer entries are in `VERSION.md`. When `VERSION.md` passes about 50 KB again, move its oldest entries to the top of the list below, newest first, and leave the pointer in `VERSION.md`.
+
+## What's New in 1.11.15 (in progress, DW-S443)
+
+*Draft, not released: VERSION.md still reads 1.11.14. At release, move this entry into VERSION.md above 1.11.14 and finish the summary line.*
+
+**Patch release: tool behaviors from partner projects (MetaMyth, Mesocosm, Community Stack, Future Visions, Events Map), mostly about the device mount, cloud sessions and links.** One DataWizard session (2026-10-28). Shipped in the Seed:
+
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`: `Artifact list` with `scope: "assets"` on another owner's artifact can return `not_found`, so `from_url` cannot copy its assets; publish a checked copy as a supporting file.
+- `Guides/Chrome MCP and Web Tool Behaviors/12.0`: the Drive connector reads a Google Sheet as a sample of the first tab; ask for a CSV or xlsx export.
+- `Guides/Cowork Build Environment/10.0`: a font safety check with the OpenType sanitizer and fontTools (`brotli` for WOFF2; the licence is often not in the file).
+- `Guides/Cowork Build Environment/8.0`: a full vault scan through the mount took about 10 times longer than in the cloud container (different vault sizes) - print the scan time, run heavy steps on the Mac.
+- `Guides/Git Guide/5.0 Daily Workflow.md`: the Obsidian Git plugin committed while "paused" - check the intervals and `git log` before a vault-wide script.
+- `Guides/Script Portability.md`: new section - the macOS temp folder is a symlink (`/var/folders` to `/private/var/folders`); `realpath` the temp path in tests.
+- `Guides/MCP Reliability and Write Verification/11.0`: a strict "unchanged since plan" check trips on any other writer; run `plan ... && apply ...` as one command line.
+- `Guides/Cowork Build Environment/11.0`: `gh api` is blocked (403) for sub-agents in a cloud session and WebFetch cannot read commit pages; `add_repo` or `gh` on the Mac. 5.0 points to it.
+- `Guides/Working Principles.md`: "Verify the drift" - a gap found by name needs a grep for the other names (aliases) first.
+- `Guides/Telegram Harvesting.md`: run the first login without a pipe; a pipe hides the phone prompt.
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0`: the stale-GitHub-page bullet - check the project's changelog or release page, not a news page date.
+- `Guides/Cowork Build Environment/8.0`: folder grants for a `~/Downloads` subfolder and a vault subfolder mounted in the same turn; sub-agents read a leaf-name mount and in-place writes work there.
+- `Guides/Cowork Build Environment/8.1`: the `tar --overwrite` bullet gains the safe fix - `mv` the old folder aside and extract fresh, which keeps the old version.
+- `Guides/MCP Reliability and Write Verification/12.0`: the short-name embed bullet is rewritten - Obsidian resolves a bare link by exact path, then same folder, then shortest path, so a new same-named note can take over a link; use path links for generic or numbered names. Its example path is now generic.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.10.4
 

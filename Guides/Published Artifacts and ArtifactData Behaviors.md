@@ -2,7 +2,7 @@
 title: Published Artifacts and ArtifactData Behaviors
 type: guide
 created: 2026-10-12
-updated: 2026-10-27
+updated: 2026-10-28
 operator: Andrew
 origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects); backfilled DW-S428'
 scope: seed
@@ -25,6 +25,7 @@ edit_log:
   - 'DW-S428 2026-10-20 - Publishing: Artifact list scope files does not count as viewed; second sighting of the refused, refused, publishes sequence (board B-0192, LocationScout)'
   - 'Seed 1.11.11 2026-10-26 - large-read bullet - a read of an artifact this session did not publish saves the full HTML to a local file that sub-agents can read (board B-0226, ReWoven)'
   - 'DW-S440 2026-10-27 - Publishing - tool behaviors B-0258, B-0257, B-0245 (xlsx and similar not served, base64 plus downloads; per-session connector warning; a sub-agent builds, the lead publishes)'
+  - 'DW-S443 2026-10-28 - Reading: assets listing of another owner''s artifact returns not_found; publish a checked copy as a supporting file (board B-0262, MetaMyth)'
 ---
 # Published Artifacts and ArtifactData Behaviors
 
@@ -71,6 +72,8 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 **A large read is saved to a tool-results file; only the head shows inline.** A ~700 KB page came back head-only, with the full HTML in a tool-results file; extract what you need (e.g. a baked data constant) from that file with a script rather than re-reading. An `Artifact` read of an artifact this session did not publish saves the full HTML to a local file (the result names it, as `.../tool-results/artifact-<id>-<version>.html`). Sub-agents in the same container can read that path, so a large page (an 870 KB deck here) can go to a reviewer agent without passing through the lead's context. (Holonic Canvas, 2026-10; ReWoven, 2026-10)
 
 **A Slides-type artifact keeps its speaker notes in each slide's `<aside>`, not in the store.** The notes sit in `project/slides/<id>.html` (slide order in `project/deck.json`). The ArtifactData `notes` collection was empty in both decks read. Read all slide files in one `Artifact read` call with `paths`. (MetaMyth, 2026-10)
+
+**`Artifact list` with `scope: "assets"` on another owner's artifact can return `not_found`, so `from_url` cannot copy its assets.** On a public artifact owned by someone outside the organization, `Artifact read` worked and saved the HTML, but the assets listing failed. A font that person had uploaded (served from `/_blob/...`) could not be copied with `from_url` + `asset_ids`. What worked: the operator downloaded the file, the session checked it (font check: Cowork Build Environment 10.0) and published it as a supporting file (`fonts/<name>.woff2`, contentType `font/woff2`). (MetaMyth, 2026-10)
 
 ## ArtifactData store
 

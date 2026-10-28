@@ -4,7 +4,7 @@ type: guide
 status: active
 maturity: working
 created: '2026-06-18'
-updated: 2026-10-27
+updated: 2026-10-28
 operator: Andrew
 tags:
   - protocol
@@ -62,6 +62,7 @@ edit_log:
     durable-home-on-receiver's-path principles; countable-gate sentence on
     Ground-truth (meta-learning reviews S301-S362)"
   - 'DW-S440 2026-10-27 - fail closed and fail visibly clause (A completion is a disk fact); memory, notes and search hits are claims clause (Verify the drift) (intake lessons, Seed 1.11.14)'
+  - 'DW-S443 2026-10-28 - Verify the drift: a gap found by name needs an alias grep first (board B-0265, Community Stack)'
 ---
 # Working Principles
 
@@ -160,7 +161,7 @@ These were standing principles in the older protocol and remain true even though
 
 **Check whether the rule already exists before minting it.** An enforcement gap or a knowledge gap presents as a policy gap, and the reflex is to write new policy. Twice in one week the proposed rule already existed: a feature request nearly minted cap-and-rotate policy for shell edit_logs that were already exempt under the YAML Schema - the oversized logs were an enforcement failure, not a policy hole (DataWizard, 2026-09) - and a collaborator's fix proposal for a flag-sweep delivery hole asked for a raw-read fallback the sweep's Query Spec already mandated, so the real gap was one new failure signature to document, not a rule to adopt (DataWizard, 2026-09). Before writing a rule, grep for its home: the right fix may be enforcement, an augmentation, or nothing. Kin to "grep the Seed before harvesting into it" and to "verify the drift before scheduling its fix" below. The same reflex generalizes past rules: inspect the ground before building on it - grep the canon before scoping a section, check what the platform natively does before building a classifier, read the live roster instead of trusting a registry file (the tool-inventory and tool-landscape principles above are the tool-shaped members of this family), and read the decision log before redesigning - a redesign nearly started for a "flaw" an earlier decision had already resolved (DataWizard, 2026-09).
 
-**Verify the drift before scheduling its fix.** A claim that something is fixed and a claim that something is broken deserve the same treatment: one targeted read against the artifact itself before the claim becomes a task. Session logs and handoff notes inherit the state of the docs they were written from; a "pinned" claim was found false across three docs, and a "still broken" claim scheduled a fix for a defect that had already been repaired (DataWizard, 2026-07). The read costs a minute; a fix scheduled from a stale claim costs a session. Companion to the Conventions Registry's "copied state rots". The same stance covers memory, notes and search hits: they are claims, not facts. Keep where each came from (a search hit keeps its location, so it can be rechecked later as current, stale or unknown), label how strong it is (observed, inferred, unknown), and say what was not checked; at session start, check a handoff note against git and the disk before acting on it. (DataWizard, 2026-10)
+**Verify the drift before scheduling its fix.** A claim that something is fixed and a claim that something is broken deserve the same treatment: one targeted read against the artifact itself before the claim becomes a task. Session logs and handoff notes inherit the state of the docs they were written from; a "pinned" claim was found false across three docs, and a "still broken" claim scheduled a fix for a defect that had already been repaired (DataWizard, 2026-07). The read costs a minute; a fix scheduled from a stale claim costs a session. Companion to the Conventions Registry's "copied state rots". The same stance covers memory, notes and search hits: they are claims, not facts. Keep where each came from (a search hit keeps its location, so it can be rechecked later as current, stale or unknown), label how strong it is (observed, inferred, unknown), and say what was not checked; at session start, check a handoff note against git and the disk before acting on it. (DataWizard, 2026-10) A claim that something is missing needs the same read: a gap check by name reported an entry as absent that was registered under another name, and its core record had no aliases. Before calling something a gap, grep notes and core records for its other names (repository name, package name, the expansion of an acronym), and add the missing alias to the core record when one turns up. For an absence found on the web, see Chrome MCP and Web Tool Behaviors 12.0. (Community Stack, 2026-10)
 
 **Ship the read affordance with the write affordance.** When a build adds a way to write something - a status, a flag, a task field - the same chunk must render it somewhere a reader will see it. A correct write with no render path reads as a broken feature to the next operator and invites duplicate writes or a second "fix" of a working thing (DataWizard, 2026-08). The test at chunk boundary: for each new write, name the view that shows it; if none exists yet, the write is not done.
 

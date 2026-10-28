@@ -2,7 +2,7 @@
 title: Script Portability
 type: guide
 created: '2026-09-23'
-updated: '2026-10-27'
+updated: '2026-10-28'
 operator: Andrew
 status: active
 edit_log:
@@ -13,6 +13,7 @@ edit_log:
   - "DW-S433 2026-10-21 - new section SQLite builds differ: pointer to the WAL read-only failure in Cowork Build Environment 6.0 (meta-learning review S405-S422)"
   - "Seed 1.11.11 2026-10-26 - new section A launchd job can run the system Python (/usr/bin/python3 3.9; DataWizard backlog)"
   - "DW-S440 2026-10-27 - Shell dialect - an unmatched zsh glob leaves a command substitution empty; refuse an empty file name (DataWizard backlog)"
+  - "DW-S443 2026-10-28 - new section The macOS temp folder is a symlink (realpath in tests; board B-0269, Mesocosm)"
 ---
 
 # Script Portability
@@ -38,6 +39,10 @@ In zsh an unmatched glob is an error, not an empty list. `CAP="$(ls -t ~/Downloa
 ## Case-insensitive disks
 
 A default macOS disk treats `Out/data` and `out/DATA` as one folder. Linux treats them as two. A test that creates case-variant paths in one repo passes on Linux and fails on the Mac. Give each case variant its own folder, or its own repo. Run the test suite on a Mac once before the script ships. (DataWizard, 2026-10)
+
+## The macOS temp folder is a symlink
+
+`tempfile.mkdtemp()` on macOS returns a path under `/var/folders/...`, which is a symlink to `/private/var/folders/...`. A script that resolves real paths and a test that compares the raw path then disagree: in one rename script, two crash-simulation tests silently skipped their fake crash and failed. In tests, pass the temp path through `os.path.realpath()`; a quick workaround is `TMPDIR=/private/tmp`. (Mesocosm, 2026-10)
 
 ## SQLite builds differ
 
