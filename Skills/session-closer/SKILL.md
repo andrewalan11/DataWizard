@@ -7,15 +7,15 @@ description: >-
   pick up where we left off' in a new thread and there's no log entry for the
   previous session.
 type: skill
-updated: '2026-10-21'
+updated: '2026-10-28'
 origin: 'DW-S158 2026-06-08 - backfilled from the earliest edit_log entry (D127)'
-version: '4.11.2'
+version: '4.11.3'
 edit_log:
+  - 'DW-S443 2026-10-28 - v4.11.3: Step 3.5 tool-behavior bullet - close the source note and its board ask in the same pass as the plant'
   - 'DW-S433 2026-10-21 - v4.11.2: Step 2 a proposed Decision Log entry is written into the entry or a working doc before close (Community Stack ask); Step 3.11 uses the 30 / 50 KB sizes and points at Conventions Registry 7.0'
   - 'DW-S424 2026-10-19 - v4.11.1: Step 3.10 also surfaces pending Look-Back Reports (session look-back scan, leak prevention fix 3)'
   - 'DW-S422 2026-10-18 - v4.11.0: landing rule - Step 4 action-items bullet made a required landing rule with one dated Waiting-on checklist; Step 2.6 ledger next: is the owed list; Step 3.5 tracking-claim verification; Step 0 lite list; output-format landing check and Waiting-on pointer; Common Mistakes bullet (leak prevention fix 1)'
   - 'DW-S422 2026-10-18 - v4.10.4: sectioned - output templates, multi-operator flag steps, no-ledger roster, triage guidance and old edit_log moved verbatim to references/; steps unchanged'
-  - 'DW-S402 2026-10-13 - v4.10.3: Step 3.14 board asks posted at write time; close verifies and backfills (B-0081)'
 ---
 
 # Session Closer Skill
@@ -186,7 +186,7 @@ For each finding, decision, or detailed context that emerged during the session,
 - **Design-doc**: Technical finding that future task-specific work needs. Identify the specific target doc and plant it there. Example: an edge case discovered during a build belongs in the relevant design doc, not just the session log.
 - **Skill-update**: Process improvement that should change how a skill works. Patch the skill now or add a specific action item naming the skill and what to change.
 - **Protocol-update**: Convention change that affects all projects. Handled by Step 3.6 (convention-change check) -- flag it there if not already caught.
-- **Environment / tool-behavior**: A platform, MCP, sandbox, git, or shell gotcha (a tool that fails in a specific way, a mount or sync limitation, an auth or permission quirk). These have a standing home -- the **Platform and Environment Behaviors** guide cluster (`Seed/GUIDES.md` lists the members: MCP Reliability, Cowork Build Environment, Git Guide troubleshooting, Chrome and web tools, scheduled tasks, and so on). Route each one to the cluster guide it fits and plant it now; a one-line entry with `(project, YYYY-MM)` provenance is enough. Support and debugging sessions produce these in batches and are the sessions most likely to close with "files updated: none" -- six environment facts from one such session sat unrouted for two months until a meta-learning review found them. Do not leave them as session-log-only.
+- **Environment / tool-behavior**: A platform, MCP, sandbox, git, or shell gotcha (a tool that fails in a specific way, a mount or sync limitation, an auth or permission quirk). These have a standing home -- the **Platform and Environment Behaviors** guide cluster (`Seed/GUIDES.md` lists the members: MCP Reliability, Cowork Build Environment, Git Guide troubleshooting, Chrome and web tools, scheduled tasks, and so on). Route each one to the cluster guide it fits and plant it now; a one-line entry with `(project, YYYY-MM)` provenance is enough. Support and debugging sessions produce these in batches and are the sessions most likely to close with "files updated: none" -- six environment facts from one such session sat unrouted for two months until a meta-learning review found them. Do not leave them as session-log-only. **When the behavior came from another project** (an exchange note or a board ask), close the source in the same pass as the plant: set the note's `status: done` with a one-line resolution naming the release, and close its board ask (`done` + `resolution:`). A planted note left open looks unplanted - one sweep found 8 of 13 incoming notes already planted in earlier releases but still open, with their board asks. (DataWizard, 2026-10)
 
 **Insight-capture awareness.** If the insight-capture skill was invoked mid-session, its report lists what was planted and where. Use that as a starting point -- verify nothing additional surfaced since the capture ran, rather than doing a full from-scratch triage. If no insight-capture was run, do the full triage as usual.
 

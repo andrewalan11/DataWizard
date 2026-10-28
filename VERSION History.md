@@ -42,6 +42,7 @@ Older "What's New" entries of the Seed, moved here from `VERSION.md` word for wo
 - `Guides/MCP Reliability and Write Verification/12.0`: the short-name embed bullet is rewritten - Obsidian resolves a bare link by exact path, then same folder, then shortest path, so a new same-named note can take over a link; use path links for generic or numbered names. Its example path is now generic.
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
+- `Skills/session-closer` v4.11.3: Step 3.5 - when a planted tool behavior came from another project's note or board ask, close both in the same pass.
 
 ## What's New in 1.10.4
 
