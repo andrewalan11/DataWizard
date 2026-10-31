@@ -6,6 +6,7 @@ updated: '2026-10-31'
 operator: Andrew
 priority: high
 maturity: working
+origin: 'DW-S182 2026-06-13 - backfilled DW-S448 from the earliest edit_log entry (D127)'
 edit_log:
   - DW-S182 2026-06-13
   - 'DW-S448 2026-10-31 - chunking step 4: embeds resolve by exact path, same folder, shortest path (was "by filename regardless of folder path"); section names unique in the vault'

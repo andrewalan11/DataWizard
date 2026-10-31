@@ -278,6 +278,7 @@ _DataWizard/Seed/
   README.md              - This file
   VERSION.md             - Version numbers and update instructions
   DataWizard Project Instructions.md - Instructions to paste into Claude (or @import for Claude Code)
+  PI.md                  - One-line import target for Claude Code (imports the Project Instructions)
   update_seed.sh         - Install/update script (Mac/Linux)
   update_seed.ps1        - Install/update script (Windows)
   SKILLS.md              - Skills catalog (the authoritative list of all skills)
@@ -287,6 +288,8 @@ _DataWizard/Seed/
   Config/                - Default configuration (enrichment_defaults.yaml)
   Guides/                - Setup and reference guides (Git Guide, Vault Structure Guide, Filename Safety, Federation Guide, Seed Install and Update, MCP Reliability, Cowork Scheduled Tasks, and more)
 ```
+
+**Two layouts.** The tree above is the default nested layout (`_DataWizard/Seed/`). The Seed can also be a flat clone: the Seed files sit directly in the clone folder, with no `Seed/` level. **Claude Code users:** point your import at `PI.md` in the Seed root, not at the Project Instructions file. `PI.md` works in both layouts. Where the pointer goes, and how to check that it loaded: `Guides/Seed Install and Update.md`, section "Claude Code and Obsidian sidebar plugins".
 
 One file you may see referenced that is NOT in the shipped Seed: `Vault Config.md` (user-specific paths and settings). It is deliberately kept out of the shared Seed so each vault keeps its own. (For the technically inclined: it's listed in `.gitignore`.) If a guide or skill asks for it and it doesn't exist yet, create it at `_DataWizard/Seed/Vault Config.md` with the paths it asks about.
 

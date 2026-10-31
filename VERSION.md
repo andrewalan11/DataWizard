@@ -1,5 +1,5 @@
 
-seed: 1.11.15
+seed: 1.11.16
 protocol: 1.8
 project_instructions: 4.9
 
@@ -72,6 +72,18 @@ Design, edit its plist to point at the new root path.
 This notice can be removed from VERSION.md after 2026-09. The recovery
 procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
 Clone (Remote-Agnostic)") and survives this notice's retirement.
+
+## What's New in 1.11.16
+
+**Patch release: how Claude Code users load the Project Instructions, and a safe home for the personal pointer in shared git repos.** From a field case in a partner project (Weave, 2026-10): a shared repo's tracked `CLAUDE.md` held one person's path to the Seed, so each fix broke it for the others, and the path never loaded because of the spaces in the file name. The import facts were checked in the Claude Code docs, in the Claude Code program, and in live runs on a Mac. Shipped in the Seed:
+
+- `PI.md` (new, Seed root): one line that imports `DataWizard Project Instructions.md` from its own folder. It works in the nested and the flat Seed layout. Point your Claude Code import at `PI.md`, so you escape spaces only in your own path to the Seed. It has no frontmatter on purpose: it loads on every Claude Code start.
+- `Guides/Seed Install and Update.md`: new section "Claude Code and Obsidian sidebar plugins" - where the personal pointer goes (a CLAUDE file you own and git does not track), the import rules (a path is read from the file that holds it; escape every space; no quotes; no import in a code block; at most 4 hops), example pointer lines, the external-import dialog (**"No, disable external imports" is selected by default - press the down arrow and select Yes; a decline is silent**), a self-check question, and notes for Cowork, AGENTS.md repos, two home-folder lines, sidebar plugins and worktrees. "Fresh Install" links to it. An example path is now generic.
+- `Protocols/Conventions Registry/33.0` (D96): the personal PI pointer goes in the vault-root `CLAUDE.md` (when the vault is not itself the shared repo) or a gitignored repo-root `CLAUDE.local.md`, never in a shared repo's tracked `CLAUDE.md`; a tracked `CLAUDE.md` may name the repo-relative home folder.
+- `Skills/project-guidelines` v1.6.0: for a project in a shared git repo, the skill makes a tracked `CLAUDE.md` with no machine paths (home folder for this repo, a "say so if no Project Instructions are loaded" line, a pointer to the team setup note) and adds `CLAUDE.local.md` to `.gitignore`. `SKILLS.md` row updated.
+- `README.md`: a note on the two Seed layouts (nested and flat) and a `PI.md` row.
+
+**Action for Claude Code users:** run `update_seed`, then move your PI import out of any shared tracked `CLAUDE.md` into your own file, pointed at `PI.md`. Then ask the self-check question from the guide. The Project Instructions do not change (still 4.9); the PI wording follows at the next PI release.
 
 ## What's New in 1.11.15
 

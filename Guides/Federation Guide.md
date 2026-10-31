@@ -8,6 +8,8 @@ tags:
   - protocol
   - federation
 updated: 2026-10-31
+origin: 'DW-S191 2026-06-21 - backfilled DW-S448 from the earliest edit_log entry (D127)'
+operator: Andrew
 edit_log:
   - "DW-S191 2026-06-21: folded Protocol 10.0 full-copies rule"
   - 'DW-S448 2026-10-31 - example paths made generic (Example Project, ~/path/to/vault)'

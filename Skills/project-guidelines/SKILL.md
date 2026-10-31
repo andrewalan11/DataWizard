@@ -6,11 +6,12 @@ description: >-
   migration', 'write project guidelines', 'set up a new project', or any mention
   of 0.0 files needing creation or updates.
 type: skill
-version: '1.5.2'
+version: '1.6.0'
 updated: '2026-10-31'
 edit_log:
   - "DW-S349 2026-09-08 - v1.5.1: Working Conventions template gains the recommended Reader-Facing Prose Style line (edit_log added this session as Step 3.8 fallback; prior history predates the field)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v1.5.2 0.0 template birth fields'
+  - 'DW-S447 2026-10-31 - v1.6.0: shared git repos get a path-free tracked CLAUDE.md template and a CLAUDE.local.md gitignore line'
 ---
 
 # Project Guidelines Skill
@@ -83,6 +84,25 @@ last_content_interests_review: YYYY-MM-DD  # set to created date if Content Inte
 ```
 
 **Filename:** `0.0 Project Guidelines - [Project Name].md` — always include the `- ProjectName` suffix to avoid wikilink ambiguity across projects. The dynamic Vault Project Map depends on unique filenames for its embed references. If an existing 0.0 uses a different suffix than the project's folder name (e.g., an abbreviation or informal name), match the existing convention. Check other infrastructure files (0.2, action items) for the project's established naming pattern. Don't rename without asking.
+
+### Shared git repos
+
+If the project lives in a shared git repo, do two more things. Skip both if the repo has its own `AGENTS.md`: such a repo is outside DataWizard (PI Scope section).
+
+1. Emit a tracked repo-root `CLAUDE.md` from the template below. Keep it path-free: no Seed path and no import line.
+2. Add `CLAUDE.local.md` to the repo `.gitignore`. Each person's PI pointer goes there or in their vault-root `CLAUDE.md`, never in the tracked file. Rule and setup steps: `Seed/Guides/Seed Install and Update.md`, section "Claude Code and Obsidian sidebar plugins".
+
+Template. Fill in the two values. The setup-note pointer stays in backticks, so it is a mention, not an import.
+
+```markdown
+Project home folder for this repo: <folder>/
+
+This repo is governed by the DataWizard Project Instructions. They load per surface, never from this file. If no DataWizard Project Instructions are loaded in this session, say so before you do any work.
+
+Per-person setup: see `<path to the team's setup note>`.
+```
+
+Show the template and the `.gitignore` line in chat with the rest of the plan. Write them after approval.
 
 ## How to Draft
 

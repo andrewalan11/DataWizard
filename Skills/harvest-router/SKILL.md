@@ -11,6 +11,8 @@ description: >-
 type: skill
 version: '1.2'
 updated: '2026-10-31'
+origin: 'DW-S312 2026-09-06 - backfilled DW-S448 from the earliest edit_log entry (D127)'
+operator: Andrew
 edit_log:
   - 'DW-S312 2026-09-06 - v1.2: Fathom zero-token export folded from the retired Harvest Agent (D128)'
   - 'DW-S448 2026-10-31 - example project name made generic (Media Project); no behavior change'

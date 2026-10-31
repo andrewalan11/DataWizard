@@ -15,12 +15,13 @@ edit_log:
     git-clone-aware sync
   - "WV_2026-09-07_AA_03 2026-09-09 - Upstream Operator Note: diagnostic corollary (missing sync log on an upstream clone is expected; check seed_role first)"
   - 'DW-S400 2026-10-12 - distribution model: Seed-embedded-in-shared-vault-repo shape (update path, social pinning, onboarding presence check)'
+  - 'DW-S447 2026-10-31 - new section: Claude Code and Obsidian sidebar plugins (per-person PI pointer, PI.md, import facts, external-import dialog, checks)'
 operator: Andrew
 purpose: Canonical guide for installing, manually updating, and auto-syncing the
   DataWizard Seed
 title: Seed Install and Update
 type: guide
-updated: 2026-10-12
+updated: 2026-10-31
 ---
 # Seed Install and Update
 
@@ -51,6 +52,8 @@ Ask your human: "Are you on Mac or Windows?" (Or check if you already know from 
 ## Fresh Install
 
 If `_DataWizard/Seed` doesn't exist, the Seed was never installed.
+
+Claude Code users: after the install, see the "Claude Code and Obsidian sidebar plugins" section below for how to load the Project Instructions.
 
 ### Mac
 
@@ -120,7 +123,7 @@ If the user already has a launchd agent running `datawizard-sync.sh` for git rep
    ```bash
    cat ~/.datawizard-sync.conf
    ```
-2. Look for a line pointing to their `_DataWizard/Seed` folder (e.g. `/Users/username/Vaults/Regen Vault/_DataWizard/Seed`).
+2. Look for a line pointing to their `_DataWizard/Seed` folder (e.g. `/Users/username/Vaults/MyVault/_DataWizard/Seed`).
 3. If the Seed path is missing, add it. Ask the user to run:
    ```bash
    echo "/path/to/vault/_DataWizard/Seed" >> ~/.datawizard-sync.conf
@@ -197,6 +200,85 @@ Claude instances now report `seed_version` in session log frontmatter (protocol 
 While verifying, check whether the human's Project Instructions version matches. The PI version is in the header of whatever instructions are pasted into their Claude Project settings (e.g. "DW Project Instructions v4.3"). If their running PI is older than what VERSION.md says, tell them:
 
 > "Your Project Instructions are out of date. Copy the updated version from `_DataWizard/Seed/DataWizard Project Instructions.md` into your Claude Project settings."
+
+---
+
+## Claude Code and Obsidian sidebar plugins
+
+*For people who run Claude Code in a terminal, or inside Obsidian through a sidebar plugin. Cowork users paste the Project Instructions (PI) into Project settings instead; see "Cowork users" below.*
+
+### Where your pointer goes
+
+Claude Code loads the PI through an import line, the pointer. The pointer holds your own path to the Seed, so it is personal. Put it in a CLAUDE file that you own and that git does not track:
+
+- **Your vault holds the repo:** use the vault-root `CLAUDE.md`.
+- **The repo is your vault, or you start Claude Code in the repo:** use a `CLAUDE.local.md` at the repo root, and list it in the repo `.gitignore`.
+
+A shared repo's tracked `CLAUDE.md` holds only repo-relative, team-wide lines. It never holds a Seed path. Each person's Seed path is different, so a path in a tracked file breaks for the others at the next pull. Canonical rule: D96 in the Conventions Registry (33.0 Operational one-liners).
+
+### Import facts
+
+- A relative path is read from the file that holds the import, not from the folder where you start Claude Code.
+- Put a backslash before every space in the path.
+- Never put quotes around the path. A quoted path is not imported.
+- An import inside backticks or a code block does not fire.
+- Imports chain at most 4 hops.
+
+### Point at PI.md
+
+The Seed root holds `PI.md`. Its only line imports the Project Instructions from its own folder, so it works in the nested and the flat Seed layout. Point your import at `PI.md`. Then you escape spaces only in your own path to the Seed. Your pointer plus `PI.md` uses 2 of the 4 hops.
+
+Example pointer lines follow. They are in a code block, so they do not fire here. Copy one line, without quotes, into your own CLAUDE file. Then change the path to match your machine.
+
+```
+@../_DataWizard/Seed/PI.md
+@_DataWizard/PI.md
+@../Shared\ Vault/_DataWizard/Seed/PI.md
+```
+
+- Line 1: the Seed is nested (`_DataWizard/Seed/`) and sits beside the repo.
+- Line 2: the Seed is a flat clone (no `Seed/` level) inside the repo.
+- Line 3: Windows (not yet tested on a Windows machine). Use forward slashes, not backslashes. The example also shows an escaped space.
+
+### The external-import dialog
+
+Claude Code asks before it loads an import that points outside the folder where you start it. This can also happen when you start in a repo subfolder and the vault-root `CLAUDE.md` holds an import that points outside that subfolder (untested). On a first launch in a new folder, a folder-trust dialog comes first.
+
+The dialog title is "Allow external CLAUDE.md file imports?". It has two options:
+
+- "No, disable external imports" - selected by default.
+- "Yes, allow external imports".
+
+Do not press Enter straight away. Press the down arrow to select "Yes, allow external imports". Then press Enter.
+
+A decline is silent and permanent for that folder. The dialog does not come back, and nothing warns you that the PI did not load. The answer is stored per project, and the Claude Code docs give no reset step. To see the dialog again, start Claude Code from a fresh copy of the folder (tested). Advanced, untested: the answer is held in Claude Code's own file `~/.claude.json`, in that project's entry, as `hasClaudeMdExternalIncludesApproved` and `hasClaudeMdExternalIncludesWarningShown`; set both to `false` to be asked again. Close Claude Code first, and keep a copy of the file.
+
+### Check that the PI loaded
+
+1. Run `/context`. Under the memory files, look for `PI.md` and the Project Instructions file, not only your own CLAUDE file. (Untested: whether imported files are listed there. Step 2 is the sure check.)
+2. Ask: "Which DataWizard Project Instructions version are you running, and from which file did you load it?" A good answer names the version in `VERSION.md` and a real file path.
+
+Do this check after every new setup. A declined dialog shows up only here.
+
+### Cowork users
+
+Cowork loads the PI from Project settings, where you paste it. Do not put the pointer in `~/.claude/CLAUDE.md`. Cowork skips a user-scope import that points outside the session folder. Whether the pasted PI plus an import in the same folder loads the PI twice is untested.
+
+### AGENTS.md repos
+
+In a repo that uses only `AGENTS.md`, a new `CLAUDE.local.md` stops `AGENTS.md` from loading. The exception: the Claude Code "Project instructions" setting loads both. Check this before you add `CLAUDE.local.md` to such a repo. A repo with its own `AGENTS.md` is outside DataWizard; see the Scope section of the PI.
+
+### Two home-folder lines
+
+A vault-root `CLAUDE.md` and a repo `CLAUDE.md` can both declare a home folder. The file closer to the launch folder is read last. The repo template from the project-guidelines skill says "home folder for this repo", so the reader can see which line applies.
+
+### Obsidian sidebar plugins
+
+Obsidian sidebar plugins (which run Claude Code inside Obsidian) usually start Claude Code at the vault root (untested). Use the vault-root `CLAUDE.md` route for them. Whether they read `CLAUDE.local.md` is untested.
+
+### Several worktrees
+
+A gitignored `CLAUDE.local.md` exists only in the worktree where you made it. Make one in each worktree. The Claude Code docs suggest an import from `~/.claude/` for people with several worktrees. Do not use that route if you also use Cowork (see "Cowork users").
 
 ---
 
