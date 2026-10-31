@@ -10,9 +10,10 @@ description: >-
   projects.
 type: skill
 version: '1.2'
-updated: '2026-09-06'
+updated: '2026-10-31'
 edit_log:
   - 'DW-S312 2026-09-06 - v1.2: Fathom zero-token export folded from the retired Harvest Agent (D128)'
+  - 'DW-S448 2026-10-31 - example project name made generic (Media Project); no behavior change'
 ---
 # Harvest Router Skill
 
@@ -185,9 +186,9 @@ Current location: / (vault root)
 Move to: _Transcripts/
 Relevant to:
   - Weave Project — discusses story arc structure
-  - Metamorphic Media — mentions podcast episode planning
+  - Media Project — mentions podcast episode planning
 Notes: Conversation between Andrew and Jay covering Weave narrative
-       and upcoming MMM recording schedule.
+       and upcoming Media Project recording schedule.
 ```
 
 For vault scan mode with many files, batch the proposals into groups
@@ -233,7 +234,7 @@ routing_notes: "Brief note on why each project is relevant"
 ```
 
 Use the project's display name in `harvest_for` (e.g., "DataWizard",
-"Metamorphic Media", "Weave Project"), not the folder path.
+"Media Project", "Weave Project"), not the folder path.
 
 **For files with no project relevance** (personal, administrative, or
 content that's been reviewed and isn't harvestable):
@@ -282,7 +283,7 @@ Routing complete.
 Action items appended to:
 - ! Action Items - DataWizard.md (3 new items)
 - ! Action Items - Weave.md (1 new item)
-- ! Action Items - Metamorphic Media.md (2 new items)
+- ! Action Items - Media Project.md (2 new items)
 ```
 
 ## Segmentation Prompt

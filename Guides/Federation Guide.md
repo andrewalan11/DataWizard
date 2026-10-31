@@ -7,9 +7,10 @@ tags:
   - datawizard
   - protocol
   - federation
-updated: 2026-06-21
+updated: 2026-10-31
 edit_log:
   - "DW-S191 2026-06-21: folded Protocol 10.0 full-copies rule"
+  - 'DW-S448 2026-10-31 - example paths made generic (Example Project, ~/path/to/vault)'
 ---
 
 # Federation Guide
@@ -18,7 +19,7 @@ How to copy notes between vault locations (federation) efficiently.
 
 ## Why Federate?
 
-When a note in one location (e.g., `_Clippings/`) is relevant to a specific project (e.g., Metamorphic Media), the project needs its own copy so it can be modified independently — different YAML, different annotations, eventually different content in a shared vault context.
+When a note in one location (e.g., `_Clippings/`) is relevant to a specific project (e.g., Example Project), the project needs its own copy so it can be modified independently — different YAML, different annotations, eventually different content in a shared vault context.
 
 Wikilinks are NOT federation. A wikilink says "this exists over there." A federated copy says "this now lives here too, and we track provenance between them."
 
@@ -42,10 +43,10 @@ The Claude instance generates a terminal command block. The user pastes it into 
 
 ```bash
 # Example: federate 3 clippings into a project folder
-cd ~/Vaults/Regen\ Vault && \
-cp "_Clippings/Source Article One.md" "_Metamorphic Media/Research/Source Article One.md" && \
-cp "_Clippings/Source Article Two.md" "_Metamorphic Media/Research/Source Article Two.md" && \
-cp "_Clippings/Source Article Three.md" "_Metamorphic Media/Research/Source Article Three.md" && \
+cd ~/path/to/vault && \
+cp "_Clippings/Source Article One.md" "_Example Project/Research/Source Article One.md" && \
+cp "_Clippings/Source Article Two.md" "_Example Project/Research/Source Article Two.md" && \
+cp "_Clippings/Source Article Three.md" "_Example Project/Research/Source Article Three.md" && \
 echo "Done — 3 files federated"
 ```
 
@@ -64,7 +65,7 @@ After the user confirms the copy is done, the Claude instance updates frontmatte
 **On the original:**
 ```yaml
 federated_to:
-  - "[[_Metamorphic Media/Research/Source Article One]]"
+  - "[[_Example Project/Research/Source Article One]]"
 ```
 
 **On the copy:**

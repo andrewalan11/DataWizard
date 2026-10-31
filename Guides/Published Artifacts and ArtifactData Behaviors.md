@@ -2,7 +2,7 @@
 title: Published Artifacts and ArtifactData Behaviors
 type: guide
 created: 2026-10-12
-updated: 2026-10-28
+updated: 2026-10-31
 operator: Andrew
 origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects); backfilled DW-S428'
 scope: seed
@@ -26,6 +26,7 @@ edit_log:
   - 'Seed 1.11.11 2026-10-26 - large-read bullet - a read of an artifact this session did not publish saves the full HTML to a local file that sub-agents can read (board B-0226, ReWoven)'
   - 'DW-S440 2026-10-27 - Publishing - tool behaviors B-0258, B-0257, B-0245 (xlsx and similar not served, base64 plus downloads; per-session connector warning; a sub-agent builds, the lead publishes)'
   - 'DW-S443 2026-10-28 - Reading: assets listing of another owner''s artifact returns not_found; publish a checked copy as a supporting file (board B-0262, MetaMyth)'
+  - 'DW-S448 2026-10-31 - tool behaviors B-0275: sandboxed srcdoc iframe for embedded prototypes; a self-publishing page carries other pages as base64 blocks (Kosmosis)'
 ---
 # Published Artifacts and ArtifactData Behaviors
 
@@ -123,6 +124,8 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 
 **Nothing in an artifact link reaches the page, so a published page has no deep links.** The page runs in a frame on its own host whose URL carries no query or fragment: opened at `https://claude.ai/artifact/<id>?x=1#y=2`, a probe page saw empty `location.search`, `location.hash` and `document.referrer`, and the host's `postMessage` traffic to the frame carried theme, viewport and capability settings but no route. No runtime capability offers a link channel either (checked against runtime contract 0.2.75). A `#route=` scheme in a published page can never be hit from a link: route through a channel the page owns (a paste field, a `db` document another page writes, a sync), and probe with a scratch page that prints what it sees before building any routing. (Holonic Canvas, 2026-10)
 
+**A prototype embedded in a page runs in `<iframe sandbox="allow-scripts" srcdoc=...>`.** Prototypes that load a library from cdn.jsdelivr.net or use `DecompressionStream` ran with no console errors; `allow-same-origin` was not needed. Once focus is inside the frame, Escape does not reach the parent page, so give the panel a visible Close button. (Kosmosis, 2026-10)
+
 ## Page runtime calls
 
 **A second HTML page may not get the runtime; put capability code on the entry page.** The runtime contract names only the entry page; whether a second HTML page in `files` gets `window.claude` was not tested. Put capability code on the entry page and route other views by hash; keep a second page as a redirect. (MetaMyth, 2026-10)
@@ -134,6 +137,8 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 **A published page can start a scheduled task, and only the task's owner can.** A page that declares `mcp: {servers: [{server: "Claude Code Remote", tools: ["fire_trigger"]}]}` can call `callTool("Claude Code Remote", "fire_trigger", {trigger_id})`. The call runs as the viewer, so only the owner of the task can start it: show the button only when `user.isOwner()` is true (`use("user")` itself can resolve `null`; treat that as not the owner). Keep the trigger id in a store document, not in the page source. What the started run can reach is in **Cowork Scheduled Tasks**. (MetaMyth, 2026-10; seen once)
 
 **Count every live subscription before checking the cap.** The `db` cap is 64 active subscriptions per view, that is per open page, and the 65th rejects `resource_exhausted` (runtime contract 0.2.85). One page checked its count before its reply and thread listeners had started, so the check read 62 while the real total reached 79 with 40 people in the store. Count after all listeners are planned, then drop the optional ones if the total is over. (MetaMyth, 2026-10; seen once)
+
+**A page that republishes itself sends one HTML document, so pages it carries must be inside it.** `artifact.publish(html)` sends only the document, not supporting files. To carry other pages (prototypes shown in an in-page viewer), embed each as base64 in a `<script type="text/plain" id="...">` and add those ids to the elements the page re-emits; each blob's sha256 was unchanged after a stubbed owner save. Put the blobs after the app script so first paint does not wait on them. (Kosmosis, 2026-10)
 
 ## Local testing and vault copies
 

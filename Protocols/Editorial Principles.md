@@ -2,12 +2,13 @@
 title: Editorial Principles
 type: protocol
 created: '2026-06-13'
-updated: '2026-06-13'
+updated: '2026-10-31'
 operator: Andrew
 priority: high
 maturity: working
 edit_log:
   - DW-S182 2026-06-13
+  - 'DW-S448 2026-10-31 - chunking step 4: embeds resolve by exact path, same folder, shortest path (was "by filename regardless of folder path"); section names unique in the vault'
 ---
 
 These apply when synthesizing source material into project documents.
@@ -129,7 +130,7 @@ Is the document already long and hard to navigate?
    │   └── ...
    ```
 
-   **Why a subfolder?** Without one, a chunked document with 10+ sections dominates the folder listing and buries other files. Obsidian resolves `![[embeds]]` by filename regardless of folder path, so moving sections into a subfolder does not break the shell's rendering.
+   **Why a subfolder?** Without one, a chunked document with 10+ sections dominates the folder listing and buries other files. Moving sections into a subfolder does not break the shell's rendering as long as each section name is unique in the vault: Obsidian resolves a bare `![[embed]]` by exact path, then a note in the same folder, then the shortest path, so a same-named note elsewhere can take over the embed (MCP Reliability and Write Verification, 12.0; naming rule: Conventions Registry, 7.0).
 
    **When NOT to use a subfolder:** If the document has only 2-3 sections, a subfolder may be overkill. Roughly 5+ sections is the threshold.
 

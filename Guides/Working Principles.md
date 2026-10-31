@@ -4,7 +4,7 @@ type: guide
 status: active
 maturity: working
 created: '2026-06-18'
-updated: 2026-10-28
+updated: 2026-10-31
 operator: Andrew
 tags:
   - protocol
@@ -63,6 +63,7 @@ edit_log:
     Ground-truth (meta-learning reviews S301-S362)"
   - 'DW-S440 2026-10-27 - fail closed and fail visibly clause (A completion is a disk fact); memory, notes and search hits are claims clause (Verify the drift) (intake lessons, Seed 1.11.14)'
   - 'DW-S443 2026-10-28 - Verify the drift: a gap found by name needs an alias grep first (board B-0265, Community Stack)'
+  - 'DW-S448 2026-10-31 - Hallucination vigilance: web-tool quotes can be paraphrases - label and spot-check (board B-0279, LocationScout)'
 ---
 # Working Principles
 
@@ -114,7 +115,7 @@ These were standing principles in the older protocol and remain true even though
 
 **Confidential content stays local.** Never embed, quote, or reference content from designated private folders in shared or federated project documents. When in doubt about whether something is shareable, treat it as private and ask.
 
-**Hallucination vigilance.** Statistics, citations, and attributed quotes produced by an AI agent are background context, not citable data. Flag uncertain claims for human verification before they go into anything shared with collaborators or funders. The cost of a fabricated citation in a funder document is far higher than the cost of a verification step.
+**Hallucination vigilance.** Statistics, citations, and attributed quotes produced by an AI agent are background context, not citable data. Flag uncertain claims for human verification before they go into anything shared with collaborators or funders. The cost of a fabricated citation in a funder document is far higher than the cost of a verification step. A web tool's "quote" can be a paraphrase too: label it, and spot-check a sample against the source before a page ships (Chrome MCP and Web Tool Behaviors, 4.0). (LocationScout, 2026-10)
 
 **Design for the next phase at build time.** When building a pipeline stage, a schema, or a store, spend the small extra effort to make its output usable by the phase you already know is coming - retrofitting later is expensive, doing it now is nearly free. The canonical case: designing enrichment output for graph-readiness (normalized entity slugs, typed relationships) before the pipeline ever ran, rather than re-processing every companion note once a graph was wanted (DataWizard, 2026-05). Later instances of the same move: block IDs stamped on every companion at write time so citations could be verified afterwards (2026-08), and a db-backed intake queue designed together with its vault write-back contract rather than bolting the vault on later (2026-08). The test is cheap: name the next phase, ask what it will need from this one, and add only the fields or hooks that answer it.
 
