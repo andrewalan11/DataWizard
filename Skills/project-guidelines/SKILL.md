@@ -6,10 +6,11 @@ description: >-
   migration', 'write project guidelines', 'set up a new project', or any mention
   of 0.0 files needing creation or updates.
 type: skill
-version: '1.5.1'
-updated: '2026-09-08'
+version: '1.5.2'
+updated: '2026-10-31'
 edit_log:
   - "DW-S349 2026-09-08 - v1.5.1: Working Conventions template gains the recommended Reader-Facing Prose Style line (edit_log added this session as Step 3.8 fallback; prior history predates the field)"
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: v1.5.2 0.0 template birth fields'
 ---
 
 # Project Guidelines Skill
@@ -72,7 +73,11 @@ title: Project Guidelines - [Project Name]
 type: project-doc
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-datawizard_protocol_version: "[current]"
+operator: FirstName
+origin: 'PROJ-SNN YYYY-MM-DD - created'
+edit_log:
+  - 'PROJ-SNN YYYY-MM-DD - created'
+seed_version: "[seed: from VERSION.md]"
 status: active
 last_content_interests_review: YYYY-MM-DD  # set to created date if Content Interests written at creation
 ```

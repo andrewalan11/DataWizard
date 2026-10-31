@@ -6,8 +6,8 @@ description: >-
   transcripts with harvest_status: pending, or any transcript with harvest_for
   YAML set. Covers video, podcast, meeting, and voice memo transcripts.
 type: skill
-updated: '2026-09-08'
-version: '0.9.2'
+updated: '2026-10-31'
+version: '0.9.3'
 edit_log:
   - DW-S158 2026-06-08
   - "MMM meta-learning plant 2026-06-09: added Step 4 (check existing vault
@@ -24,6 +24,7 @@ edit_log:
   - 'DW-S330 2026-09-04 - v0.9.1: See Also gains the shared-layer-redaction overlay pointer (required when the harvest destination is a shared layer)'
   - "DW-S349 2026-09-08 - v0.9.2: Reader-Facing Output rule added (load the
     Reader-Facing Prose Style guide when the destination is read-aloud-class)"
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: v0.9.3 Harvest Log name'
 ---
 
 # Transcript Harvest Skill
@@ -56,7 +57,7 @@ Harvest content from transcripts (video, podcast, meeting, voice memo) into proj
 6. **Triage multi-topic sources** -- if the transcript covers multiple topics or threads, surface the topic list to the user and offer to skip stale or low-relevance items before writing. This keeps the harvest lean and avoids over-capturing content the user has already moved past. Especially valuable for chat-style transcripts and multi-meeting catch-up conversations where some threads may be outdated by harvest time.
 7. **Harvest into destination docs** — synthesize relevant content into project documents. Use citation format: `([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]])`. Don't transcribe — synthesize.
 8. **Update source YAML** -- set `harvest_status`, `harvested_into` (with section-level anchors), `harvest_date`, and `harvest_notes`. For re-harvests, append to `harvested_into` and convert `harvest_date` to an array (most recent last). Or set `harvest_status: reviewed` with `harvest_notes` explaining why nothing was harvested.
-9. **Update Harvest Ledger** -- add or update a row in `0.4 Harvest Ledger - [Project].md` with source, harvest date, destinations, and agent.
+9. **Update Harvest Log** -- add or update a row in `0.4 Harvest Log - [Project].md` with source, harvest date, destinations, and agent.
 10. **Session log** -- add harvest details to `0.2 Session Log.md` at the end of the session as part of normal session logging -- not after each individual source.
 
 ## Segmentation (before you harvest)
@@ -121,7 +122,7 @@ When a harvest routes to **multiple destinations, or to a destination that is co
 - Flattening tensions and disagreements -- preserve nuance
 - Forgetting to update source YAML -- the next agent won't know this was already processed
 - Skipping `harvest_notes` -- the "commit message" is the most valuable part, especially for `reviewed` or partial harvests
-- Forgetting the Harvest Ledger -- source YAML is the truth, but the ledger is how humans and agents scan routing at a glance
+- Forgetting the Harvest Log -- source YAML is the truth, but the log is how humans and agents scan routing at a glance
 - Harvesting without checking project assignment -- content ends up in the wrong project docs or gets orphaned
 - Processing multiple sources without completing all 10 steps per source first (session log excepted -- that waits til end)
 - Declaring a referenced source inaccessible without checking `_Clippings/` and `_Transcripts/` first -- existing vault copies are easy to overlook

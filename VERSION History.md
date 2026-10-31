@@ -2,10 +2,12 @@
 title: VERSION History
 type: guide
 created: 2026-10-18
-updated: 2026-10-28
+updated: 2026-10-31
 operator: Andrew
 origin: DW-S421 2026-10-18 - What's New entries 1.0.0 to 1.5.0 moved from VERSION.md word for word (size rotation, archivist rule)
 edit_log:
+  - 'DW-S448 2026-10-31 - What''s New 1.9.5 to 1.0.0 moved word for word to VERSION History - 1.0.0 to 1.9.5.md (size rotation before 1.11.15)'
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: draft 1.11.15 doc-fix bullets'
   - 'DW-S443 2026-10-28 - draft entry 1.11.15 (in progress) added: tool-behavior plants from five partner projects'
   - Seed 1.11.11 2026-10-26 - What's New 1.10.0 to 1.10.4 moved in from VERSION.md word for word (size rotation before 1.11.11)
   - DW-S428 2026-10-20 - What's New 1.9.1 to 1.9.5 moved in from VERSION.md word for word (size rotation before 1.11.7)
@@ -18,13 +20,13 @@ edit_log:
 
 # VERSION History
 
-Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newer entries are in `VERSION.md`. When `VERSION.md` passes about 50 KB again, move its oldest entries to the top of the list below, newest first, and leave the pointer in `VERSION.md`.
+Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newer entries are in `VERSION.md`. When `VERSION.md` passes about 50 KB again, move its oldest entries to the top of the list below, newest first, and leave the pointer in `VERSION.md`. Entries 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md`; when this file passes about 50 KB, start the next part the same way.
 
-## What's New in 1.11.15 (in progress, DW-S443)
+## What's New in 1.11.15 (in progress, DW-S443, DW-S446)
 
 *Draft, not released: VERSION.md still reads 1.11.14. At release, move this entry into VERSION.md above 1.11.14 and finish the summary line.*
 
-**Patch release: tool behaviors from partner projects (MetaMyth, Mesocosm, Community Stack, Future Visions, Events Map), mostly about the device mount, cloud sessions and links.** One DataWizard session (2026-10-28). Shipped in the Seed:
+**Patch release: tool behaviors from partner projects (MetaMyth, Mesocosm, Community Stack, Future Visions, Events Map), mostly about the device mount, cloud sessions and links, plus fixes for stale or contradicting rules found by a Seed error check.** Two DataWizard sessions (2026-10-28, 2026-10-31). Shipped in the Seed:
 
 - `Guides/Published Artifacts and ArtifactData Behaviors.md`: `Artifact list` with `scope: "assets"` on another owner's artifact can return `not_found`, so `from_url` cannot copy its assets; publish a checked copy as a supporting file.
 - `Guides/Chrome MCP and Web Tool Behaviors/12.0`: the Drive connector reads a Google Sheet as a sample of the first tab; ask for a CSV or xlsx export.
@@ -40,9 +42,27 @@ Older "What's New" entries of the Seed, moved here from `VERSION.md` word for wo
 - `Guides/Cowork Build Environment/8.0`: folder grants for a `~/Downloads` subfolder and a vault subfolder mounted in the same turn; sub-agents read a leaf-name mount and in-place writes work there.
 - `Guides/Cowork Build Environment/8.1`: the `tar --overwrite` bullet gains the safe fix - `mv` the old folder aside and extract fresh, which keeps the old version.
 - `Guides/MCP Reliability and Write Verification/12.0`: the short-name embed bullet is rewritten - Obsidian resolves a bare link by exact path, then same folder, then shortest path, so a new same-named note can take over a link; use path links for generic or numbered names. Its example path is now generic.
+- `Skills/session-closer` v4.11.3: Step 3.5 - when a planted tool behavior came from another project's note or board ask, close both in the same pass.
+
+**Doc fixes from a Seed error check (scout test of 1.11.12, checked against 1.11.14):**
+
+- `Guides/Git Guide/10.0 Commit Guards.md`: "Three guards", not two; says where each guard runs (conflict markers in the hook and CI, filenames in the hook only for now, secret files in the hook with DW Save at push time); no longer claims a shipped `check-filenames.yml`; a session id in the text is replaced by a date.
+- `Protocols/Conventions Registry/10.0 Archiving`: the example now follows the mirror pattern (`xArchive - ProjectName/Strategy/Old Strategy.md`).
+- `Protocols/Conventions Registry/2.0 Infrastructure file slots`: the core rule says when each slot appears (0.0-0.3 at setup, 0.4 at the first harvest, 0.5 at the first open item); the example says "start with", not "ship only".
+- `Protocols/Conventions Registry/1.0 Link, don't restate`: the Review Automation guide owns cadence numbers, not the session-closer; the slot table pointer reads "(entry 2.0)".
+- `Protocols/Conventions Registry/26.0 Coordination board`: the Rule and the Example now post the ask when the outbound item is written, with the close-time check as the safety net; a gate row naming another project's actor is no longer listed as an outbound item.
+- `Protocols/YAML Schema.md`: its own edit_log is in date order again; the birth table says edit_log is not on shells, and the edit_log section says a new file gets it at birth; `team_attention*` fields are migrated in one sweep, not on next touch; "Harvest Log" and "harvest-log queries".
+- `Guides/Filename Safety.md`: inside double quotes, `!` followed by anything but a space starts history expansion (was "a letter or digit").
+- `Guides/Orientation Flag Sweep - Query Spec.md`: the null-literal note is corrected - `NULL` sorts last; the harm is that the item counts as dated.
+- `Skills/session-closer`: Step 4 gate rows name an operator or a person only (work that waits on another project's session is a board ask); Step 3.14 links the board id rule instead of restating it and drops gate rows from the outbound kinds; Step 2.5 lists `origin`; "Harvest Log" in Step 4 and the related-files list. `references/output-format.md`: the sweep trace line links the Query Spec instead of carrying an old copy; both session-log templates gain `origin` and `edit_log`.
+- `Skills/project-guidelines`: the 0.0 template drops the retired `datawizard_protocol_version` pin and gains `operator`, `origin`, `edit_log` and `seed_version`.
+- `Guides/Harvest Workflow Guide.md`, `Skills/document-harvest`, `Skills/transcript-harvest`: the 0.4 file is the "Harvest Log" everywhere, matching the slot table ("the ledger" becomes "the log").
+- `Skills/project-health-audit`: Action Items (0.5) is required once the first item is filed, matching the slot rule.
+- Skill versions: project-health-audit v2.1.2, session-closer v4.11.4, project-guidelines v1.5.2, document-harvest v0.5.2, transcript-harvest v0.9.3; `SKILLS.md` rows synced; session-closer `references/changelog.md` takes the oldest edit_log line (rolling window).
+
+**Adopters:** the 0.4 slot file is named "Harvest Log". A project whose file is named "Harvest Ledger" renames it when next touched.
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-- `Skills/session-closer` v4.11.3: Step 3.5 - when a planted tool behavior came from another project's note or board ask, close both in the same pass.
 
 ## What's New in 1.10.4
 
@@ -107,312 +127,3 @@ Not yet covered: the commit guard (`Scripts/hooks/pre-commit`) has no secret che
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
-## What's New in 1.9.5
-
-**Patch release: tool behaviors from three DataWizard sessions and two partner projects.** Three DataWizard sessions (2026-10-17). Shipped in the Seed:
-
-- `Guides/Cowork Build Environment/8.0 Device Bridge.md`, the wedged-shell bullet: the fault is not machine-wide, and a new session is not a sure way out - one project had no working device shell in three parallel sessions for a whole day, also after an app restart, and a new session the next day started with the same failure; when the build inputs are one staged bundle, check that a container rebuild matches the staged outputs byte for byte first.
-- `8.1 Device Bridge - Staging, Commits and Transport.md`: `device_stage_files` fails the whole call when one listed path does not exist; if the bridge drops mid-session, keep building in the container and commit after reconnect (no new grant needed).
-- `8.2 Device Bridge - Sub-agents and Orchestration.md`: worker-tier sub-agents wrote JSON deliverables 6 of 6 times when the lead rendered and checked the notes; parallel sub-agents sharing the operator's Chrome tripped a site's bot check for everyone - throttle them or keep browser work in the lead; a worker's count check against its own selection missed a file.
-- `5.0 Network and GitHub Data.md`: Overpass mirrors fail from the container too (proxy drops, 500, 504), the PDF Tools fetch gets 406; Nominatim works from the container; Chrome was the fallback when the device shell was down.
-- `Guides/Chrome MCP and Web Tool Behaviors/1.0 Chrome MCP Interaction Limits.md`: `resize_window` can report success while the viewport does not change.
-- `4.0 web_fetch Behaviors.md`: GitHub open items are readable, history pages answer ROBOTS_DISALLOWED; "no merge seen" is not evidence.
-- `6.0 Scripted Downloads from the Shells (Container and Device).md`: Reddit refuses logged-out reads from every shell (post JSON 403, old.reddit login redirect, bot-check page); a redirect to `/login` must stop a run; the working pattern is an operator-run console script in a logged-in tab that saves one JSON file for a local script to ingest.
-- `10.0 Claude-in-Chrome Extension from a Cowork Cloud Session.md`: `javascript_tool` gives up at 45 s while async page work keeps running (fire-and-forget, then poll); page data has no path to a file except through the conversation; the extension refuses some sites "due to safety restrictions" (hand the step to the operator).
-- `Guides/Published Artifacts and ArtifactData Behaviors.md`: two confirmations (the read sequence on a 2.3 MB page; capabilities kept when omitted on republish).
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.9.4
-
-**Patch release: seven field learnings from four projects.** One DataWizard session (2026-10-16). Shipped in the Seed:
-
-- `Guides/Cowork Build Environment/8.0 Device Bridge.md`, the wedged-shell bullet: the fault is per session, not per machine, so a new session is the way out, not an app restart; check `get_device_info` for `scratchFolder`; the error text has no detail; stop after two identical failures; list uncommitted files in the handoff; how to rebuild a generated file with the file tools only.
-- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: a sub-agent can write a `.md` when the file is the named deliverable (always give a fallback); new bullet - "preserved in git history" is false until the vault is saved, so move cut text into an archive note in the same step.
-- `Guides/Published Artifacts and ArtifactData Behaviors.md`: for a large page, budget the lead's own full read of the live source before the first publish (a sub-agent's read does not count); running the read sequence before the first publish avoids the refusal; a page can carry its own `[hidden]` reset so local and live agree.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.9.3
-
-**Patch release: two holonic-records schema rulings, and four field learnings.** One DataWizard session (2026-10-16). Shipped in the Seed:
-
-- `Protocols/YAML Schema.md`, Holonic Records: the `community` kind now carries `founded` (with `location`); `place` does not. Relation records keep their place in the list: a retracted record stays at its index, a replacement goes at the end, and no record is removed, spliced or re-ordered, because a consumer may derive an id from a record's position. `Guides/Make Your Project Data Holonic.md` says the same.
-- `Guides/Published Artifacts and ArtifactData Behaviors.md`: the refusal sequence after a refused republish - an identical resend can keep being refused; a shell byte-compare or an `Artifact read` with `path` does not count as reading the saved copy; a Read-tool read of a small slice of it clears the refusal.
-- `Guides/Chrome MCP and Web Tool Behaviors/2.0 Reading Client-Rendered Pages.md`: rung 9 - a fetch that comes back with only the title and meta description means "unreadable", not "no evidence".
-- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: a wedged `device_bash` stays wedged for the session; switch to the stage, edit in the container, commit path.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. A vault that generates its holonic shared-facts blocks with a script should let `community` carry `founded` there too, or the next regenerate drops the line. (DataWizard, 2026-10)
-
-## What's New in 1.9.2
-
-**Patch release: three big guides become shell + sections, and a third intake batch of field learnings lands.** One DataWizard session (2026-10-15). Shipped in the Seed:
-
-- **Sectioned guides.** `Guides/Cowork Build Environment.md`, `Guides/MCP Reliability and Write Verification.md` and `Guides/Chrome MCP and Web Tool Behaviors.md` were each past or near the ~50 KB line where MCP reads and patches turn unreliable. Each is now a short shell (frontmatter, intro, `![[embeds]]`) plus one section file per former H2 in a folder of the same name; the text was moved byte for byte. The shells' edit_logs are frozen; new edits log on the section files. Device Bridge (Cowork Build Environment 8.0) is further split by theme: 8.0 shell and environment, 8.1 staging, commits and transport, 8.2 sub-agents and orchestration; two near-identical "device shell is GNU Linux" bullets were merged. New learnings go into the matching section file, never the shell.
-- **New section** `Cowork Build Environment/10.0 Scanning Third-Party Code.md` (OSV-Scanner call analysis runs the scanned repo's build code; GuardDog can report a clean run it did not finish).
-- **Platform and Environment Behaviors plants** from six projects' notes (Evolutionary Media Commons, Holonic Canvas, LocationScout, MetaMyth, Community Stack, DataWizard), about 50 learnings: background jobs in the cloud container (survival past the call is undefined; detach with `setsid nohup ... < /dev/null & disown` and check the log grows); folder grants for deep build paths; `sed -i.bak` leaves undeletable backups on a connected folder; spend-limit kills that still wrote output; the general-purpose sub-agent will not write report `.md` files; the read-only Plan agent; staging, commit and checksum refinements; Python glob order and json.dump reformatting; pipx with the newest Homebrew Python; `pdftotext` ligatures; Playwright flakes under parallel runs and Back with `history.replaceState`; reviewing animation from video; published-artifact comment rounds, overlay mock-ups, the byte-exact publish compare, admin-only root rules and ArtifactData `batch`; `visibility` vs `opacity`; Chrome page-text truncation, auto-translation and embedded state JSON; Obsidian tool flips with no reconnect notice; `git am` stopped halfway without the delete grant; `device_request_delete_permission` in scheduled tasks. Plus one tier-generic "Build rounds" sentence in the Conventions Registry, Model routing.
-- **Seed hygiene.** `.gitignore` now ignores `*.bak`: rollback copies stay out of the published Seed (keep them in a backup folder outside the Seed).
-
-**Propagation:** `update_seed.sh`. Links to these guides by name keep working; a heading link of the form `[[Guide#Heading]]` into a sectioned guide should point at the section file. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.9.1
-
-**Patch release: the board's last interim wording goes, and a second intake batch of field learnings lands.** Two DataWizard sessions (2026-10-13). Shipped in the Seed:
-
-- `Protocols/Conventions Registry.md`, "Coordination board": post the ask at write time, not only at close (the close-time check verifies and backfills); the interim clause about the board script refusing `intent:` / `status: seen` is gone (the script now carries both); an ask may carry an optional `resolution:` line; the hand-path id rule is "`next_free`, or the next id above the highest present (mirror incl. Unreconciled, and archive)", in the Registry, the template and the board header alike. `Templates/Coordination Board - Template.md` matches.
-- `Skills/session-closer` v4.10.3 (Step 3.14 verifies that each outbound item has a board row and posts only the missing ones). `Skills/supervised-build` v1.5.1 (one worktree and one output folder per parallel builder; no `git stash` across worktrees).
-- Platform and Environment Behaviors guides, from five projects' notes (Kosmosis, Holonic Canvas, LocationScout, Evolutionary Media Commons, MetaMyth): `Cowork Build Environment.md` (folder grants: ask for the exact folder, then widen; no connected folder means the Obsidian MCP is the only write path; vault-level files are invisible to the device shell when only a project folder is connected; a Mac venv does not run in the device shell; build sdists in a venv; byte-faithful sectioning; Overpass tiling and `out geom;`; `git archive` crossings miss gitignored inputs; content inventory before consolidating), `MCP Reliability and Write Verification.md` (local MCP tools time out while the computer sleeps; `write_note` append re-serialises the frontmatter; `edit_file` dryRun for files past the read ceiling), `Published Artifacts and ArtifactData Behaviors.md` (no deep-link channel into a published page; byte check before the first publish; recipe strips the trailing close tags; capabilities kept on republish), `Chrome MCP and Web Tool Behaviors.md` (aggregator fallback marked partial; `og:image` contact-sheet check), `Cowork Scheduled Tasks.md` (append-only run log: a launch can start twice), `Multi-Instance Coordination Patterns.md` (a run-card review that executes).
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.9.0
-
-**Board intake release: five projects' field learnings land in the Seed, plus three schema and board rulings.** A DataWizard intake session triaged 25 cross-project asks (Evolutionary Media Commons, Holonic Canvas, LocationScout, Community Stack, Weave) in one pass. Shipped in the Seed:
-
-- `Guides/Published Artifacts and ArtifactData Behaviors.md` (new, Platform and Environment Behaviors cluster; row in GUIDES.md): the publish read gate and refusal sequence, `Artifact read` URL and large-read behavior, the ArtifactData store (list/out_dir, pinned atomic batch, nested-merge update and the `__delete__` marker, body size cap), who can write to an artifact db, and the rendering constraints (image CSP, no browser automation inside the artifact frame).
-- `Guides/Cowork Build Environment.md` (+20): a rejected or cancelled sub-agent launch may still have run; 529 resume by message; staging and commit paths and limits; text-only checksum rule (images change bytes in transit); container survives a restart; folder grants on the nearest parent; `tar --overwrite`; container background jobs die across a pause; per-container staging; Overpass from the device shell; `git archive` has no history (format-patch hand-off); synced-folder `<name> 2.<ext>` duplicates; `device_bash` 180 s cap; a dropped link can leave the command completed; Playwright fold click; Chromium console-error allowlist. Ruling: no git through the device shell on vault-mounted repos stands, with one narrow lead-seat exception (delete grant verified active; never a sub-agent, never unattended).
-- `Guides/MCP Reliability and Write Verification.md`, `Guides/Git Guide/9.0 Troubleshooting.md` (lapsed delete grant leaves `HEAD.lock` and `maintenance.lock`; rename-aside recovery), `Guides/Browser and File System Access Behaviors.md` (a script element id that matches a library global shadows it), `Guides/Chrome MCP and Web Tool Behaviors.md` (WebSearch per-turn budget shared across sub-agents; no user identity in a User-Agent; 429 handling; captcha-vs-WebFetch; a Connectors section), `Guides/Cowork Scheduled Tasks.md` (no ask-the-human branch on an unattended skill's normal path; `requires_local_device` binding; `device_absent` and late-PENDING failure modes; launchd cannot read ~/Documents, ~/Desktop, ~/Downloads; `launchctl kickstart`).
-- `Protocols/YAML Schema.md`, Holonic Records: predicate `uses` / `used_by` (not symmetric, on a core; role words `user`, `runs on`, `hosted on`, `publishes to` map to it); optional provenance fields `by` (the person the change was made for, `member:<key>`) and `via` (append-only custody hops `<kind>:<id>`); example comments are explanatory, not canonical.
-- `Protocols/Conventions Registry.md`: new entry "Provenance: by and via" (rule, example, hop-kind table as the lint set); "Coordination board" gains awareness asks - an `intent: action | awareness` field on asks (default `action`; awareness statuses open -> seen | stale), not a third block kind. `Templates/Coordination Board - Template.md` carries the grammar and an example.
-- `Skills/supervised-build` v1.5.0 (reviewer fixture experiments: two runs, partial apply, re-plan; force the event ordering before accepting "flake"; re-count from files; resume the plan reviewer by message; a cancelled launch may have run). `Skills/session-closer` v4.10.1 (Step 3.14 asks whether the session changed something another project depends on; if so, post an awareness ask). `SKILLS.md` synced.
-
-**Not yet in this release:** the board script's `intent` column and `seen` status (a block carrying `intent:` is parked in Unreconciled by the render until that build lands); the holon index merge path for a core that adopts another project's hid.
-
-**Propagation:** Seed files reach every vault through `update_seed.sh`. No Project Instructions change and no re-paste; the `K awareness` orientation trace count waits for the next PI bump. (DataWizard, 2026-10)
-
-## What's New in 1.8.0
-
-**Holonic records: one core per thing, one projection per project.** When several projects each keep a note about the same organization, person, tool or event, the shared facts now live once, in a core note in the vault's `_Entities/` folder. Each project keeps its own note, a projection, with a generated `## Shared facts (from core)` block plus its own view. Every core carries a permanent id, `hid`, that indexes and other tools join on, and relations between things are small records drawn from one predicate list, so `member_of` written in one project means the same thing in every other. Shipped in the Seed:
-
-- `Protocols/YAML Schema.md`, section "Holonic Records": the core fields, twelve kinds (`org`, `network`, `fund`, `community`, `platform`, `protocol`, `tool`, `person`, `project`, `place`, `event`, `work`), keys and anchor schemes, lifecycle (`active`, `merged`, `retired`; nothing is deleted), the `relations:` record and predicate table, the person rules (three states, `team` exposure by default, a field allow-list) and the four projection fields. The "Wikilinks everywhere" rule gains one exception: `core_note` is a plain path. The section's example hids are now valid values (the earlier ones held the digits 8 and 9, outside the `a-z2-7` alphabet).
-- `Protocols/Conventions Registry.md`, entry "Holonic records": the rule (consolidate the core, not the views), the shared-facts block and the shorter person block, identity, lifecycle, relations, persons, the sync rules (the core wins for shared facts, corrections flow up, sync is a diff against the live target) and the delivery classes. ID families gains three rows: `hid`, `core_id` and relation ids.
-- `Protocols/Content Type Taxonomy.md`: the `entity` line points at Holonic Records. `Config/taxonomy.yaml` is unchanged.
-- `Guides/Make Your Project Data Holonic.md` (new): how a project adopts the contract - when a thing needs a core, what a projection carries, writing relations, adding a kind or a predicate, person cores, what an index gives you, and giving an existing vault its hids.
-
-The tooling stays in the maintainer's workshop until a second vault runs it with only Vault Config changes: the index that mints `hid` and answers lookups, the reconcile and backfill scripts, the federating skill and the lint checks. The guide says what each does, so a vault can adopt the contract before the tools ship.
-
-**Coming from the organizations-only shape.** A vault that adopted the earlier, organizations-only version of this convention (it shipped without a version note): cores gain `hid`; `partners:` strings become `relations:` records, each string kept as the record's `raw`; `people:` leaves org cores, because it is relationship content, not a shared fact; each projection gains `hid` as its fourth field, and the block loses its People bullet. (DataWizard, 2026-10)
-
-**Propagation:** the Seed files reach every vault through `update_seed.sh`. No Project Instructions change and no re-paste. Projects adopt on touch, following the guide; nothing in an existing vault changes until a session federates a note.
-
-## What's New in 1.7.0
-
-**Coordination board (cross-project asks and write claims).** One vault-level board says "project X, something waits for you - here is where it is" (asks) and "I am writing this store or subtree until this time" (claims). Each row is a pointer; the content stays in the note it points at. The table lives in the operational database; `_Coordination/Board.md` is the shared markdown mirror. Shipped in the Seed:
-
-- `Templates/Coordination Board - Template.md` - depersonalized starter: header, block grammar, hand-path steps, one example ask and one example claim.
-- Conventions Registry entry "Coordination board" (rule, example, and who writes the table: scripts, Claude Code and DW Save write it; a session on a mount that cannot forward SQLite locks, such as Cowork, uses the hand path on the mirror) and the `B-NNNN` row in ID families.
-- `Guides/Orientation Flag Sweep - Query Spec.md` section (d): the board sweep as steps over the mirror, the trace fragment, and how to act on an ask.
-- `session-closer` v4.10.0: Step 3.14 posts an ask for each outbound item and releases held claims; Step 3.13 notes that claim expiry runs in the board render.
-- `Scripts/datawizard-sync.sh` (DW Save): when `board.py` exists and `python3` is on PATH, each save first runs `board.py render` and adds one `board` row to the status card (`folded`, `look at the board`, or `render error`); the save never fails because of the board.
-- `Config/taxonomy.yaml`: infrastructure types `coordination-board` and `coordination-board-archive`; drive-by fix: `exchange-note` registered too (it had been unregistered while every Session Exchange note used it - 21 type-validity errors cleared in this vault).
-
-`board.py` itself stays in the DataWizard Workshop until a second operator runs it; until then the board is read by hand from the mirror in other vaults.
-
-**Propagation:** the Seed files reach every vault through `update_seed.sh`; the orientation sub-check reaches each project only through a per-project re-paste of the Project Instructions (required; tracked as a gate row at close).
-
-## What's New in 1.6.2
-
-**Fork-topology guard (`update_seed.sh`).** Git mode now verifies that
-`origin` points at the canonical repo (owner AND repo name matched by URL,
-https or ssh form, case-insensitive) before trusting any origin-based
-comparison. Previously a clone whose origin was a fork was measured against
-the fork alone: a fork-synced clone reported "Already current" while
-releases behind canonical (field-confirmed on a collaborator clone stuck at
-1.1.1 for months), and two error messages prescribed
-`git reset --hard origin/main` - the exact command that rolls a fork-shaped
-clone back to the fork's stale state (demonstrated live on the audit
-fixture: 1.6.0 -> 1.2.0). Now:
-
-- Fork-shaped clones get a WARNING naming the actual canonical remote (or
-  its absence), and the script also fetches canonical to measure real
-  staleness.
-- The staleness report is honest: "in sync with your FORK (origin), but N
-  commit(s) behind the canonical Seed repo", exit 3 - never a false
-  "Already current". A fork clone that IS current with canonical still
-  exits 2, with a note.
-- All four recovery messages (dirty tree, failed self-heal, ahead-of-origin,
-  failed fast-forward) point at Git Guide 7.0 "Recovering a Seed Clone
-  (Remote-Agnostic)" instead of prescribing reset commands - reset-as-
-  default-verb is retired from the script's entire error surface.
-- The zip-over-git self-heal is explicitly restricted to canonical-origin
-  clones.
-
-No remote is ever auto-repointed; all guards still fail closed. Audited in
-DW S318 (run-don't-read fixture audit), built and fixture-verified in DW
-S333 (nine-scenario regression matrix incl. ssh-form URLs, fork-owner
-anchoring, the canonical self-heal, and the upstream guard).
-`update_seed.ps1` needs no change - it refuses git clones entirely.
-
-## What's New in 1.6.1
-
-**Windows updater unbroken (`update_seed.ps1`).** A single em dash on the
-sync-log line made the entire script unparseable under Windows PowerShell
-5.1: with no BOM, PS 5.1 reads `.ps1` files as ANSI, the em dash's bytes
-(E2 80 94) decode to `a`+`euro`+curly-quote, and PowerShell accepts curly
-quotes as string delimiters - the literal closes early and the parse
-collapses. Shipped broken in 1.2.0 (2026-08-15), so **no Windows operator
-has been able to run any Seed update or install auto-sync since** -
-silently (a script that never parses writes no Sync Log line). Diagnosed
-by Jay's instance (WV_2026-09-02_JC_02); verified byte-level on the
-maintainer clone (DW S325).
-
-**IMPORTANT - Windows installs at 1.6.0 or below cannot self-update to
-get this fix** (the broken script IS the update path). One-time manual
-re-download, from the vault root in PowerShell:
-
-    Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/andrewalan11/DataWizard/main/update_seed.ps1 -OutFile "_DataWizard\Seed\update_seed.ps1"
-
-then run the updater normally (add `-InstallAutosync` if the
-"DataWizard Seed Update" scheduled task was never created).
-
-**All Seed shell scripts are now pure ASCII.** Em dashes in
-`update_seed.sh` and `Scripts/datawizard-*.sh` replaced too - cosmetic
-there (bash tolerates UTF-8), but the same defect class. Standing rule:
-scripts that ship in the Seed stay ASCII-only; a non-ASCII byte in a
-BOM-less `.ps1` is a parse-time landmine on Windows.
-
-## What's New in 1.6.0
-
-**Operator Gate Queue codified.** The deployment-gate tracker - built-or-decided work waiting on a specific actor to bring it live - graduates from pilot to canon after two full exit ceremonies in the field. The **Conventions Registry** gains three entries: **Operator Gate Queue** (lifecycle vocabulary `designed -> built -> installed -> verified-live`, parser-first G-row schema, feeding-at-close, verify-a-gate's-live-state-before-working-it, the exit ceremony into the project registry), **Active Threads ledger row schema** (seven fields; `next:` holds current state only, ~5 lines, pointing at the driver doc or State Board - link-don't-restate applied to the ledger itself), and **Model routing** (the single home for the tier heuristic: high-capability default; highest tier for synthesis, audits, reviews, canon writes; fast tier for mechanical batches) - plus a deployment-gate row in the Tracking Model fact-class table.
-
-**session-closer v4.7.0**: Step 4 gains the gate-queue feeding bullet (anything built but not verified-live gets a gate row when the actor is specific; `unverified` is named honestly, never pending-success); Step 4.5's model line points at the Registry instead of restating the heuristic; Step 2.6 handles sectioned ledgers (a shell of per-arc embed files - patch the arc's file, never the shell).
-
-**New: `Seed/Templates/Operator Gate Queue - Template.md`** - a depersonalized starter queue (classes A-F, Parked, Deployed, one example row), cataloged in GUIDES.md. First template in the new `Seed/Templates/` folder.
-
-## What's New in 1.5.0
-
-**supervised-build skill (new).** The Coordination Patterns guide's Pattern 4 - the per-chunk review relay between a build session and a reviewer instance - codified as a skill after four field runs (the guide's own codify-on-second-use rule, overdue by two). One `SKILL.md`, two seats: the build session gets the **review gate as a hard step** (before writing chunk N, a `status: reviewed` note covering it must exist in Session Exchange; if absent, pause and ask - skipping review is a conscious operator choice on the record, never a silent omission), and the reviewer gets the verification discipline (verify on disk, never from reports; test shipped scripts by *running* them on scratch fixtures outside the vault; ask for the class rule, not the special-case fix) plus the **mandated State Board write**: a fixed five-field block (status / verified / next_gate / turn / blocking) updated after every delivered review, so a fresh instance can answer "where are we at on this arc" from the driver doc alone. The guide keeps the rationale and the transport conventions and now points at the skill; the field shape lives in the skill.
-
-## What's New in 1.4.0
-
-**Synthesis provenance - Phase 1: block citation extends to all generated docs.** Block-level citation (D112) now spans every document generated under DW protocols, not only companion notes - design docs, reports, decision entries, session-log entries, exchange reviews, and Seed plants. Granularity follows the **evidence unit, not the document class**: a paragraph or turn takes a block stamp (`^bN`/`^tN`), a whole section takes a section anchor.
-
-- **Conventions Registry** citation section gains generated-docs + obligation tiers, evidence-vs-edit-provenance-root (two syntaxes, one meaning each), the reach rule and metadata exemption (a stamp does not bump `updated:` or `edit_log`), block-ID tolerance (reuse any trailing block ID, human-minted included), and "Seed text may carry block IDs."
-- **block-stamper skill v2**: the non-source exclusion is retired for the evidence-unit rule; adds reach, stamp-before-cite, verify-after-claim collision guard, ID tolerance, the metadata exemption, and the script handoff.
-- **`Scripts/stamp_blocks.py`** (new): an on-cite block stamper - byte-faithful (append to the target line only), stdlib, Python 3.8+, with `--manifest`/`--file`/`--dry-run`/`--verify`, atomic write, and BOM handling. The batch executor twin of the skill; runs natively in Claude Code / GitHub Actions and through the device shell under Cowork. Regression fixtures ship beside it in the consuming vault's test area.
-  Block boundaries follow CommonMark element starts (heading, fence, rule, setext underline, blockquote, table row, list item), so prose directly above any of them is stamped on its own last line, never on the structural line; outcomes report the target line (`@L<n>`) because `--verify` confirms only that an ID landed where intended, not that the intended line was right.
-
-No protocol or Project Instructions change. The extension is recorded as decision entries in the consuming vault; Phase 2 (an outward-facing one-pager as the first production customer) is the next phase.
-
-## What's New in 1.3.1
-
-**Auto-sync self-overwrite fix (`update_seed.sh`).** The updater
-replaced itself on disk mid-run: the zip-mode `cp` and the git-mode
-`merge --ff-only` both overwrite `update_seed.sh` while bash is still
-reading it by byte offset, so execution resumed inside the freshly
-written file -- surfacing as a spurious `UNINSTALL_AUTOSYNC: unbound
-variable` at line 122 (the tell: the "Downloading..." message printed
-first, the line-122 error arrived after). Fixed by wrapping the whole
-script body in a `main()` function invoked on the last line, so bash
-parses to EOF before any file-replacing command runs -- removing the
-dependence on file size entirely. Diagnosed by Tree's instance
-(DreamVault), 2026-08-20. The bash-only fix is version-gated behind
-this 1.3.1 bump so zip-mode installs (which skip when versions match)
-actually pick it up. Note: the *last* run of an old unwrapped script --
-the one that copies 1.3.1 into place -- still crashes on its own bug
-mid-copy (a one-time syntax error, and no sync-log line for that run).
-That is expected and self-correcting: the Seed is already at 1.3.1, and
-the next run (the new script) clears `/tmp` and logs "Already current."
-
-**Zip-over-git self-heal.** A clone that a past zip-mode run copied
-over without committing is left dirty-but-byte-identical to
-`origin/main`, and the git-mode dirty guard then skipped forever
-(exit 3, every run, no sync log ever written). The updater now fetches
-first and, when the tree is dirty but provably lossless to reset (no
-local commits ahead AND working tree already equal to `origin/main`),
-self-heals with `git reset --hard origin/main`. Genuine local edits
-are still refused -- now with the recovery command named in the
-SKIPPED message.
-
-`update_seed.ps1` needed no change: PowerShell parses the whole script
-before executing (no self-overwrite), and it already refuses zip-sync
-on a git clone.
-
-## What's New in 1.3.0
-
-**Team flags are deliverable as of this release.** The Flag Surfacing
-Chain Phase 1 (read side) ships the machinery that surfaces `flag_for`
-items to their addressees -- a system previously measured at 0% delivery
-because only the write side existed.
-
-- **Flag ship date: 2026-08-18.** The session-closer's flag expiry pass
-  (Step 3.13) applies ONLY to flags set on or after this date. Flags
-  that predate it are a pre-existing backlog: triage them in a dedicated
-  session, never mass-expire them (they were set when delivery was
-  broken -- expiring them as "unread" would falsify the record).
-- **Project Instructions v4.6** -- new Orientation Step 6: the unified
-  orientation sweep (flag sweep on multi-operator projects, stale-stub
-  reconciliation, intake what's-new) with an unconditional compliance
-  trace written into the claim stub. **Re-paste required:** copy the
-  updated PI from `Seed/DataWizard Project Instructions.md` into each
-  project's Cowork Settings (or refresh your CLAUDE.md import) --
-  instruction shipped is not instruction loaded, and an operator whose
-  surface still runs v4.5 has no working flag delivery. Instances: the
-  version-mismatch protocol below handles the prompt.
-- **YAML Schema Section 4** reconciled to the `flag*` cluster as
-  canonical (`team_attention*` deprecated, mapping included); new
-  `flag_due` / `flag_default` / `flag_status` fields and a `flag_note`
-  content requirement.
-- **session-closer v4.6.0** -- flag anatomy at set-time, 2-3 flag
-  budget per close, the expiry pass (sole automatic writer of
-  `expired-unread`), sweep-trace carry-forward, and the lean approval
-  gate (write directly for routine closes; three judgment-class
-  stop-and-asks kept).
-- **Three new/updated guides:** `Orientation Flag Sweep - Query Spec`
-  (the sweep query, four corrections, named constants),
-  `Team Attention Rollout` (per-person canary live test, four-branch
-  diagnosis tree, executor chain -- read this before turning flags on
-  in a team project), and `Flag Queue Page Template` (per-person
-  Dataview queue page, empty-due-last sort).
-
-## What's New in 1.2.0
-- One-command Seed auto-sync: `update_seed.sh --install-autosync` (Mac,
-  launchd) / `update_seed.ps1 -InstallAutosync` (Windows, Task Scheduler).
-  Daily check at 6:00 (configurable via --hour / -Hour) plus at login,
-  with catch-up when the machine wakes - it does not need to be awake at
-  the scheduled hour. Remove with --uninstall-autosync / -UninstallAutosync.
-- update_seed.sh is now git-clone aware: a cloned Seed syncs via
-  git fetch + fast-forward merge and is never clobbered when local
-  edits or local commits exist (skip is logged instead).
-- Upstream guard: a `seed_role` row containing `upstream` in Vault
-  Config.md makes both scripts refuse to sync or install auto-sync
-  (protects the maintainer's Seed, which pushes rather than pulls).
-- session-closer v4.5.0: at close, the orientation stub is overwritten
-  in place with the final entry and renamed (write + move) instead of
-  deleted - no more destructive-op permission prompt for the stub.
-- Seed Install and Update guide rewritten around the one-command
-  auto-sync flow; README Updating section points to it.
-
-## What's New in 1.1.1
-- SECURITY: .gitignore now excludes Telegram harvester artifacts
-  (Scripts/.env, Scripts/*.session, Scripts/output/) and
-  task-manager-config.md (user-specific paths)
-- task-manager-config.md removed from the repo and its history
-  (history rewrite -- see NOTICE above)
-- update_seed.sh moved to Seed root and vault-root detection fixed;
-  install commands now copy dotfiles correctly (cp ... /. not /*)
-- README updating/orientation claims corrected (no GitHub fetch during
-  orientation; updates are user-initiated)
-- Telegram Harvesting guide: credential notes must live outside
-  git-tracked folders (e.g. a vault-root _Private/ folder)
-
-## What's New in 1.1.0
-- Meta-folder convention: `_` prefix replaces `~` for Sections, Archive, Infrastructure (D71)
-- `- ProjectName` suffix on meta-folders for vault-wide search disambiguation (D71)
-- Shells live in domain folders, not project root (D72)
-- No Roman numerals in section headers (D73)
-- Project-prefix convention for domain folders (D74)
-- Per-document session log naming: `0.01 Session Log - [Doc Name].md` (D75)
-- Protocol Summary v2.6 with clear shell + section architecture explanation
-- Vault Bootstrap folder template updated with new structure
-- Archiving protocol updated for `_Archive - ProjectName/`
-- Shell + section recommended phrasing added to Vault Bootstrap for 0.0 files
-
-## What's New in 1.0.0
-- Local-first distribution: Seed installs directly into your vault
-- update_seed.sh: one-command install and update with verification
-- Project Instructions v3.0: local-first, 40 lines down from 80
-- Safe Characters rule added to Working Rules (rule 9)
-- Semantic Seed versioning with What's New summaries
-- README rewritten with local-first install flow
-- Backup prompted as part of install

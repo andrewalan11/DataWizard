@@ -7,8 +7,8 @@ description: >-
   pending, or hand-highlighted documents. NOT for transcripts - use
   transcript-harvest instead.
 type: skill
-updated: '2026-09-08'
-version: '0.5.1'
+updated: '2026-10-31'
+version: '0.5.2'
 edit_log:
   - "MMM meta-learning plant 2026-06-09: added Step 3 (triage before fetching),
     renumbered"
@@ -20,6 +20,7 @@ edit_log:
   - "DW-S262 2026-08-08: added Harvest via embeddable synth note pointer (D116)"
   - "DW-S349 2026-09-08 - v0.5.1: Reader-Facing Output rule added (load the
     Reader-Facing Prose Style guide when the destination is read-aloud-class)"
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: v0.5.2 Harvest Log name'
 ---
 
 # Document Harvest Skill
@@ -51,7 +52,7 @@ Harvest content from non-transcript sources — articles, clippings, research do
 4. **Read the source fully** -- understand the complete content before extracting anything.
 5. **Harvest into destination docs** -- synthesize relevant content into project documents. Use citation format: `([[Source Title#Section|YYYY-MM-DD]])`. If `highlighted_by_hand: true`, focus on highlighted passages first. Synthesize, don't copy -- restate ideas in the voice of the destination document.
 6. **Update source YAML** -- set `harvest_status`, `harvested_into` (with section-level anchors), `harvest_date`, and `harvest_notes`. For re-harvests, append to `harvested_into` and convert `harvest_date` to an array (most recent last). Or set `harvest_status: reviewed` with `harvest_notes` explaining why nothing was harvested.
-7. **Update Harvest Ledger** -- add or update a row in `0.4 Harvest Ledger - [Project].md` with source, harvest date, destinations, and agent.
+7. **Update Harvest Log** -- add or update a row in `0.4 Harvest Log - [Project].md` with source, harvest date, destinations, and agent.
 8. **Session log** -- add harvest details to `0.2 Session Log.md` at the end of the session as part of normal session logging -- not after each individual source.
 
 ## Block-Level Citations (stamp-on-cite)
@@ -75,7 +76,7 @@ When a harvest routes to **multiple destinations, or to a destination that is co
 - Forgetting to check `harvest_status` before starting -- risks duplicating work or overwriting provenance
 - Copying instead of synthesizing -- restate ideas, don't reproduce the source text
 - Skipping `harvest_notes` -- the "commit message" is the most valuable part
-- Forgetting the Harvest Ledger -- source YAML is the truth, but the ledger is how humans and agents scan routing
+- Forgetting the Harvest Log -- source YAML is the truth, but the log is how humans and agents scan routing
 - Processing multiple sources without completing steps 1-7 per source first (session log waits til end)
 - Skipping the triage pass on link batches -- fetching paywalled or already-harvested sources wastes context and time
 

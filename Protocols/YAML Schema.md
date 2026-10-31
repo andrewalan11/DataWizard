@@ -2,14 +2,12 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: 2026-10-27
+updated: 2026-10-31
 origin: DW-S182 2026-06-13
 operator: Andrew
 priority: high
 maturity: working
 edit_log:
-  - 'DW-S397 2026-10-12: quote-any-scalar-with-colon-space callout beside Wikilinks everywhere (meta-learning review S363-S376)'
-  - "DW-S382 2026-10-02: added Holonic Core Records section (entity_kind vocabulary, core_id/core_note/core_synced, projections states, to_confirm; D133) + the core_note exception to Wikilinks everywhere"
   - DW-S182 2026-06-13
   - DW-S183 2026-06-14
   - "DW-S191 2026-06-21: added stream: session-log field"
@@ -30,14 +28,17 @@ edit_log:
     changes 1-2)
   - "DW-S374 2026-09-23 - field-retirement rule (remove at retirement time;
     meta-learning review S301-S323)"
+  - 'DW-S382 2026-10-02: added Holonic Core Records section (entity_kind vocabulary, core_id/core_note/core_synced, projections states, to_confirm; D133) + the core_note exception to Wikilinks everywhere'
   - 'DW-S387 2026-10-05: Holonic Core Records replaced by Holonic Records (hid, kinds table, keys/anchors, lifecycle, relations records, predicate table, person rules, projection hid; D134)'
   - 'DW-S391 2026-10-08: Holonic Records example hids made valid a-z2-7 values (core and projection k7m2..., relation target m4k7...); the old ones held 8 and 9 (T19 Chunk 7)'
+  - 'DW-S397 2026-10-12: quote-any-scalar-with-colon-space callout beside Wikilinks everywhere (meta-learning review S363-S376)'
   - 'DW-S398 2026-10-12 - Holonic Records: uses/used_by predicate (R7), by/via provenance fields (R3), example-comments note, claim-flow pointer'
   - 'DW-S410 2026-10-16 - Holonic Records: community kind carries founded (B-0116); a retracted relation record keeps its index - append, never remove, splice or re-order (B-0093)'
   - 'DW-S417 2026-10-17 - Holonic Records: github-repo anchor scheme row; new Tool Evaluation Notes section (verdict incl. cloned, fit, platform field e.g. mac, tool_maturity, license, reviewed_by, categories, safety, safety_checked, safety_by; D153 + S417 rulings)'
   - 'DW-S430 2026-10-21 - Holonic Records: stored form of a key (hashed in the operational db; consumers hash the plain anchor before joining)'
   - 'DW-S440 2026-10-27 - colon-space callout widened to any frontmatter write, with the usual free-text carriers; new edit_log bullet - a new line goes after the last line of the last entry; section row - quote a dotted number (B-0239, B-0250)'
   - 'DW-S440 2026-10-27 - Wikilinks everywhere callout - quote the link, an unquoted wikilink parses as a nested list (intake lessons, Seed 1.11.14)'
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: edit_log order and scope, Harvest Log'
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. One exception: `core_note` on a holonic projection is a plain path (see Holonic Records). Obsidian resolves wikilinks by filename regardless of folder path, so the short form is sufficient and more robust than full paths. Quote the link: write `"[[Note Name]]"`, because an unquoted `[[Note Name]]` parses as a nested list. (DataWizard, 2026-10)
@@ -145,7 +146,7 @@ The following fields MUST be present in frontmatter when any new file is created
 | `updated` | YYYY-MM-DD (same as created) | Last modification date |
 | `operator` | First name (e.g. Operator-A) | Who created it |
 | `origin` | Creation entry (e.g. 'DW-S161 2026-06-09'), immutable | Creation provenance |
-| `edit_log` | Seeded with the same entry as `origin`; thereafter a rolling last-5 window (D127) | Recent-touch window |
+| `edit_log` | Seeded with the same entry as `origin`; thereafter a rolling last-5 window (D127). Not on shell files (see the edit_log section) | Recent-touch window |
 
 **Required on section files additionally:**
 
@@ -207,7 +208,7 @@ flag_default: outreach proceeds in the listed order
 
 **`flagged_for` is not canonical.** Some vaults use a `flagged_for` field as a wikilink pointer to a separate flags document -- that is unrelated to operator attention and must not be read as an attention flag. Use `flag_for` for attention routing.
 
-**Deprecated: `team_attention*`.** Phase 0 shipped `team_attention` / `team_attention_by` / `team_attention_note`. These are superseded by the `flag*` cluster; no live consumer reads them. Migrate on next touch:
+**Deprecated: `team_attention*`.** Phase 0 shipped `team_attention` / `team_attention_by` / `team_attention_note`. These are superseded by the `flag*` cluster; no live consumer reads them. Per the field-retirement rule above, migrate any file still carrying them in one sweep, not on next touch:
 
 | Deprecated | Canonical |
 |---|---|
@@ -218,7 +219,7 @@ flag_default: outreach proceeds in the listed order
 
 ### Harvest Tracking
 
-Source files track provenance with a lean 4-field schema. The source YAML is the single source of truth for harvest provenance -- the Harvest Ledger (0.4) is a convenience view, and the session log holds the full narrative.
+Source files track provenance with a lean 4-field schema. The source YAML is the single source of truth for harvest provenance -- the Harvest Log (0.4) is a convenience view, and the session log holds the full narrative.
 
 **Status values:**
 
@@ -256,7 +257,7 @@ harvest_notes: "Initial enrichment. Manual harvest extracted bonding curves fram
 **Deferred fields** (add to a source file only when the use case exists, not before):
 
 - **`harvest_agent`**: Who performed the harvest. Currently tracked in the session log. Add to YAML if computed views need to filter by agent.
-- **`harvest_type`** (initial / supplemental / review-only / superseded): Categorizes the transformation. Add if ledger queries need to filter by type.
+- **`harvest_type`** (initial / supplemental / review-only / superseded): Categorizes the transformation. Add if harvest-log queries need to filter by type.
 - **`harvest_confidence`** (high / medium / low): For automated pipeline harvests that may need human review. Add when automated steps write to project documents.
 - **`harvest_for`**: Which project(s) this source should be harvested into. String for single-project (`harvest_for: ReWoven`), array for multi-project (`harvest_for: [ReWoven, MetaMyth]`). Add to sources in shared locations (like `_Transcripts/`) that aren't inside a project folder.
 - **`fathom_id`**: The Fathom recording ID (integer). Bridges between the Fathom Meeting Index and transcript files. Add to any Fathom-sourced transcript.
@@ -512,7 +513,7 @@ edit_log:
 - One entry per session (deduplicated), stamped once per file at session close - not on every touch.
 - Entries are one compact line: session ID + date (agent edits `'ProjectAbbrev-SNN YYYY-MM-DD'`, human edits `'Name YYYY-MM-DD'`), plus an optional short clause of a few words. Narrative belongs in the session log entry, not here.
 - When appending would exceed 5 entries, drop the oldest **in the same write**. Nothing is copied anywhere at trim time: the trimmed history is already recorded in the session log manifests.
-- **Section files:** required. **Infrastructure files (0.x) and standalone docs:** recommended. **Shell files:** none - shells are assembly surfaces; their `updated` field bumps when sections change, but they do not accumulate a log.
+- **Section files:** required. **Infrastructure files (0.x) and standalone docs:** recommended (a new file gets it at birth - Creation-Time Metadata Contract). **Shell files:** none - shells are assembly surfaces; their `updated` field bumps when sections change, but they do not accumulate a log.
 - Preferred writer: `stamp_editlog.py` (quote-on-write, append-and-trim, `--manifest` batch mode). Hand edits are legal under the same contract: pass the full windowed list back in a single write (never a bare append via `update_frontmatter` merge - see the MCP Reliability guide's array-wipe warning).
 - **A new `edit_log` line goes after the last line of the last entry, never after the first line of an older entry.** A long entry wraps onto an indented second line. A line inserted between the first line and its wrapped half leaves the wrapped half with no parent: the block fails to parse, or, when the entry was a plain value, the two halves join and two entries read as one (that case parses, so a parse check does not see it). Both happened in one vault, in two action-items files, always near the top of the list, which points at a writer that inserts at a fixed position. `stamp_editlog.py` inserts at the true tail, after the last continuation line. (DataWizard, 2026-10)
 - SKILL.md files that used edit_log as a version changelog keep that history in a body `## Changelog` section instead; their frontmatter edit_log rolls like everywhere else.

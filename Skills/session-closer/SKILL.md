@@ -7,15 +7,15 @@ description: >-
   pick up where we left off' in a new thread and there's no log entry for the
   previous session.
 type: skill
-updated: '2026-10-28'
+updated: '2026-10-31'
 origin: 'DW-S158 2026-06-08 - backfilled from the earliest edit_log entry (D127)'
-version: '4.11.3'
+version: '4.11.4'
 edit_log:
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: v4.11.4 gate rows, board ids, Harvest Log'
   - 'DW-S443 2026-10-28 - v4.11.3: Step 3.5 tool-behavior bullet - close the source note and its board ask in the same pass as the plant'
   - 'DW-S433 2026-10-21 - v4.11.2: Step 2 a proposed Decision Log entry is written into the entry or a working doc before close (Community Stack ask); Step 3.11 uses the 30 / 50 KB sizes and points at Conventions Registry 7.0'
   - 'DW-S424 2026-10-19 - v4.11.1: Step 3.10 also surfaces pending Look-Back Reports (session look-back scan, leak prevention fix 3)'
   - 'DW-S422 2026-10-18 - v4.11.0: landing rule - Step 4 action-items bullet made a required landing rule with one dated Waiting-on checklist; Step 2.6 ledger next: is the owed list; Step 3.5 tracking-claim verification; Step 0 lite list; output-format landing check and Waiting-on pointer; Common Mistakes bullet (leak prevention fix 1)'
-  - 'DW-S422 2026-10-18 - v4.10.4: sectioned - output templates, multi-operator flag steps, no-ledger roster, triage guidance and old edit_log moved verbatim to references/; steps unchanged'
 ---
 
 # Session Closer Skill
@@ -110,6 +110,7 @@ Before presenting the draft, verify all required frontmatter fields are present.
 - `updated` (YYYY-MM-DD)
 - `operator` (human operator's first name -- see Step 3.12)
 - `seed_version` (the `seed:` value from `_DataWizard/Seed/VERSION.md`, read during orientation)
+- `origin` (the creation entry, immutable -- the same entry `edit_log` is seeded with; YAML Schema, Creation-Time Metadata Contract)
 - `edit_log` (this session's identifier, e.g. `"DW-S196 2026-06-22"` -- required on section files)
 
 `seed_version` is read from VERSION.md during orientation -- never hardcode it from template examples. The former `datawizard_protocol_version` pin is retired per D93; do not add it. If any field is missing from the draft, add it before proceeding. Do not present a draft with missing required fields. This is especially important for `operator`, which powers team dashboards and authorship queries but is easy to omit when pattern-matching from older session logs that predate this requirement. `seed_version` makes team Seed currency visible -- when scanning session logs, a stale Seed version is immediately apparent.
@@ -318,7 +319,7 @@ Answer one question from the session's own history: **did this session create or
 
 This check exists because the offending session is the only place with perfect knowledge of what it wrote; target-side detection (lint) is the backstop, not the primary. (DataWizard, 2026-09)
 
-**Board (all projects, all tiers).** Each outbound item filed this session (exchange note or feature request to another project, gate row naming another project's actor) should already have its ask on the coordination board, posted in the same step that wrote the item (Conventions Registry, "Coordination board", post at write time). Verify that each outbound item has a row and post only the missing ones; every claim this session holds is released. Mac-side and Claude Code: `python3 "<scripts>/board.py" close --session <id> --ask "TO::NOTE::SUMMARY"` (globals such as `--db` before `close`). Cowork: post by hand in `_Coordination/Board.md` following its header (use `next_free`, or the next id above the highest present if a block already carries it; re-read; renumber on collision); release by editing `status` and `updated`. Record the ids in the session log. Also ask "did this session change something another project depends on, without asking it to act?" - if yes, post an ask with `intent: awareness` (statuses open -> seen | stale); tool-behavior notes that the receiving project will plant are ordinary asks (`intent: action`, the default). Rule: Conventions Registry, "Coordination board".
+**Board (all projects, all tiers).** Each outbound item filed this session (exchange note or feature request to another project) should already have its ask on the coordination board, posted in the same step that wrote the item (Conventions Registry, "Coordination board", post at write time). Verify that each outbound item has a row and post only the missing ones; every claim this session holds is released. Mac-side and Claude Code: `python3 "<scripts>/board.py" close --session <id> --ask "TO::NOTE::SUMMARY"` (globals such as `--db` before `close`). Cowork: post by hand in `_Coordination/Board.md` following its header (id rule: Conventions Registry, "ID families", Board row IDs); release by editing `status` and `updated`. Record the ids in the session log. Also ask "did this session change something another project depends on, without asking it to act?" - if yes, post an ask with `intent: awareness` (statuses open -> seen | stale); tool-behavior notes that the receiving project will plant are ordinary asks (`intent: action`, the default). Rule: Conventions Registry, "Coordination board".
 
 ### Step 4: Update related infrastructure files
 
@@ -334,11 +335,11 @@ Check whether the session produced work that belongs in other files:
 
   Still check off completed items and add new ones. See the triage guidance below when the backlog needs cleanup. (DataWizard, 2026-10: two look-backs found about one open item in three not where the next reader would look.)
 - **Decision log**: If decisions were made during the session (agreements, vision refinements, commitments, technical choices, scope changes), they belong as separate entries in the Decision Log. Note them in "What happened" and point to the Decision Log entry.
-- **Harvest ledger**: If harvesting was done during the session, verify the Harvest Ledger was updated as part of the harvest checklist. If not, update `0.4 Harvest Ledger - [Project].md` now.
+- **Harvest log**: If harvesting was done during the session, verify the Harvest Log was updated as part of the harvest checklist. If not, update `0.4 Harvest Log - [Project].md` now.
 - **Tool inventory** (projects that keep one in their 0.6 Registry): if the session *designed* a tool or surface (a design doc now exists), *built* one (code now exists), or brought one *live*, add or update its row with the new state. A designed-but-unbuilt tool belongs in the inventory as much as a live one -- the inventory exists so a later instance in any project can ask "does something like this already exist?" before designing it again.
-- **Operator Gate Queue** (projects that keep one): scan the session's builds and decisions - anything built or decided but not verified-live where production reads it gets a gate row, but only when the actor is specific (operator-native, another project's session, a named person); work any future session can pick up stays in the action items. A build that could not be verified live is recorded as `unverified`, never pending-success. If a gate reached verified-live this session, run the exit ceremony (Deployed section, then a registry Infrastructure row with a `verify:` line). Schema, lifecycle vocabulary, and ceremony: the Conventions Registry's Operator Gate Queue entry.
+- **Operator Gate Queue** (projects that keep one): scan the session's builds and decisions - anything built or decided but not verified-live where production reads it gets a gate row, but only when the actor is specific (operator-native, or a named person); work that waits on another project's session is a board ask, not a gate row, and work any future session can pick up stays in the action items. A build that could not be verified live is recorded as `unverified`, never pending-success. If a gate reached verified-live this session, run the exit ceremony (Deployed section, then a registry Infrastructure row with a `verify:` line). Schema, lifecycle vocabulary, and ceremony: the Conventions Registry's Operator Gate Queue entry.
 
-Write the changes directly. Exception: a Decision Log entry is judgment-class -- show its text and get approval before writing it (Step 2). Action items, the harvest ledger, and shell updates are written directly.
+Write the changes directly. Exception: a Decision Log entry is judgment-class -- show its text and get approval before writing it (Step 2). Action items, the harvest log, and shell updates are written directly.
 
 Periodic full triage (every ~30 sessions): `references/action-items-triage.md`.
 
@@ -385,7 +386,7 @@ The entry templates (Output Format, Structured Format for Complex Sessions, Writ
 - **Session log shell** (`0.2 Session Log - Project.md`): Add an embed reference (`![[section filename]]`) to the shell after creating the section file.
 - **Action items**: The landing rule at Step 4 (required). Check off completed items, add new ones; rulings and small tasks for the operator go on the dated Waiting-on checklist.
 - **Decision log**: Decisions belong as separate numbered entries. The session log references them but doesn't replace them.
-- **Harvest ledger**: If harvesting was done, update `0.4 Harvest Ledger - [Project].md` with source, destinations, and agent. Source YAML should already be updated as part of the harvest checklist.
+- **Harvest log**: If harvesting was done, update `0.4 Harvest Log - [Project].md` with source, destinations, and agent. Source YAML should already be updated as part of the harvest checklist.
 
 ## Synthesis Check
 

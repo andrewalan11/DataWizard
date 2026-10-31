@@ -10,12 +10,13 @@ edit_log:
   - 'DW-S388 2026-10-06 - sub-check (d) board sweep + trace fragment (lands with PI 4.9; Coordination Board T20 Chunk 3)'
   - 'DW-S398 2026-10-12 - sub-check (d): hand-edit placement in Unreconciled (render comments)'
   - 'DW-S440 2026-10-27 - Acting on an ask - a block in Live ends at the first blank line, not the next heading (B-0250)'
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: null-sort rationale corrected'
 maturity: working
 operator: Andrew
 seed_version: 1.2.0
 title: Orientation Flag Sweep - Query Spec
 type: guide
-updated: 2026-10-27
+updated: 2026-10-31
 origin: 'DW-S272 2026-08-18 - backfilled from the earliest edit_log entry (D127)'
 ---
 # Orientation Flag Sweep - Query Spec
@@ -125,7 +126,7 @@ top = rows[:5]
 remainder = len(rows) - len(top)
 ```
 
-Five corrections applied over the original reference implementation: **no byte cap on the frontmatter read** (the original read the first 8,000 bytes of each file; a frontmatter block whose `edit_log` has grown past that -- 10 KB on one project's Active Threads ledger -- never reaches its closing fence, so the `^---\n(.*?)\n---` match fails and the flag is silently absent. That file carried the queue's only dated `flag_due`, addressed to four operators, and every surface missed it. `read_through_frontmatter()` reads to the fence. Live-corpus catch, 2026-08-26. Any other reader of `flag_for` -- a notice board, a dashboard script -- must be checked for a sibling cap); **CRLF/BOM normalization** (`utf-8-sig` + newline normalize, so files saved on Windows or with a BOM are not silently skipped by the `^---\n` anchor); **zero-indent block lists** (`[ \t]*` not `[ \t]+`, so a `flag_for:` list whose items sit at column 0 is parsed); **empty-due-last sort** (a sentinel high date so flags without a `flag_due` fall to the end rather than sorting ahead of dated ones); **null-literal normalization** (a YAML null literal -- `null`, `~`, `None`, as properties editors write for an empty date field -- is treated as field-absent, never as a date string; without this, a `flag_due: null` file counts as dated and sorts by the literal string, which lands last only by lexicographic luck -- an uppercase `NULL` variant would sort a phantom item to the top of every queue. Live-corpus catch, 2026-08).
+Five corrections applied over the original reference implementation: **no byte cap on the frontmatter read** (the original read the first 8,000 bytes of each file; a frontmatter block whose `edit_log` has grown past that -- 10 KB on one project's Active Threads ledger -- never reaches its closing fence, so the `^---\n(.*?)\n---` match fails and the flag is silently absent. That file carried the queue's only dated `flag_due`, addressed to four operators, and every surface missed it. `read_through_frontmatter()` reads to the fence. Live-corpus catch, 2026-08-26. Any other reader of `flag_for` -- a notice board, a dashboard script -- must be checked for a sibling cap); **CRLF/BOM normalization** (`utf-8-sig` + newline normalize, so files saved on Windows or with a BOM are not silently skipped by the `^---\n` anchor); **zero-indent block lists** (`[ \t]*` not `[ \t]+`, so a `flag_for:` list whose items sit at column 0 is parsed); **empty-due-last sort** (a sentinel high date so flags without a `flag_due` fall to the end rather than sorting ahead of dated ones); **null-literal normalization** (a YAML null literal -- `null`, `~`, `None`, as properties editors write for an empty date field -- is treated as field-absent, never as a date string; without this, a `flag_due: null` file counts as dated and sorts by the literal string, which lands last only by lexicographic luck (letters sort after digits, so `NULL` and `None` land last too) -- and the item still counts as dated, a phantom due date. Live-corpus catch, 2026-08).
 
 Surface each of `top` with title (filename), `flag_note`, `flag_by`, `flag`, and `flag_due`; on any item past `flag_due`, show its `flag_default` (what happens on silence). Then state the `remainder` count.
 

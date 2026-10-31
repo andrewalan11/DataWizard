@@ -2,7 +2,7 @@
 title: Harvest Workflow Guide
 type: guide
 created: '2026-04-25'
-updated: '2026-08-08'
+updated: '2026-10-31'
 operator: Andrew
 status: active
 edit_log:
@@ -10,6 +10,7 @@ edit_log:
     cross-refs to post-demolition homes"
   - "DW-S262 2026-08-08: added Multi-destination/not-ready destinations edge
     case (embeddable synth-note pointer; D116)"
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: Harvest Log name'
 tags:
   - protocol
   - harvesting
@@ -33,10 +34,10 @@ Harvest provenance lives in three places, each at a different zoom level:
 | Layer | Where | What it records | Analogy |
 |---|---|---|---|
 | **Source YAML** | Frontmatter on each source file | Machine-queryable state and routing | The database |
-| **Harvest Ledger (0.4)** | One file per project | Scannable routing index | `git log --oneline` |
+| **Harvest Log (0.4)** | One file per project | Scannable routing index | `git log --oneline` |
 | **Session Log** | Session log entries | Full narrative with editorial context | `git log -p` |
 
-The source YAML is the single source of truth. The ledger is a convenience view. The session log is the full story. If the ledger disappeared, nothing would be lost.
+The source YAML is the single source of truth. The log is a convenience view. The session log is the full story. If the log disappeared, nothing would be lost.
 
 ## Before You Harvest
 
@@ -133,9 +134,9 @@ harvest_date: 2026-04-25
 harvest_notes: "Read in full. Content is operational planning with no harvestable material for project docs."
 ```
 
-### Step 2: Update the Harvest Ledger
+### Step 2: Update the Harvest Log
 
-Add a row to `0.4 Harvest Ledger - [Project].md` in the appropriate source type section:
+Add a row to `0.4 Harvest Log - [Project].md` in the appropriate source type section:
 
 ```markdown
 ## Transcripts
@@ -145,7 +146,7 @@ Add a row to `0.4 Harvest Ledger - [Project].md` in the appropriate source type 
 | 2026-03-31 Kevin-Andrew-Jay | 2026-04-25 | Codex XIV; Story Bible 4.0 | Claude |
 ```
 
-If the ledger doesn't exist yet, create it using the template from the Harvest Provenance Architecture design doc. Group by source type from day one: Transcripts, Articles and Clippings, Contributor Documents, Pending.
+If the log doesn't exist yet, create it using the template from the Harvest Provenance Architecture design doc. Group by source type from day one: Transcripts, Articles and Clippings, Contributor Documents, Pending.
 
 The Pending section doubles as a lightweight harvest queue:
 
@@ -169,7 +170,7 @@ When returning to a previously harvested source (e.g., a supplemental pass or ne
 
 ### Multi-project sources
 
-Sources with `harvest_for: [ProjectA, ProjectB]` need harvest into each project's documents. A source is only fully harvested when `harvested_into` covers all projects listed in `harvest_for`. Update the ledger in each project.
+Sources with `harvest_for: [ProjectA, ProjectB]` need harvest into each project's documents. A source is only fully harvested when `harvested_into` covers all projects listed in `harvest_for`. Update the log in each project.
 
 ### Multi-destination or not-ready destinations
 
@@ -179,7 +180,7 @@ When a harvest fans out to several destination docs, or a destination is contest
 
 A companion note (`c_` prefix) is a separate AI-generated note containing enrichment output -- summaries, tags, themes, lexicon candidates -- for a source file. Companions live in `_Companions/` with mirrored subfolder structure and are created by the enrichment pipeline. Source files are never modified except for YAML updates and transcript section headers; all synthesis goes in the companion. See the Companion notes entry in the [[Conventions Registry]] (or the [[YAML Schema]]) for the full companion note architecture.
 
-When the pipeline creates a companion note but no manual harvest into project docs happens, the source YAML still gets updated (`harvested_into` includes the `c_` link, `harvest_status: harvested`). But the ledger does NOT get a row -- the ledger tracks project-document routing, not companion creation.
+When the pipeline creates a companion note but no manual harvest into project docs happens, the source YAML still gets updated (`harvested_into` includes the `c_` link, `harvest_status: harvested`). But the log does NOT get a row -- the log tracks project-document routing, not companion creation.
 
 ### The companion: field
 

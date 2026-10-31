@@ -3,12 +3,13 @@ title: 'Output Format and Templates'
 type: skill-reference
 parent: "[[_DataWizard/Seed/Skills/session-closer/SKILL|session-closer]]"
 created: '2026-10-18'
-updated: '2026-10-18'
+updated: '2026-10-31'
 operator: Andrew
 origin: 'DW-S422 2026-10-18 - moved verbatim from session-closer SKILL.md v4.10.3'
 edit_log:
   - 'DW-S422 2026-10-18 - created: moved verbatim from session-closer SKILL.md v4.10.3'
   - 'DW-S422 2026-10-18 - v4.11.0: What-next template gains the landing check line and the Waiting-on pointer line'
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: trace link, origin and edit_log'
 ---
 
 *Part of the [[_DataWizard/Seed/Skills/session-closer/SKILL|session-closer]] skill*
@@ -28,6 +29,9 @@ section: N
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 operator: FirstName
+origin: 'PROJ-SNN YYYY-MM-DD - created'
+edit_log:
+  - 'PROJ-SNN YYYY-MM-DD - created'
 seed_version: "[seed: from VERSION.md]"
 ```
 
@@ -40,6 +44,9 @@ section: "WV_2026-06-10_AA_01"
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 operator: FirstName
+origin: 'PROJ_YYYY-MM-DD_INITIALS_NN - created'
+edit_log:
+  - 'PROJ_YYYY-MM-DD_INITIALS_NN - created'
 seed_version: "[seed: from VERSION.md]"
 ```
 
@@ -51,7 +58,7 @@ seed_version: "[seed: from VERSION.md]"
 ## Session N: YYYY-MM-DD (Brief Title)          ← solo-operator
 ## WV_2026-06-10_AA_01: Brief Title              ← multi-operator
 
-*Orientation sweep trace (carried verbatim from the claim stub, PI Orientation Step 6): `flag sweep [PI v4.6]: N surfaced, M handled, K deferred | stubs: P stale, Q reconciled | intake: R new`. Solo projects carry the `n/a (solo)` form; a missing line means the sweep did not run -- do not omit it.*
+*Orientation sweep trace (carried verbatim from the claim stub, PI Orientation Step 6; format: [[Orientation Flag Sweep - Query Spec]], "The compliance trace"). A missing line means the sweep did not run -- do not omit it.*
 
 ### What happened
 

@@ -2,7 +2,7 @@
 title: Filename Safety - Cross-Platform Character Map
 type: guide
 created: '2026-04-30'
-updated: '2026-10-18'
+updated: '2026-10-31'
 status: active
 tags:
   - protocol
@@ -13,6 +13,7 @@ edit_log:
   - DW-S246 2026-08-05 - consecutive-spaces link-integrity rationale (wikilink
     space-collapse dangle, S229; meta-learning review S221-S230)
   - DW-S421 2026-10-18 - FS-1
+  - 'DW-S446 2026-10-31 - Seed error-check fixes: history-expansion rule widened'
 ---
 
 # Filename Safety - Cross-Platform Character Map
@@ -52,7 +53,7 @@ These characters must never appear in filenames:
 - **Curly quotes** (" " ' '): Use straight quotes (' ") instead. Same patch_note issue.
 - **Leading/trailing dots**: Avoid. Files starting with `.` are hidden on Unix systems.
 - **Reserved Windows names**: Avoid `CON`, `PRN`, `AUX`, `NUL`, `COM1`-`COM9`, `LPT1`-`LPT9` as filenames (with or without extension).
-- **Exclamation mark** (`!`): Do not use it in new file or folder names, and not as a sort prefix (use the 0.x numbering instead). Inside double quotes, `!` followed by a letter or digit (`_!nbox`, `!deas.md`, `Yes!_draft`) starts history expansion in an interactive zsh or bash Terminal, so a pasted command fails with `event not found`. Existing names are renamed on touch, inside the app so links follow, never in a batch and never in a collaborator's folder. (DataWizard, 2026-10)
+- **Exclamation mark** (`!`): Do not use it in new file or folder names, and not as a sort prefix (use the 0.x numbering instead). Inside double quotes, `!` followed by anything but a space (`_!nbox`, `!deas.md`, `Yes!_draft`) starts history expansion in an interactive zsh or bash Terminal, so a pasted command fails with `event not found`. Existing names are renamed on touch, inside the app so links follow, never in a batch and never in a collaborator's folder. (DataWizard, 2026-10)
 
 ## Replacement Rules
 

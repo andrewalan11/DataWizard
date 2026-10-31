@@ -6,9 +6,9 @@ description: >-
   narrative order, and routes findings. Triggers on: 'DW review', 'audit this
   project', 'check project health', or when the review-automation cadence flags an audit due.
 type: skill
-version: '2.1.1'
+version: '2.1.2'
 created: '2026-05-23'
-updated: '2026-10-12'
+updated: '2026-10-31'
 operator: Andrew
 edit_log:
   - "DW-S179 2026-06-12 - v2.0: consumes dw_lint report (P2), judgment checks
@@ -22,6 +22,7 @@ edit_log:
   - "DW-S312 2026-08-30 - D114 cadence-pointer sweep: session-closer thresholds
     references repointed to the Review Automation guide (S312 Seed review)"
   - 'DW-S400 2026-10-12 - v2.1.1: Step 0 cross-project --config / --vault-root note (C9/G4 false positives)'
+  - 'DW-S446 2026-10-31 - v2.1.2: Action Items required once the first item is filed (matches the 0.x slot rule)'
 ---
 
 # Project Health Audit Skill
@@ -76,7 +77,7 @@ For audits triggered by the review-automation cadence, default to **Standard**.
 
 Lint's G2 checks slot NAMING; this check asks whether the project HAS what it needs:
 
-- **Fixed core 0.0-0.5** (required in every project): Project Guidelines, MOC, Session Log, Decision Log, Harvest Log (required after first harvest), Action Items. All live in `_Infrastructure - ProjectName/`.
+- **Fixed core 0.0-0.5** (required in every project): Project Guidelines, MOC, Session Log, Decision Log, Harvest Log (required after first harvest), Action Items (required once the first item is filed). All live in `_Infrastructure - ProjectName/`.
 - **Reserved standard 0.6-0.13** (only if the project uses the capability): 0.6 Registry, 0.7 Quest Log, 0.8 Health Audit Log, 0.9 Quest Dashboard, 0.10 Team Dashboard, 0.11 content-interest scan log.
 - Judgment call: a project doing harvesting without a 0.4, or a team project without a 0.10, is a gap; a solo project without a 0.10 is fine.
 
