@@ -13,6 +13,8 @@
 #   coordination-board-archive (T20 Chunk 3; no taxonomy_version bump)
 # DW-S422 2026-10-18: infrastructure_types + protocol-section, skill-reference
 #   (Registry and session-closer sectioning; no taxonomy_version bump)
+# DW-S449 2026-11-01: infrastructure_types + coordination-board-targets
+#   (board well-known targets file; no taxonomy_version bump)
 
 meta:
   taxonomy_version: "2.7"
@@ -117,6 +119,7 @@ infrastructure_types:
   exchange-note: "Session Exchange notes between instances - plans, reviews, reports, handoffs, briefs"
   coordination-board: "The vault-level coordination board mirror (_Coordination/Board.md) and its template"
   coordination-board-archive: "Monthly archive of terminal board rows (_Coordination/Board Archive/YYYY-MM.md)"
+  coordination-board-targets: "Well-known targets list beside the board (_Coordination/Board - Targets.md); written once by render when missing, edited by hand"
 
 # ---------------------------------------------------------------------------
 # Retired types - hard renames from taxonomy history; replacement is canonical

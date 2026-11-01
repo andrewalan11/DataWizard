@@ -1,5 +1,5 @@
 
-seed: 1.11.16
+seed: 1.11.17
 protocol: 1.8
 project_instructions: 4.9
 
@@ -72,6 +72,19 @@ Design, edit its plist to point at the new root path.
 This notice can be removed from VERSION.md after 2026-09. The recovery
 procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
 Clone (Remote-Agnostic)") and survives this notice's retirement.
+
+## What's New in 1.11.17
+
+**Patch release: a smaller coordination board. Awareness asks lapse after 30 days, several projects can mark one ask seen, and the archive keeps every version.** The board mirror had grown past the 50 KB read limit, mostly with old awareness asks nobody could close. One DataWizard session (2026-11), built and reviewed on copies first. Shipped in the Seed:
+
+- `Protocols/Conventions Registry/26.0 Coordination board.md`: three new paragraphs. **Awareness asks lapse** at the first render 30 days after `posted` (status `stale`, closed, archived, a `lapse` event); the resolution says who saw it (`lapsed unseen after 30 days`, or `lapsed after 30 days; seen by ...; not seen by ...`, with any earlier resolution kept as ` (was: ...)`). Action asks still never expire. "Stale" now means superseded, withdrawn by the poster, or lapsed. **Seen by several projects:** an ask to two or more projects or to `all` carries `- seen_by:`; each project adds itself; the render closes a named-recipient ask as seen once all are in; a `to: all` ask closes only by lapse or by its poster. A hand `status: seen` on such an ask is refused for the status only (the seen_by mark is kept). **The archive** keeps every version: a closed row changed after archiving gets a new copy; Recently closed shows 5; the well-known targets moved to `Board - Targets.md` beside the board.
+- `Guides/Orientation Flag Sweep - Query Spec.md`, sub-check (d): skip an awareness ask whose `seen_by` holds your project; lapsed asks no longer show. The trace format is unchanged.
+- `Templates/Coordination Board - Template.md`: the hand-edit sentence and the `seen_by` grammar line match the board script's header; the targets list is now a pointer to `Board - Targets.md`; the example awareness ask shows `seen_by`. `GUIDES.md` row updated.
+- `Config/taxonomy.yaml` and `Protocols/Content Type Taxonomy.md`: new infrastructure type `coordination-board-targets` (no taxonomy version bump).
+
+**For vaults that run the board script** (`board.py`; `repo_scan.py` and `holon_index.py` share its operational db): the board table moves to schema 8 (a `seen_by` column). `schema_version` is now a log of applied migrations shared by these scripts, not a counter: each script checks for the version it needs and adds its own row only if absent (DataWizard decision log D147, amended). Deploy order: back up the db; copy `board.py`, `repo_scan.py` and `holon_index.py` into place together; run `board.py migrate` at once; then `board.py render`. Until migrate runs, every board command stops with a "pre-v8" message, and DW Save's board row shows a render error (the save continues).
+
+**Action for other projects:** run `update_seed`. To mark an awareness ask seen that names several projects or `all`, add your project to its `- seen_by:` line and set `updated` - do not set `status: seen`. On an ask to your project alone, `status: seen` still works. If an awareness ask you posted needs a project to act, repost it as an action ask before it lapses. The Project Instructions do not change (still 4.9); no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.11.16
 

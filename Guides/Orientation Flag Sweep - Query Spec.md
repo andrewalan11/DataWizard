@@ -11,12 +11,13 @@ edit_log:
   - 'DW-S398 2026-10-12 - sub-check (d): hand-edit placement in Unreconciled (render comments)'
   - 'DW-S440 2026-10-27 - Acting on an ask - a block in Live ends at the first blank line, not the next heading (B-0250)'
   - 'DW-S446 2026-10-31 - Seed error-check fixes: null-sort rationale corrected'
+  - 'DW-S449 2026-11-01 - sub-check (d): skip an awareness ask whose seen_by holds this project; lapsed asks no longer show'
 maturity: working
 operator: Andrew
 seed_version: 1.2.0
 title: Orientation Flag Sweep - Query Spec
 type: guide
-updated: 2026-10-31
+updated: 2026-11-01
 origin: 'DW-S272 2026-08-18 - backfilled from the earliest edit_log entry (D127)'
 ---
 # Orientation Flag Sweep - Query Spec
@@ -152,12 +153,12 @@ The coordination board (Conventions Registry, "Coordination board") holds cross-
 
 1. **Source.** `<vault>/<board_dir>/Board.md` - `board_dir` from `Vault Config.md`, default `_Coordination/`. Filesystem read only, never MCP (the fallback reasons under sub-check (a) apply: a stale or empty MCP read would look like an empty board). No file: the trace fragment is `board: n/a (no board)`.
 2. **Blocks.** Read the blocks under `## Live` only. A block starts at `### B-NNNN ask - <summary>` or `### B-NNNN claim - <summary>`; its fields are `- key: value` lines, several per line separated by ` | `. The grammar itself lives in the board's own header.
-3. **Asks.** Keep asks whose `status` is `open` or `picked-up` and whose `to` list (comma-separated, case-insensitive) holds this project's abbreviation or `all`. Sort: dated `due` first (earliest first), then undated; within that, oldest `posted`, then lowest id. Surface the top **5** (id, status, by, posted, due, summary, note path) and state the count of the rest.
+3. **Asks.** Keep asks whose `status` is `open` or `picked-up` and whose `to` list (comma-separated, case-insensitive) holds this project's abbreviation or `all`. Skip an awareness ask whose `- seen_by:` line already holds this project's abbreviation (this project has seen it; the list is comma-separated, case-insensitive). After a render, lapsed awareness asks do not show: the render closes an open awareness ask 30 days after its `posted` time (Conventions Registry, "Coordination board"). Sort: dated `due` first (earliest first), then undated; within that, oldest `posted`, then lowest id. Surface the top **5** (id, status, by, posted, due, summary, note path) and state the count of the rest.
 4. **Claims.** A claim is live when `status: held` AND now (UTC) is before `heartbeat` + `ttl` minutes - never trust `held` alone; the mirror can lag the clock. Surface every live claim, any project (a claim on a store you write blocks your scripts either way): id, target, by, expiry, reason. A `held` claim already past its TTL is listed once as "expired, awaiting expiry" and is not counted; the next render marks it expired.
 5. **Unreconciled.** If the board has an `## Unreconciled` section, say so in one line ("N board blocks unreconciled - see Board.md"). Those are hand blocks the last render refused; they are not counted in the trace, but they are never dropped silently.
 6. **Trace fragment**, appended to the compliance trace: `| board: N asks (M shown), K live claims` - N asks addressed to this project, M = min(N, 5), K live claims.
 
-**Mac-side and Claude Code equivalent:** `python3 "<scripts>/board.py" sweep --project <ABBR>` prints the same lines and the trace fragment from the table. Global options (`--db`, `--vault`, `--board-dir`, `--now`) go BEFORE the subcommand: `python3 "<scripts>/board.py" --db <path> sweep --project <ABBR>`. The table and the mirror agree after every render; between renders the mirror can carry hand rows the table has not folded yet.
+**Mac-side and Claude Code equivalent:** `python3 "<scripts>/board.py" sweep --project <ABBR>` prints the same lines and the trace fragment from the table; it skips the same seen_by asks and prints how many it hid. The trace format is unchanged. Global options (`--db`, `--vault`, `--board-dir`, `--now`) go BEFORE the subcommand: `python3 "<scripts>/board.py" --db <path> sweep --project <ABBR>`. The table and the mirror agree after every render; between renders the mirror can carry hand rows the table has not folded yet.
 
 **Acting on an ask** (an explicit act, never part of the sweep). By hand, in the mirror (Cowork sessions never write the table - ruling R4 in the Registry entry): edit the block's `status` (`picked-up`, `done`, `declined` or `stale`), add `- picked_by: <session>` or `- closed: <UTC time>` as fits, and set `- updated:` to now (UTC); the next render folds it in. A forgotten `updated` loses to the table and shows as `table wins` on the next render. Mac-side: `python3 "<scripts>/board.py" pickup B-NNNN --by <session>` (likewise `done`, `decline`, `stale`). Hand edits in `## Unreconciled`: a render leaves an HTML comment (`<!-- refused: ... -->`) between a refused block and the next heading; add new fields directly after the block's `updated:` line, never at the block's end, or they land after the comment and read as the next block's. The same care applies in `## Live`: a block ends at the first blank line after it, not at the next `### ` heading. For the last block under `## Live`, a search for the next `### ` runs past the `## Recently closed` heading, and an appended `updated:` or `resolution:` line then lands under the wrong heading. Find the end by the first blank line (or the next `## ` or `### `, whichever comes first), or add the field directly after the block's `updated:` line. (DataWizard, 2026-10; VibeCut, 2026-10)
 
