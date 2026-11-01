@@ -2,7 +2,7 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: 2026-10-31
+updated: 2026-11-01
 origin: DW-S182 2026-06-13
 operator: Andrew
 priority: high
@@ -40,6 +40,7 @@ edit_log:
   - 'DW-S440 2026-10-27 - Wikilinks everywhere callout - quote the link, an unquoted wikilink parses as a nested list (intake lessons, Seed 1.11.14)'
   - 'DW-S446 2026-10-31 - Seed error-check fixes: edit_log order and scope, Harvest Log'
   - 'DW-S448 2026-10-31 - Wikilinks everywhere callout: resolution order exact path, same folder, shortest path (was by filename regardless of folder path); links MCP Reliability 12.0'
+  - 'DW-S453 2026-11-01 - Session Log Fields: late-close fields (outcome, closed_after_fact, closed_by, close_sources, chat_gate; late-close tier design DW-S452)'
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. One exception: `core_note` on a holonic projection is a plain path (see Holonic Records). Obsidian resolves a bare `[[Note Name]]` by exact path, then a note in the same folder, then the shortest path, so the short form is safe only while the name is unique in the vault (MCP Reliability and Write Verification, 12.0). Quote the link: write `"[[Note Name]]"`, because an unquoted `[[Note Name]]` parses as a nested list. (DataWizard, 2026-10)
@@ -121,6 +122,16 @@ Fields specific to session-log entry files, beyond the birth metadata every file
 **`claim_id`**: A short random token (e.g. a 6-8 char hex nonce) stamped on a session-log *stub* at claim time to make session-claiming collision-evident under concurrency. After writing the stub, the claiming instance re-reads it and checks `claim_id`: if the on-disk value is not the one it wrote, a parallel instance won the slot, so it claims the next free identifier instead (PI Orientation Step 3, verify-after-claim). Ephemeral - present only while `status: in-progress`; the session-closer strips it when it overwrites the stub with the full entry at close. Design: [[Session Claiming Under Concurrency]].
 
 **`session_started` / `session_closed`**: The session's date span (both plain YYYY-MM-DD; equal for a single-day session). Sessions increasingly cross midnight or span days, and a single date cannot cover both ends. The claim stub sets `session_started:` at claim time; the session-closer sets `session_closed:` at close and reconciles any of the session's writes stamped with the start date that actually landed later. The session identifier keeps the start date - identity never changes mid-session; the span lives in these fields. On every ordinary document, `updated:` means the date of the actual write, never the session-start date. (Adopted 2026-09 from four-project field evidence; see Date Stamping and Time Sense below.)
+
+**Late-close fields** (`outcome`, `closed_after_fact`, `closed_by`, `close_sources`, `chat_gate`): Set only on an entry written by the session-closer's late-close tier, which closes a stale stub after the fact from records (and, if needed, the old chat) without reopening its thread. The entry keeps `status: complete`; these fields say how it was closed. Look-Back and Meta-Learning reviews skip entries with `closed_after_fact: true`, because a late entry is not a live record of the session. Procedure: the session-closer's late-close tier (`references/late-close.md`). (DataWizard, 2026-11)
+
+| Field | Values | Meaning |
+|---|---|---|
+| `outcome` | `self-evident`, `recovered`, `covered`, `abandoned`, `not-dw-work` | `self-evident`: the stub already settled it (a cost label; the body gives the real result). `recovered`: work found that no other record holds. `covered`: a later entry, Look-Back or decision holds it, or the stub was a duplicate claim (body names the session). `abandoned`: no trace in any source. `not-dw-work`: personal, or moved to another project (other projects use their own name for this value) |
+| `closed_after_fact` | `true` | The entry was written late, by another session |
+| `closed_by` | session id | The session that wrote the late entry |
+| `close_sources` | list of `stub`, `lookback`, `records`, `chat`, `git`, `board` | Only the sources actually used |
+| `chat_gate` | `claim_id`, `trace-line`, `none` | Which identity check proved the old chat was the right one; `none` = no chat was used |
 
 ### Infrastructure File Frontmatter
 
