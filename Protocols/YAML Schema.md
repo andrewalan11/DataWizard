@@ -42,6 +42,7 @@ edit_log:
   - 'DW-S448 2026-10-31 - Wikilinks everywhere callout: resolution order exact path, same folder, shortest path (was by filename regardless of folder path); links MCP Reliability 12.0'
   - 'DW-S453 2026-11-01 - Session Log Fields: late-close fields (outcome, closed_after_fact, closed_by, close_sources, chat_gate; late-close tier design DW-S452)'
   - 'DW-S456 2026-11-02 - removed dead link(s) to maintainer-only design notes (release smoke test, full-Seed link sweep)'
+  - 'DW-S460 2026-11-02 - 1.12.2: Tool Evaluation Notes gain source_url (link from a tool note to its intake item; board B-0296 part 1, Tech Tools)'
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. One exception: `core_note` on a holonic projection is a plain path (see Holonic Records). Obsidian resolves a bare `[[Note Name]]` by exact path, then a note in the same folder, then the shortest path, so the short form is safe only while the name is unique in the vault (MCP Reliability and Write Verification, 12.0). Quote the link: write `"[[Note Name]]"`, because an unquoted `[[Note Name]]` parses as a nested list. (DataWizard, 2026-10)
@@ -447,6 +448,7 @@ A *tool note* is the one shared evaluation of a tech tool (a code repo, an app, 
 
 ```yaml
 repo_key: example-org/example-tool   # repos only: lower-cased owner/repo; the value of the core's github-repo key
+source_url: https://example.org/tool   # tool notes born from an intake link: that link, as saved
 one_liner: ...
 license: MIT                 # SPDX id; `none found`; `<id> (README only)` when only the README states it
 mac: yes                     # one field per operator platform (here `mac`): yes | partly | no | unclear
@@ -464,6 +466,7 @@ The trailing comments explain the fields; they are not canonical YAML (as in the
 
 - **Platform field:** each operator keeps one field per platform the tool must run on, named for the platform (for example `mac`), with the same four values.
 - **`tool_maturity`** is the tool's state. It is distinct from the document `maturity` field (Document Weighting), which tool notes do not use for this. A tool core's `maturity` is the CS-scale field of Holonic Records, a different scale.
+- **`source_url`** links a tool note born from intake to its intake item, so a script finds the item without parsing `origin:`. Write the link as it was saved; intake scripts normalize it when they match. The session that creates the note from an intake item writes it. Notes not born from intake leave it out.
 - **`verdict`:** `clone`, `later` and `skip` answer a review of a repo not yet on disk; `cloned` marks a repo that is already on disk. Like the other values, `cloned` is the operator's own answer; no script sets it (a scanner's own keys already record that a repo is on disk).
 - **`safety`** takes only these words: `not checked` | `look-first (<reasons>)` | `no concerns found (<tier>, <tools>, <date>)` | `do not clone (<reason>)` | `human-audited`. Never "safe" or "clean". `no concerns found` promises only that no repo code ran, that the named files were read, and that cloning and reading the code is fine. It says nothing about installing dependencies or running the tool.
 - **`safety_by`** names the checker as one hop in the `via` hop form of "Provenance: by and via" (Conventions Registry): `agent:<project>/<session>`, `task:<name>`, or `member:<key>` for a person's audit.

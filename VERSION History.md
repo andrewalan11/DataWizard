@@ -21,11 +21,37 @@ edit_log:
   - DW-S424 2026-10-19 - What's New 1.7.0 moved in from VERSION.md word for word (size rotation before 1.11.3)
   - DW-S422 2026-10-18 - What's New 1.6.0 to 1.6.2 moved in from VERSION.md word for word (size rotation before 1.11.0)
   - DW-S421 2026-10-18 - created
+  - 'DW-S460 2026-11-02 - What''s New 1.11.9 and 1.11.8 moved in from VERSION.md word for word (size rotation before 1.12.2)'
 ---
 
 # VERSION History
 
 Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newer entries are in `VERSION.md`. When `VERSION.md` passes about 50 KB again, move its oldest entries to the top of the list below, newest first, and leave the pointer in `VERSION.md`. Entries 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md`; when this file passes about 50 KB, start the next part the same way.
+
+## What's New in 1.11.9
+
+**Patch release: 13 lessons from a meta-learning review and a partner project (ReWoven).** One DataWizard session (2026-10-21). Ten lessons come from the review of two meta-learning reports, two tool behaviors were sent by ReWoven, and one web-fetch behavior comes from a DataWizard research run (re-tested before planting). Shipped in the Seed:
+
+- `Guides/MCP Reliability and Write Verification/`: 7.0 (the filesystem MCP `outputSchema` failure was seen on one link in 2026-09; in 2026-10 the same tools worked in five sessions in a row, on files up to 84 KB - test one call before you assume the server is broken); 1.0 (the same note on the `filesystem:edit_file` bullet).
+- `Guides/Cowork Build Environment/`: 8.0 (`mv` inside one connected folder needs no delete grant, and between two connected folders it copies, then fails to remove the source; the device shell's `$HOME` outlasted a six-hour pause but is no place for the only rollback copy; the `pkill -f` bullet points at the cloud-container case); 4.0 (an always-on launchd job always shows a PID, so an idle check names the jobs that write the store); 6.0 (on macOS a read-only open of a WAL-mode database fails with "unable to open database file" when no `-shm` file exists, and the fix that worked); 8.1 (a stale commit was also seen two turns after the edit - patch a small vault edit on the device instead; staging from the device shell's scratch folder was refused even when `get_device_info` described it as stageable); 8.2 (ids that must be unique are given by the installer at write time; drafts carry a placeholder); 9.0 (`2>&1 | tail` can hide the unittest summary - send the output to a file and grep it).
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0 web_fetch Behaviors.md`: the gitlab.com REST API answers `ROBOTS_DISALLOWED`; a gitlab.com project page was blocked for research sub-agents in one session and read fine from another; the GitHub API and the Docker Hub v2 tags API were readable.
+- `Guides/Cowork Scheduled Tasks.md`, Other known failure modes: a task prompt's stated premise is a snapshot from when it was written; read the live `last_*` stamp first.
+- `Guides/Script Portability.md`: new short section "SQLite builds differ", pointing at the WAL read-only failure in Cowork Build Environment 6.0.
+- `Protocols/Conventions Registry/`: 17.0 Holonic records (when you rule on a relation's predicate, read the schema's definition, not only whether the predicate exists); 30.0 Carry the probe, not the snapshot (notes about tools and platforms rot too - read the live source before acting on a recorded tool fact).
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
+
+## What's New in 1.11.8
+
+**Patch release: five lessons from the last builds.** One DataWizard session (2026-10-21). Each had been written down in the project's backlog but was not yet in the Seed. Shipped in the Seed:
+
+- `Skills/supervised-build/SKILL.md` (v1.6.1): Reviewer Steps, new paragraph "Fix text goes in the review file" - a reviewer writes the exact current text and its replacement into the review file the fixer reads, never only into its hand-back. In-thread variant, "Scratch, never the vault" - brief every `device_bash` builder to write its output to an absolute path outside the vault. `SKILLS.md`: the row is now v1.6.1.
+- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: new bullet - a `device_bash` sub-agent that did `cd` into the vault and wrote a relative file name left a file in the vault root that the sub-agent could not delete; give the agent a scratch folder and full paths.
+- `Protocols/Conventions Registry/26.0 Coordination board.md`: new paragraph - post claims for a step the operator runs by hand just before the run, and re-post them (old blocks `reclaimed`) if the run slips past the ttl.
+- `Protocols/YAML Schema.md`, Holonic Records: new paragraph "Stored form of a key" - a key whose value has a "/" (every `github-repo` key) is stored hashed in the operational database; a consumer hashes the plain key from the core's `keys:` with the index's key function and checks the active keys, never plain text.
+- `Guides/Cowork Build Environment/9.0 Verification Discipline for Builds.md`: two new bullets - an apply that says `unchanged` is expected when a fix changes only the JSON report (verify on the report); `python3 -I` drops the script folder from `sys.path`, so a test that imports a sibling script needs a run without `-I`.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.11.7
 
