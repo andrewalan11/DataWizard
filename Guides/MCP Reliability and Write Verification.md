@@ -3,8 +3,9 @@ title: MCP Reliability and Write Verification
 type: guide
 scope: seed
 created: '2026-05-03'
-updated: 2026-10-15
+updated: 2026-11-02
 edit_log:
+  - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
   - 'DW-S408 2026-10-15 - sectioned into shell + sections in "MCP Reliability and Write Verification/" (Seed/Guides); this edit_log is frozen - future edits log on the section files'
   - 'DW-S403 2026-10-13 - Bridge Drops: local MCP tools time out while the computer sleeps; Read-Tool Overflow: edit_file dryRun for files past the read ceiling (board intake B-0076 Evolutionary Media Commons, B-0083 MetaMyth)'
   - 'DW-S403 2026-10-13 - Obsidian gotchas: write_note append re-serialises the frontmatter (board intake B-0065, Kosmosis)'
@@ -18,7 +19,7 @@ edit_log:
   - RG-S4 2026-07-25 - planted the update_frontmatter merge:true array-wipe
     failure mode; sandbox mount-path correction to RW S53; cross-mount mv
     duplicate hazard
-  - "DW-S227 2026-08-01 - Jay FR batch item a: which-server header,
+  - "DW-S227 2026-08-01 - collaborator FR batch item a: which-server header,
     version-pinning section, search_notes positive note, move_note EISDIR entry"
   - DW-S235 2026-08-04 - transport-502 verify-before-retry section
     (must-have-changed-field verification rule)

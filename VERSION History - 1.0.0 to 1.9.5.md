@@ -2,10 +2,11 @@
 title: VERSION History - 1.0.0 to 1.9.5
 type: guide
 created: 2026-10-31
-updated: 2026-10-31
+updated: 2026-11-02
 operator: Andrew
 origin: 'DW-S448 2026-10-31 - What''s New 1.0.0 to 1.9.5 moved from VERSION History.md word for word (size rotation before 1.11.15)'
 edit_log:
+  - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
   - 'DW-S448 2026-10-31 - created: What''s New 1.9.5 to 1.0.0 moved in from VERSION History.md word for word'
 ---
 
@@ -159,7 +160,7 @@ quotes as string delimiters - the literal closes early and the parse
 collapses. Shipped broken in 1.2.0 (2026-08-15), so **no Windows operator
 has been able to run any Seed update or install auto-sync since** -
 silently (a script that never parses writes no Sync Log line). Diagnosed
-by Jay's instance (WV_2026-09-02_JC_02); verified byte-level on the
+by a collaborator's instance (a Weave session); verified byte-level on the
 maintainer clone (DW S325).
 
 **IMPORTANT - Windows installs at 1.6.0 or below cannot self-update to
@@ -211,7 +212,7 @@ variable` at line 122 (the tell: the "Downloading..." message printed
 first, the line-122 error arrived after). Fixed by wrapping the whole
 script body in a `main()` function invoked on the last line, so bash
 parses to EOF before any file-replacing command runs -- removing the
-dependence on file size entirely. Diagnosed by Tree's instance
+dependence on file size entirely. Diagnosed by a collaborator's instance
 (DreamVault), 2026-08-20. The bash-only fix is version-gated behind
 this 1.3.1 bump so zip-mode installs (which skip when versions match)
 actually pick it up. Note: the *last* run of an old unwrapped script --

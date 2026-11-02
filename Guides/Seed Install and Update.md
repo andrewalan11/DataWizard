@@ -4,10 +4,10 @@ created: 2026-06-11
 edit_log:
   - DW-S168 2026-06-11
   - DW-S189 2026-06-18
-  - "DW-S227 2026-08-01 - Jay FR batch item b: zip-as-canon distribution note;
+  - "DW-S227 2026-08-01 - collaborator FR batch item b: zip-as-canon distribution note;
     Windows update_seed.ps1 manual-update instructions + Task Scheduler
     auto-sync section"
-  - "DW-S227 2026-08-01 - Jay FR batch item d: announcement norm added to
+  - "DW-S227 2026-08-01 - collaborator FR batch item d: announcement norm added to
     Upstream Operator Note; note de-personalized (maintainer name removed)"
   - DW-S270 2026-08-15 - one-command auto-sync installers (--install-autosync /
     -InstallAutosync) replace the manual plist and Task Scheduler recipes;
@@ -16,12 +16,13 @@ edit_log:
   - "WV_2026-09-07_AA_03 2026-09-09 - Upstream Operator Note: diagnostic corollary (missing sync log on an upstream clone is expected; check seed_role first)"
   - 'DW-S400 2026-10-12 - distribution model: Seed-embedded-in-shared-vault-repo shape (update path, social pinning, onboarding presence check)'
   - 'DW-S447 2026-10-31 - new section: Claude Code and Obsidian sidebar plugins (per-person PI pointer, PI.md, import facts, external-import dialog, checks)'
+  - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
 operator: Andrew
 purpose: Canonical guide for installing, manually updating, and auto-syncing the
   DataWizard Seed
 title: Seed Install and Update
 type: guide
-updated: 2026-10-31
+updated: 2026-11-02
 ---
 # Seed Install and Update
 

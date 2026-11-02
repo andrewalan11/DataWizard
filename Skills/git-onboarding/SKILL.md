@@ -6,9 +6,10 @@ description: >-
   a git onboarding guide', 'new team member needs git access', or any context
   where a collaborator needs git setup and project orientation.
 type: skill
-version: '1.1'
-updated: '2026-06-14'
+version: '1.1.1'
+updated: '2026-11-02'
 edit_log:
+  - 'DW-S456 2026-11-02 - v1.1.1: depersonalized examples (names replaced with neutral placeholders)'
   - DW-S184 2026-06-14 - repointed Git Registry ref to 0.6 Registry
 ---
 
@@ -48,13 +49,13 @@ Before starting the walkthrough, collect these from the user:
 
 | Variable | Example | Notes |
 |---|---|---|
-| Collaborator name | Jay Cousins | For the guide title and git author config |
-| Collaborator's GitHub username | jaycousins | Needed for repo access |
-| Collaborator's email | jay@example.com | For git identity config |
+| Collaborator name | Person A | For the guide title and git author config |
+| Collaborator's GitHub username | person-a-handle | Needed for repo access |
+| Collaborator's email | person-a@example.com | For git identity config |
 | Collaborator's OS | macOS / Windows | Determines platform-specific instructions |
 | Project name | Weave | For the guide title and folder references |
-| Repo URL | github.com/KevinTriplett/project_weave | From Git Registry or user |
-| Repo owner | Kevin | Who grants collaborator access |
+| Repo URL | github.com/maintainer/project_weave | From Git Registry or user |
+| Repo owner | The maintainer | Who grants collaborator access |
 | Access method | SSH / HTTPS | SSH recommended; ask if they have a preference |
 | Clone location | ~/Documents/Weave | Where on their machine the repo will live |
 
@@ -210,4 +211,4 @@ Two deliverables:
 
 ## Reference Implementation
 
-See `_Weave Project Repo/Weave Workflows/Git Onboarding Guide - Jay.md` for a comprehensive project-specific example.
+See a project-specific onboarding guide kept in your project's workflows folder for a comprehensive example.

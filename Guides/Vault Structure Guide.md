@@ -2,9 +2,10 @@
 title: Vault Structure Guide
 type: document
 created: '2026-03-07'
-updated: '2026-08-30'
+updated: '2026-11-02'
 status: active
 edit_log:
+  - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
   - "DW-S312 2026-08-30 - stale-warning banner added (pre-demolition content;
     full rewrite queued under D97; S312 Seed review)"
 tags:
@@ -55,7 +56,7 @@ _Companions/
 
 **Why mirrored subfolders?** It keeps companions discoverable — you always know where to find a companion note based on where its source lives. It also keeps the source folders clean (transcripts with transcripts, companions with companions).
 
-**Naming convention:** `c_Source Note Title.md` (`c_` prefix, no space - D83). Example: `c_2025-10-22 Michael Garfield.md`
+**Naming convention:** `c_Source Note Title.md` (`c_` prefix, no space - D83). Example: `c_2025-10-22 Interview Transcript.md`
 
 **What companions contain:**
 - Section map with timestamps (for transcripts)
@@ -75,7 +76,7 @@ participants: ["[[Person 1]]", "[[Person 2]]"]
 tags:
   - companion
   - ai-generated
-generating_agent: Andrew / Claude
+generating_agent: Operator-A / Claude
 ```
 
 Wikilinks in `source_transcript` (or `source_note` for non-transcripts) make the relationship clickable in Obsidian's properties panel.
@@ -91,7 +92,7 @@ _DataWizard/
   00 - Guides for Humans/    ← setup guides (you are here)
   01 - Project/              ← architecture docs, decision log, session log
   02 - Research/             ← pipeline specs, model research, tool comparisons
-  03 - Andrew's Vault/       ← vault-owner's personal working layer (not shared)
+  03 - My Vault/       ← vault-owner's personal working layer (not shared)
   04 - For LLMs/             ← reference docs for AI agents
   AI + LLMs - START HERE - DataWizard - Universal Protocol.md  ← AI instructions
   Content Type Taxonomy.md   ← the 21 content types
@@ -166,7 +167,7 @@ federated_date: 2026-03-07
 **Notes:** Use natural language titles. No date prefixes needed for content notes — DataWizard uses frontmatter `created:` for dates. **Do not use em-dashes (—), curly quotes, or other special characters in note titles** — use plain hyphens (-) and straight quotes instead. Special characters cause patch and path-matching failures for AI agents.
 
 **Transcripts:** `YYYY-MM-DD [Participant Names] — [Topic].md`
-Example: `2026-02-14 Andrew and Jay — Flow Funding Pilot.md`
+Example: `2026-02-14 Team Call — Pilot Project Planning.md`
 
 **Voice memos:** Keep whatever your recorder generates — DataWizard classifies them by content, not filename.
 

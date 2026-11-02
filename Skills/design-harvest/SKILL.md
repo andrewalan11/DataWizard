@@ -8,9 +8,10 @@ description: >-
   update living docs, or any time research has produced findings that should
   change how the project works.
 type: skill
-updated: '2026-10-12'
-version: '1.2.1'
+updated: '2026-11-02'
+version: '1.2.2'
 edit_log:
+  - 'DW-S456 2026-11-02 - v1.2.2: depersonalized examples (names replaced with neutral placeholders)'
   - 'DW-S400 2026-10-12 - v1.2.1: Harvesting from Foreign Codebases section (four heuristics)'
 ---
 
@@ -218,7 +219,7 @@ When the source is another team's repo rather than a research note, four heurist
   side.** Before writing a design doc for a need that spans projects,
   check whether the other project's instance is already capturing the
   requirements. A parallel instance may be writing the spec
-  concurrently (Jay's Mycelial CRM FR was authored by a parallel Weave
+  concurrently (a collaborator's CRM feature request was authored by a parallel Weave
   instance mid-session, S166). Coordinate before drafting.
 
 ## See Also

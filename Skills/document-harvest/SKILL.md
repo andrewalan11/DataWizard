@@ -7,8 +7,8 @@ description: >-
   pending, or hand-highlighted documents. NOT for transcripts - use
   transcript-harvest instead.
 type: skill
-updated: '2026-10-31'
-version: '0.5.2'
+updated: '2026-11-02'
+version: '0.5.3'
 edit_log:
   - "MMM meta-learning plant 2026-06-09: added Step 3 (triage before fetching),
     renumbered"
@@ -21,6 +21,7 @@ edit_log:
   - "DW-S349 2026-09-08 - v0.5.1: Reader-Facing Output rule added (load the
     Reader-Facing Prose Style guide when the destination is read-aloud-class)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v0.5.2 Harvest Log name'
+  - 'DW-S456 2026-11-02 - v0.5.3: depersonalized example (a guest name replaced)'
 ---
 
 # Document Harvest Skill
@@ -48,7 +49,7 @@ Harvest content from non-transcript sources — articles, clippings, research do
 
 1. **Check source YAML** -- read `harvest_status`. If already `harvested`, confirm with user before re-harvesting. If `reviewed`, check `harvest_notes` for the reason before re-opening.
 2. **Check project assignment** -- look for `harvest_for` in the source YAML. If missing and the source is not inside a project folder, ask the user which project this belongs to. Do not harvest without a destination.
-3. **Triage before fetching** -- when processing a batch of links or sources, do a quick triage pass before committing to full harvest. For each source, check: (a) is it accessible? (paywalled, offline, or auth-gated sources waste context if you try to fetch them), (b) is it already in the vault? (search `_Clippings/` and project folders for existing copies), (c) what format is it? (video, PDF, article, thread -- each requires different handling). This pass takes minutes but can save significant context. In MMM S07, several of Michael Garfield's 8 post-meeting links turned out to be paywalled, already harvested, or video content -- a triage pass would have immediately clarified which sources were actionable.
+3. **Triage before fetching** -- when processing a batch of links or sources, do a quick triage pass before committing to full harvest. For each source, check: (a) is it accessible? (paywalled, offline, or auth-gated sources waste context if you try to fetch them), (b) is it already in the vault? (search `_Clippings/` and project folders for existing copies), (c) what format is it? (video, PDF, article, thread -- each requires different handling). This pass takes minutes but can save significant context. In one project's session, several of a guest's 8 post-meeting links turned out to be paywalled, already harvested, or video content -- a triage pass would have immediately clarified which sources were actionable.
 4. **Read the source fully** -- understand the complete content before extracting anything.
 5. **Harvest into destination docs** -- synthesize relevant content into project documents. Use citation format: `([[Source Title#Section|YYYY-MM-DD]])`. If `highlighted_by_hand: true`, focus on highlighted passages first. Synthesize, don't copy -- restate ideas in the voice of the destination document.
 6. **Update source YAML** -- set `harvest_status`, `harvested_into` (with section-level anchors), `harvest_date`, and `harvest_notes`. For re-harvests, append to `harvested_into` and convert `harvest_date` to an array (most recent last). Or set `harvest_status: reviewed` with `harvest_notes` explaining why nothing was harvested.

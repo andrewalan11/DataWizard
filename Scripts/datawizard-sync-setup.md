@@ -1,10 +1,10 @@
 ---
 created: 2026-04-24
-updated: 2026-10-18
+updated: 2026-11-02
 type: guide
 scope: seed
 edit_log:
-  - "DW-S227 2026-08-01 - Jay FR batch item b: scoped Windows platform note
+  - "DW-S227 2026-08-01 - collaborator FR batch item b: scoped Windows platform note
     (Seed updates via update_seed.ps1; full DW Save PowerShell port flagged as
     future work)"
   - "DW-S253 2026-08-07 - Chunk 5: added commit-guard install step (Step 3) +
@@ -18,6 +18,7 @@ edit_log:
   - "DW-S419 2026-10-18 - machine: conf key (commit-message label, replaces
     the hostname) in What It Does + Step 1; Step 3: the commit guard's third
     check (secret files in the staged index)"
+  - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
 ---
 
 # DataWizard Sync Setup Guide

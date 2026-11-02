@@ -6,8 +6,8 @@ description: >-
   transcripts with harvest_status: pending, or any transcript with harvest_for
   YAML set. Covers video, podcast, meeting, and voice memo transcripts.
 type: skill
-updated: '2026-10-31'
-version: '0.9.3'
+updated: '2026-11-02'
+version: '0.9.4'
 edit_log:
   - DW-S158 2026-06-08
   - "MMM meta-learning plant 2026-06-09: added Step 4 (check existing vault
@@ -25,6 +25,7 @@ edit_log:
   - "DW-S349 2026-09-08 - v0.9.2: Reader-Facing Output rule added (load the
     Reader-Facing Prose Style guide when the destination is read-aloud-class)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v0.9.3 Harvest Log name'
+  - 'DW-S456 2026-11-02 - v0.9.4: depersonalized examples (names replaced with neutral placeholders)'
 ---
 
 # Transcript Harvest Skill
@@ -145,7 +146,7 @@ When a transcript contains a researcher's verbal walkthrough of their work -- de
 
 The brief becomes a new file (not a patch to an existing doc) with: which documents were mentioned, which ones the researcher flagged as high leverage, and enough context for the next person or agent to know where to start. Tag with `priority: high` and `type: research-brief`.
 
-Example: Weave Session 24 harvested a Kaliya-Andrew call where Kaliya walked through her Exploring Funding research. The harvest output was `Exploring Funding - Research Brief.md` -- the brief Andrew had asked her to write, assembled from her verbal tour.
+Example: Weave Session 24 harvested a call where a collaborator walked through their funding research. The harvest output was `Funding Research - Research Brief.md` -- the brief the operator had asked them to write, assembled from the verbal tour.
 
 This pattern applies when: (a) the transcript is someone describing research they've done, (b) no written brief exists yet, (c) the research is in a folder or set of documents that others need to navigate. The brief is a harvest destination alongside the usual synth docs.
 

@@ -12,6 +12,7 @@ edit_log:
     case (embeddable synth-note pointer; D116)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: Harvest Log name'
   - 'DW-S456 2026-11-02 - removed two dead links to a maintainer-only design note (release smoke test blocker)'
+  - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
 tags:
   - protocol
   - harvesting
@@ -105,9 +106,9 @@ harvest_for: Weave
 segmented: true
 harvest_status: harvested
 harvested_into:
-  - "[[c_2026-03-31 Kevin-Andrew-Jay]]"
-  - "[[Codex#Section XIV]]"
-  - "[[Story Bible#4.0 Bonding Curves]]"
+  - "[[c_2026-03-31 Team Call]]"
+  - "[[Project Codex#Section XIV]]"
+  - "[[Project Canon#4.0 Example Section]]"
 harvest_date: 2026-04-25
 harvest_notes: "Initial harvest. Extracted ARG tech stack framing and bonding curves discussion. Filtered interpersonal sidebar."
 ```
@@ -116,9 +117,9 @@ harvest_notes: "Initial harvest. Extracted ARG tech stack framing and bonding cu
 ```yaml
 harvest_status: harvested
 harvested_into:
-  - "[[c_2026-03-31 Kevin-Andrew-Jay]]"
-  - "[[Codex#Section XIV]]"
-  - "[[Story Bible#4.0 Bonding Curves]]"
+  - "[[c_2026-03-31 Team Call]]"
+  - "[[Project Codex#Section XIV]]"
+  - "[[Project Canon#4.0 Example Section]]"
   - "[[ReWoven Vision#3.0 Governance]]"
 harvest_date:
   - 2026-04-25
@@ -144,7 +145,7 @@ Add a row to `0.4 Harvest Log - [Project].md` in the appropriate source type sec
 
 | Source | Harvest Date | Destinations | Agent |
 |---|---|---|---|
-| 2026-03-31 Kevin-Andrew-Jay | 2026-04-25 | Codex XIV; Story Bible 4.0 | Claude |
+| 2026-03-31 Team Call | 2026-04-25 | Project Codex XIV; Project Canon 4.0 | Claude |
 ```
 
 If the log doesn't exist yet, create it using the template from the Harvest Provenance Architecture design doc. Group by source type from day one: Transcripts, Articles and Clippings, Contributor Documents, Pending.
@@ -156,7 +157,7 @@ The Pending section doubles as a lightweight harvest queue:
 
 | Source | Type | Likely Destinations | Notes |
 |---|---|---|---|
-| 2026-04-10 Design Review | transcript | Codex, Story Bible | Has harvest_for: Weave |
+| 2026-04-10 Design Review | transcript | Project Codex, Project Canon | Has harvest_for: Weave |
 ```
 
 ### Step 3: Session Log

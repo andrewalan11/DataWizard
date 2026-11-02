@@ -9,9 +9,11 @@ description: >-
   per-project (default) and cross-project. Two scales: backlog (chunked,
   multi-session) and maintenance (incremental nightly).
 type: skill
-version: '0.1'
-updated: '2026-06-04'
+version: '0.1.1'
+updated: '2026-11-02'
 status: draft
+edit_log:
+  - 'DW-S456 2026-11-02 - v0.1.1: depersonalized examples (names replaced with neutral placeholders)'
 ---
 # Content Interest Scan Skill
 
@@ -271,8 +273,8 @@ flag: 2026-06-04
 flag_by: "content-interest-scanner (auto)"
 flag_note: "High-relevance match for [Content Interest Category]"
 flag_for:
-  - Kaliya
-  - Jay
+  - Person A
+  - Person B
 ```
 
 Only auto-flag high-relevance matches. Medium matches get the `content_interest_match` tag but not a team flag. The human reviewing the scan report can manually flag anything that deserves team attention.

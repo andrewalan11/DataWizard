@@ -27,10 +27,11 @@ edit_log:
     consumer project's unattended run skipped stamping on a 400K+ source rather
     than risk hand-rolled edits"
   - 'DW-S456 2026-11-02 - v2.1.1: removed two dead links to a maintainer-only design note (release smoke test blocker)'
+  - 'DW-S456 2026-11-02 - v2.1.2: depersonalized examples (names replaced with neutral placeholders)'
 name: block-stamper
 type: skill
 updated: '2026-11-02'
-version: "2.1.1"
+version: "2.1.2"
 ---
 # Block Stamper Skill
 
@@ -137,7 +138,7 @@ blocked in the armoured working class of post-WW1 Vienna. ^b7
 Transcript turn:
 
 ```
-**Kevin**: I had a really good call with some of the community
+**Person A**: I had a really good call with some of the community
 organizers and developers for the Holo movement. ^t1
 ```
 

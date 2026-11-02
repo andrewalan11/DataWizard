@@ -9,13 +9,14 @@ description: >-
   correct folders, sets routing YAML, and appends action items to target
   projects.
 type: skill
-version: '1.2'
-updated: '2026-10-31'
+version: '1.2.1'
+updated: '2026-11-02'
 origin: 'DW-S312 2026-09-06 - backfilled DW-S448 from the earliest edit_log entry (D127)'
 operator: Andrew
 edit_log:
   - 'DW-S312 2026-09-06 - v1.2: Fathom zero-token export folded from the retired Harvest Agent (D128)'
   - 'DW-S448 2026-10-31 - example project name made generic (Media Project); no behavior change'
+  - 'DW-S456 2026-11-02 - v1.2.1: depersonalized examples (names replaced with neutral placeholders)'
 ---
 # Harvest Router Skill
 
@@ -182,14 +183,14 @@ project, ask:
 Present your assessment to the user before writing anything:
 
 ```
-File: 2026-04-22 Jay Andrew.md
+File: 2026-04-22 Meeting Transcript.md
 Type: transcript
 Current location: / (vault root)
 Move to: _Transcripts/
 Relevant to:
   - Weave Project — discusses story arc structure
   - Media Project — mentions podcast episode planning
-Notes: Conversation between Andrew and Jay covering Weave narrative
+Notes: Conversation between Person A and Person B covering Weave narrative
        and upcoming Media Project recording schedule.
 ```
 
@@ -212,7 +213,7 @@ Move the file to the correct content folder based on its type:
 | Resource/framework | `_Resources/` |
 
 Use `obsidian:move_note` for the move. If the file has a date-based name
-(e.g., `2026-04-22 Jay Andrew.md`), keep the original filename.
+(e.g., `2026-04-22 Meeting Transcript.md`), keep the original filename.
 
 **Subfolder routing:** Some content folders have subfolders for further
 organization. If the file clearly belongs in a subfolder (e.g., voice memo
@@ -306,11 +307,11 @@ less effective.
 
 ```
 The following transcripts need segmentation before harvest:
-- _Transcripts/2026-04-22 Jay Andrew.md
-- _Transcripts/2026-04-20 Tree Andrew.md
+- _Transcripts/2026-04-22 Meeting Transcript.md
+- _Transcripts/2026-04-20 Team Call.md
 
 Run segment_transcript.py on each:
-  python _DataWizard/Seed/Scripts/segment_transcript.py "_Transcripts/2026-04-22 Jay Andrew.md"
+  python _DataWizard/Seed/Scripts/segment_transcript.py "_Transcripts/2026-04-22 Meeting Transcript.md"
 
 Or batch them:
   for f in [list]; do python _DataWizard/Seed/Scripts/segment_transcript.py "$f"; done
