@@ -15,6 +15,8 @@
 #   (Registry and session-closer sectioning; no taxonomy_version bump)
 # DW-S449 2026-11-01: infrastructure_types + coordination-board-targets
 #   (board well-known targets file; no taxonomy_version bump)
+# DW-S455 2026-11-02: infrastructure_types + coordination-board-inbox
+#   (board index plus one inbox per project, D165; no taxonomy_version bump)
 
 meta:
   taxonomy_version: "2.7"
@@ -117,8 +119,9 @@ infrastructure_types:
   config: "Machine-readable or config-carrying docs"
   dashboard: "Dashboard and embed surfaces"
   exchange-note: "Session Exchange notes between instances - plans, reviews, reports, handoffs, briefs"
-  coordination-board: "The vault-level coordination board mirror (_Coordination/Board.md) and its template"
-  coordination-board-archive: "Monthly archive of terminal board rows (_Coordination/Board Archive/YYYY-MM.md)"
+  coordination-board: "The vault-level coordination board index (_Coordination/Board.md) and its template"
+  coordination-board-inbox: "One inbox per project beside the board index (_Coordination/Inbox/<ABBR>.md): the live asks addressed to that project alone; written by board.py render"
+  coordination-board-archive: "Monthly archive of terminal board rows (_Coordination/Board Archive/YYYY-MM.md, continued in parts YYYY-MMb.md, ...)"
   coordination-board-targets: "Well-known targets list beside the board (_Coordination/Board - Targets.md); written once by render when missing, edited by hand"
 
 # ---------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 title: Content Type Taxonomy
 type: project-doc
 created: '2026-03-02'
-updated: 2026-11-01
+updated: 2026-11-02
 origin: DW-S179 2026-06-12
 version: v2.7
 status: active
@@ -17,6 +17,7 @@ edit_log:
   - 'DW-S388 2026-10-06: infrastructure types gain exchange-note, coordination-board, coordination-board-archive (T20)'
   - 'DW-S422 2026-10-18 - +protocol-section, +skill-reference (Registry and session-closer sectioning)'
   - 'DW-S449 2026-11-01 - infrastructure types gain coordination-board-targets (board well-known targets file; no version bump)'
+  - 'DW-S455 2026-11-02 - infrastructure types gain coordination-board-inbox (one inbox per project beside the board index; no version bump)'
 ---
 
 # Content Type Taxonomy v2.7
@@ -219,7 +220,7 @@ An asynchronous communication — voice note, audio message, or text message sen
 
 Scoped list for DW project machinery -- not pipeline source material, not full taxonomy entries (D89). Definitions and fold map for synonym drift: `Seed/Config/taxonomy.yaml`.
 
-`project-doc`, `design-doc`, `research-note`, `feature-request`, `bug-report`, `skill-request`, `skill`, `skill-reference`, `guide`, `guide-section`, `quest`, `protocol`, `protocol-section`, `scan-report`, `processing-report`, `config`, `dashboard`, `exchange-note`, `coordination-board`, `coordination-board-archive`, `coordination-board-targets`
+`project-doc`, `design-doc`, `research-note`, `feature-request`, `bug-report`, `skill-request`, `skill`, `skill-reference`, `guide`, `guide-section`, `quest`, `protocol`, `protocol-section`, `scan-report`, `processing-report`, `config`, `dashboard`, `exchange-note`, `coordination-board`, `coordination-board-inbox`, `coordination-board-archive`, `coordination-board-targets`
 
 ---
 

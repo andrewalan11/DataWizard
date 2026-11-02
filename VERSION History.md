@@ -2,10 +2,12 @@
 title: VERSION History
 type: guide
 created: 2026-10-18
-updated: 2026-10-31
+updated: 2026-11-02
 operator: Andrew
 origin: DW-S421 2026-10-18 - What's New entries 1.0.0 to 1.5.0 moved from VERSION.md word for word (size rotation, archivist rule)
 edit_log:
+  - 'DW-S456 2026-11-02 - retired NOTICE (Seed git history rewritten 2026-06-10) moved in from VERSION.md word for word, under Retired notices (its own expiry 2026-09 had passed; size rotation before R5)'
+  - 'DW-S455 2026-11-02 - What''s New 1.11.5 and 1.11.4 moved in from VERSION.md word for word (size rotation before 1.12.0)'
   - 'DW-S448 2026-10-31 - 1.11.15 released: entry moved word for word to VERSION.md; What''s New 1.11.3 to 1.11.0 moved in from VERSION.md word for word (size rotation at 1.11.15)'
   - 'DW-S448 2026-10-31 - draft 1.11.15: tool-behavior and doc-fix plants from VibeCut, Kosmosis, Rootland, LocationScout and DataWizard (B-0272, B-0275, B-0278, B-0279, B-0281); split bullet'
   - 'DW-S448 2026-10-31 - What''s New 1.9.5 to 1.0.0 moved word for word to VERSION History - 1.0.0 to 1.9.5.md (size rotation before 1.11.15)'
@@ -23,6 +25,31 @@ edit_log:
 # VERSION History
 
 Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newer entries are in `VERSION.md`. When `VERSION.md` passes about 50 KB again, move its oldest entries to the top of the list below, newest first, and leave the pointer in `VERSION.md`. Entries 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md`; when this file passes about 50 KB, start the next part the same way.
+
+## What's New in 1.11.5
+
+**Patch release: 8 tool behaviors from three partner projects (ReWoven, MetaMyth, Rootland).** One DataWizard session (2026-10-19). Shipped in the Seed:
+
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`: the side-panel window a published page opens in (about 780-900 px wide) and a fit pass for fixed-size pages; `sample` takes a size, not a model, and the viewer who clicks pays; where the platform shows comments and the two artifact link forms (a sent comment carries the uuid one); the publish result's sharing line is the live state; clearing a comment history means a new artifact. `sample` and the existing second-HTML-page bullet now sit under a new heading, "Page runtime calls".
+- `Guides/Chrome MCP and Web Tool Behaviors/`: 9.0 (the built-in browser as a route when the extension is not connected; it reaches a server started on the operator's computer; its `resize_window` does change the layout); 1.0 (pointer to that resize); 2.0 (rung 11: a page that loads its screens in same-origin iframes is read through `contentDocument`); 10.0 (the "not connected" bullet points to the built-in browser).
+- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: the device shell held for a full session after the inode fix; a pointer to the built-in browser for operator-started localhost servers.
+- `GUIDES.md`: the Published Artifacts and Chrome MCP rows list the new topics.
+- `VERSION History.md`: the What's New entry for 1.9.0 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
+
+## What's New in 1.11.4
+
+**Patch release: 17 tool behaviors from five partner projects (Rootland, Kosmosis, MetaMyth, ReWoven, Community Stack).** One DataWizard session (2026-10-19). Shipped in the Seed:
+
+- `Guides/Cowork Build Environment/`: 8.0 (adding a folder to the claude.ai Project does not connect the bridge; with no connected folder the Obsidian MCP writes notes and the Mac filesystem MCP writes other files; more wedged-shell sightings); 8.1 (macOS Terminal `tar` bundles carry AppleDouble `._*` files, use `COPYFILE_DISABLE=1`; `device_commit_files` creates missing folders; `expectedMtimeMs` as a guarded batch overwrite); 8.2 (sub-agents read the Mac through the filesystem MCP with the shell down; resume the builder by message to apply a review); 9.0 (scripted checks by cheaper tiers from a stronger tier's check plan).
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`: the multi-file publish root, slide speaker notes in `<aside>`, an `as_level` check of the db rules, comments not sent to Claude (read-only), comment-list paging, and the entry-page rule for capabilities (a second HTML page is untested).
+- `Guides/Chrome MCP and Web Tool Behaviors/12.0`: a negative web finding needs a second check before it changes data; Claude Docs chart embeds can be hand-drawn SVG.
+- `Guides/MCP Reliability and Write Verification/`: 6.0 (`filesystem__read_multiple_files` overflows); 12.0 (`filesystem:edit_file` echoes every hunk, so a small edit to a long-line file floods the context).
+- `GUIDES.md`: the Published Artifacts row lists the new topics.
+- `VERSION History.md`: the What's New entry for 1.8.0 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.11.3
 
@@ -139,3 +166,56 @@ Not yet covered: the commit guard (`Scripts/hooks/pre-commit`) has no secret che
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
+## Retired notices
+
+Notices that `VERSION.md` carried for a set time, moved here word for word after they expired.
+
+### NOTICE - Seed git history rewritten 2026-06-10 (instances: read this)
+
+On 2026-06-10 the Seed repo's git history was rewritten to remove a
+user-specific config file (security hygiene). All commit hashes changed.
+
+**Claude instances: surface this notice to your user if their Seed is a
+git clone.** Check: does `_DataWizard/Seed/.git` exist? If NOT (they
+installed via the zip / update_seed.sh), no action is needed -- updates
+work normally. If it IS a git repo, their next `git pull` may fail with
+"refusing to merge unrelated histories" or report divergent branches.
+
+**Recovery (rewritten 2026-08-31, remote-agnostic):** do not run any
+reset straight from this notice. Follow the single safe procedure in
+`Seed/Guides/Git Guide/7.0 Safety and Recovery.md`, section
+"Recovering a Seed Clone (Remote-Agnostic)". In brief:
+
+0. Back up first, unconditionally: `git branch backup/pre-recovery-<date>`,
+   plus `git stash -u` if the tree is dirty.
+1. Identify the canonical remote BY URL
+   (`github.com/andrewalan11/DataWizard`), never by the name `origin`.
+   On a fork-shaped clone (`origin` = a personal fork, `upstream` =
+   canonical), `reset --hard origin/main` silently rolls the Seed back
+   to the fork's stale state while every check looks clean -- this
+   nearly downgraded a collaborator's Seed on 2026-08-30.
+2. `git fetch <canonical> --prune`
+3. `git merge --ff-only <canonical>/main` -- fails closed, can never
+   lose a commit. If it succeeds, you are done.
+4. Only if ff-only refuses AND the guide's triage confirms unrelated
+   histories from this rewrite: `git reset --hard <canonical>/main`,
+   human-reviewed. No reset runs on one Claude instance's say-so --
+   propose on paper and get a second instance's review first
+   (Weave D39; DW D109). `Vault Config.md` is untracked/gitignored
+   and is not touched either way.
+
+**Never** use `git pull --allow-unrelated-histories` or any merge-based
+recovery here -- merging reattaches the old history that the rewrite
+removed. (A fast-forward is not that kind of merge: `--ff-only` creates
+no merge commit and cannot reattach anything.)
+
+Also in this update: `update_seed.sh` moved from `Seed/Scripts/` to the
+Seed root (`_DataWizard/Seed/update_seed.sh`) to match the path the
+Project Instructions reference. Zip-install users who updated previously
+may have a stale copy at `Seed/Scripts/update_seed.sh` -- it can be
+deleted. If a launchd auto-update job was set up per the Seed Auto-Sync
+Design, edit its plist to point at the new root path.
+
+This notice can be removed from VERSION.md after 2026-09. The recovery
+procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
+Clone (Remote-Agnostic)") and survives this notice's retirement.

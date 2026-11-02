@@ -3,7 +3,7 @@ title: Project Instructions - Changelog
 type: project-doc
 status: active
 created: '2026-06-18'
-updated: '2026-10-06'
+updated: '2026-11-02'
 origin: 'DW-S189 2026-06-18 - backfilled from the earliest edit_log entry (D127)'
 operator: Andrew
 tags:
@@ -16,6 +16,7 @@ edit_log:
   - DW-S366 2026-09-22 - v4.7 repair note + Seed tracker row corrected
   - DW-S366 2026-09-22 - v4.8 entry + canon write gate notice
   - DW-S388 2026-10-06 - v4.9 entry + tracker to v4.9 / Seed 1.7.0
+  - DW-S455 2026-11-02 - v4.10 entry + tracker to v4.10 / Seed 1.12.0
 ---
 # Project Instructions - Changelog
 
@@ -27,8 +28,14 @@ Version history for the DataWizard Project Instructions (`DataWizard Project Ins
 
 | What | Version | Last changed |
 |---|---|---|
-| Project Instructions | v4.9 | 2026-10-06 |
-| Seed | v1.7.0 | 2026-10-06 |
+| Project Instructions | v4.10 | 2026-11-02 |
+| Seed | v1.12.0 | 2026-11-02 |
+
+---
+
+## What Changed in v4.10
+
+**Orientation 6(d) reads the board index plus this project's own inbox.** The coordination board is now a small index (`_Coordination/Board.md`: asks to several projects or to `all`, every live claim, recently closed rows, a count line per project) and one inbox per project (`_Coordination/Inbox/<ABBR>.md`: the asks addressed to that project alone). The sweep reads both files, by filesystem; claims are in the index. The trace line keeps its format (`| board: N asks (M shown), K live claims`); only the PI version in it changes. Step 1 now says to compare versions part by part (4.10 is newer than 4.9), because this is the first two-digit minor. Nothing else in the PI changed. Mechanism: Query Spec sub-check (d); rule: Conventions Registry, "Coordination board". Shipped with Seed 1.12.0. Re-paste required. (DW-S455, 2026-11-02)
 
 ---
 

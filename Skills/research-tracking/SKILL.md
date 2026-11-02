@@ -8,12 +8,13 @@ description: >-
   accumulating without a tracking system, or any time you are about to evaluate
   a tool, repo, framework, or external resource.
 type: skill
-updated: '2026-10-12'
-version: '1.5.1'
+updated: '2026-11-02'
+version: '1.5.2'
 edit_log:
   - "DW-S243 2026-08-05 - v1.5: After Fan-Out routing subsection (routing loop
     for fan-out outputs)"
   - 'DW-S400 2026-10-12 - v1.5.1: memory-surface sources (web-primary, lead lists not figures) under the Output column; After Research -- Fold Verdicts Back'
+  - 'DW-S456 2026-11-02 - v1.5.2: references/tracking-index-template.md example link made generic'
 ---
 
 # Research Tracking

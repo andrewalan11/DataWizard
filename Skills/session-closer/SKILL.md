@@ -7,10 +7,11 @@ description: >-
   pick up where we left off' in a new thread and there's no log entry for the
   previous session.
 type: skill
-updated: '2026-10-31'
+updated: '2026-11-02'
 origin: 'DW-S158 2026-06-08 - backfilled from the earliest edit_log entry (D127)'
-version: '4.11.4'
+version: '4.11.5'
 edit_log:
+  - 'DW-S456 2026-11-02 - v4.11.5: Pre-close reflection - dead link to a maintainer-only note replaced with its two-sentence rationale (release smoke test blocker; Fable-reviewed)'
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v4.11.4 gate rows, board ids, Harvest Log'
   - 'DW-S443 2026-10-28 - v4.11.3: Step 3.5 tool-behavior bullet - close the source note and its board ask in the same pass as the plant'
   - 'DW-S433 2026-10-21 - v4.11.2: Step 2 a proposed Decision Log entry is written into the entry or a working doc before close (Community Stack ask); Step 3.11 uses the 30 / 50 KB sizes and points at Conventions Registry 7.0'
@@ -396,4 +397,4 @@ Before closing, verify two things:
 
 2. **Knowledge transfer completeness.** The session log is a handoff document, not a knowledge store. Detailed findings, patterns, tool evaluations, and architectural implications belong in design docs, skills, and tracking files where future instances will encounter them during task-specific work. If a finding only exists in the session log, it will likely be missed -- future instances read the last 2-3 session entries for orientation, then work from design docs and skills. Always ask: "would a future instance working on [relevant topic] find this in the doc they'd naturally read?" If not, plant it there.
 
-See [[Context and Session Management]] for the rationale.
+Rationale: synthesis and cross-item pattern recognition are the first capabilities to degrade as a context window fills, while tool use and file operations are the last. Capturing the thinking before the mechanical close steps protects the part that is most at risk.

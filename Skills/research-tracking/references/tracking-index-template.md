@@ -2,6 +2,9 @@
 title: Research Tracking Index Template
 type: skill-reference
 parent: research-tracking
+updated: '2026-11-02'
+edit_log:
+  - 'DW-S456 2026-11-02 - example link made generic (it named a maintainer-only note; release smoke test)'
 ---
 
 # Research Tracking Index Template
@@ -68,7 +71,7 @@ describing when it becomes worth evaluating.
 **Output column examples:**
 
 For moderate/deep evaluations (link to research note):
-> [[DUMBAI - Defensive Agent Design Patterns]]
+> [[Example Research Note]]
 
 For light evaluations (inline verdict + key details):
 > Community consensus: md for context/intent, code for execution.

@@ -2,7 +2,7 @@
 title: Harvest Workflow Guide
 type: guide
 created: '2026-04-25'
-updated: '2026-10-31'
+updated: '2026-11-02'
 operator: Andrew
 status: active
 edit_log:
@@ -11,6 +11,7 @@ edit_log:
   - "DW-S262 2026-08-08: added Multi-destination/not-ready destinations edge
     case (embeddable synth-note pointer; D116)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: Harvest Log name'
+  - 'DW-S456 2026-11-02 - removed two dead links to a maintainer-only design note (release smoke test blocker)'
 tags:
   - protocol
   - harvesting
@@ -19,7 +20,7 @@ tags:
 
 # Harvest Workflow Guide
 
-*A practical walkthrough of harvesting content from source material into project documents. For the full design rationale, see [[Harvest Provenance Architecture]].*
+*A practical walkthrough of harvesting content from source material into project documents.*
 
 ## What Harvesting Is
 
@@ -188,7 +189,6 @@ The `companion:` field on source files and the `c_` entry in `harvested_into` ar
 
 ## Related Documents
 
-- [[Harvest Provenance Architecture]] -- full design rationale
 - [[YAML Schema]] -- field definitions
 - [[Editorial Principles]] -- synthesis guidance
 - [[Conventions Registry]] -- ledger/log-discipline conventions and citation format

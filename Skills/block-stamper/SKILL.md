@@ -26,10 +26,11 @@ edit_log:
     edits, never cite unstamped anchors, never discard the mapping) - after a
     consumer project's unattended run skipped stamping on a 400K+ source rather
     than risk hand-rolled edits"
+  - 'DW-S456 2026-11-02 - v2.1.1: removed two dead links to a maintainer-only design note (release smoke test blocker)'
 name: block-stamper
 type: skill
-updated: 2026-08-31
-version: "2.1"
+updated: '2026-11-02'
+version: "2.1.1"
 ---
 # Block Stamper Skill
 
@@ -45,7 +46,7 @@ Stamp a block ID on a source-file paragraph or transcript turn so it becomes add
 
 **Writes are byte-faithful.** A stamp is a one-line append that changes no content. It is exempt from birth-metadata ceremony (no `updated:` bump, no `edit_log` entry on the stamped file), and it must not reflow the file -- append the ID to the target line only, with no end-of-line normalization, whitespace change, or frontmatter re-dump. This keeps a stamp the minimal diff a downstream updated-field reconciliation treats as a non-body change.
 
-Citation canon: the Conventions Registry citation section. Full spec: [[Citation Mechanism - Block-Level Provenance]] and the synthesis-provenance design plan.
+Citation canon: the Conventions Registry citation section.
 
 ## When to Use
 
@@ -222,7 +223,6 @@ The original model stamped every substantive paragraph up front. This is superse
 
 ## See Also
 
-- [[Citation Mechanism - Block-Level Provenance]] -- full design canon (block IDs, on-cite stamping, lifecycle, precision)
 - the Conventions Registry citation section -- the citation-format canon (block default, section-anchor fallback, glyph display)
 - the synthesis-provenance design plan -- the extension of block citation to all generated documents (obligation tiers, evidence board, export patterns)
 - `stamp_blocks.py` (Seed/Scripts) -- the batch script twin of this skill

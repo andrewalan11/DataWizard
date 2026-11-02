@@ -2,7 +2,7 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: 2026-11-01
+updated: '2026-11-02'
 origin: DW-S182 2026-06-13
 operator: Andrew
 priority: high
@@ -41,6 +41,7 @@ edit_log:
   - 'DW-S446 2026-10-31 - Seed error-check fixes: edit_log order and scope, Harvest Log'
   - 'DW-S448 2026-10-31 - Wikilinks everywhere callout: resolution order exact path, same folder, shortest path (was by filename regardless of folder path); links MCP Reliability 12.0'
   - 'DW-S453 2026-11-01 - Session Log Fields: late-close fields (outcome, closed_after_fact, closed_by, close_sources, chat_gate; late-close tier design DW-S452)'
+  - 'DW-S456 2026-11-02 - removed dead link(s) to maintainer-only design notes (release smoke test, full-Seed link sweep)'
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. One exception: `core_note` on a holonic projection is a plain path (see Holonic Records). Obsidian resolves a bare `[[Note Name]]` by exact path, then a note in the same folder, then the shortest path, so the short form is safe only while the name is unique in the vault (MCP Reliability and Write Verification, 12.0). Quote the link: write `"[[Note Name]]"`, because an unquoted `[[Note Name]]` parses as a nested list. (DataWizard, 2026-10)
@@ -119,7 +120,7 @@ Fields specific to session-log entry files, beyond the birth metadata every file
 | `side-quest` | Entry is a tangent from the main arc; its "What's next" does not carry the main-arc handoff |
 | *(absent)* | Normal main-arc session entry |
 
-**`claim_id`**: A short random token (e.g. a 6-8 char hex nonce) stamped on a session-log *stub* at claim time to make session-claiming collision-evident under concurrency. After writing the stub, the claiming instance re-reads it and checks `claim_id`: if the on-disk value is not the one it wrote, a parallel instance won the slot, so it claims the next free identifier instead (PI Orientation Step 3, verify-after-claim). Ephemeral - present only while `status: in-progress`; the session-closer strips it when it overwrites the stub with the full entry at close. Design: [[Session Claiming Under Concurrency]].
+**`claim_id`**: A short random token (e.g. a 6-8 char hex nonce) stamped on a session-log *stub* at claim time to make session-claiming collision-evident under concurrency. After writing the stub, the claiming instance re-reads it and checks `claim_id`: if the on-disk value is not the one it wrote, a parallel instance won the slot, so it claims the next free identifier instead (PI Orientation Step 3, verify-after-claim). Ephemeral - present only while `status: in-progress`; the session-closer strips it when it overwrites the stub with the full entry at close.
 
 **`session_started` / `session_closed`**: The session's date span (both plain YYYY-MM-DD; equal for a single-day session). Sessions increasingly cross midnight or span days, and a single date cannot cover both ends. The claim stub sets `session_started:` at claim time; the session-closer sets `session_closed:` at close and reconciles any of the session's writes stamped with the start date that actually landed later. The session identifier keeps the start date - identity never changes mid-session; the span lives in these fields. On every ordinary document, `updated:` means the date of the actual write, never the session-start date. (Adopted 2026-09 from four-project field evidence; see Date Stamping and Time Sense below.)
 
@@ -286,7 +287,7 @@ embed_targets:
   - "[[Decision Log]]"
 ```
 
-Present only on synth notes built for this pattern; absent on ordinary companions and sources. The synth note stays `type: companion`. Convention and full workflow (Embed Map, team-download header, heading-parity close step): [[Conventions Registry]] (Harvest via embeddable synth note). Provenance model: [[Harvest Provenance Architecture]].
+Present only on synth notes built for this pattern; absent on ordinary companions and sources. The synth note stays `type: companion`. Convention and full workflow (Embed Map, team-download header, heading-parity close step): [[Conventions Registry]] (Harvest via embeddable synth note).
 
 ### Federation Fields
 

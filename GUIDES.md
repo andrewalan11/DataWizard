@@ -2,7 +2,7 @@
 title: DataWizard Guides
 type: project-doc
 created: '2026-06-22'
-updated: 2026-11-01
+updated: 2026-11-02
 origin: 'DW-S195 2026-06-22 - backfilled from the earliest edit_log entry (D127)'
 operator: Andrew
 edit_log:
@@ -45,6 +45,7 @@ edit_log:
   - 'Seed 1.11.11 2026-10-26 - Cowork Build Environment row names Claude Code cloud sessions (new section 11.0) and where the scanners run'
   - 'DW-S440 2026-10-27 - Chrome MCP, Cowork Build Environment and Published Artifacts rows extended (Seed 1.11.13)'
   - 'DW-S449 2026-11-01 - Coordination Board template row: targets file, seen_by, third example'
+  - 'DW-S455 2026-11-02 - Coordination Board template row: index plus one inbox per project'
 ---
 # DataWizard Guides
 
@@ -91,7 +92,7 @@ These learnings rot faster than any other kind because they have no design-doc h
 | **Team Attention Rollout** | Activating the flag system on a multi-operator project: the five-step activation recipe, preconditions (Seed version, PI loaded per surface), the per-person canary live test, the four-branch diagnosis tree for undelivered flags (incl. shipped-is-not-loaded), the executor chain for `flag_default`, first-render expectations, and the reader-path principle. |
 | **Flag Queue Page Template** | Copy-in template for a per-person flag queue page (Dataview): one section per operator over `flag_for` frontmatter, with the empty-due-last sort fix and the exact-name list-matching caveat. Render surface only -- the frontmatter is the mechanism. |
 | **Operator Gate Queue - Template** (`Seed/Templates/`) | Copy-in starter for a deployment-gate queue: class sections A-F + Parked + Deployed and one example G-row. The schema, lifecycle vocabulary, feeding rule, and exit ceremony are canonical in the Conventions Registry's Operator Gate Queue entry; wire the file as the third layer of the 0.5 action-items shell. |
-| **Coordination Board - Template** (`Seed/Templates/`) | Copy-in starter for the vault-level coordination board (`_Coordination/Board.md`): the header, the block grammar and hand-path steps (seen_by for awareness asks to several projects), one example ask, one example claim and one example awareness ask; the well-known targets live in `Board - Targets.md` beside the board. The rule and who writes the table are canonical in the Conventions Registry's Coordination board entry; the orientation read is the Query Spec's sub-check (d). |
+| **Coordination Board - Template** (`Seed/Templates/`) | Copy-in starter for the vault-level coordination board index (`_Coordination/Board.md`; the render adds one inbox per project, `Inbox/<ABBR>.md`, for the asks addressed to that project alone): the header, the block grammar and hand-path steps (seen_by for awareness asks to several projects), one example ask, one example claim and one example awareness ask; the well-known targets live in `Board - Targets.md` beside the board. The rule and who writes the table are canonical in the Conventions Registry's Coordination board entry; the orientation read is the Query Spec's sub-check (d). |
 
 ### Surfaces and tools
 | Guide | Covers |

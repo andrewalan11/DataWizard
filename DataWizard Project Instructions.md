@@ -3,7 +3,7 @@ title: DataWizard Project Instructions
 type: project-doc
 status: active
 created: '2026-03-12'
-updated: '2026-10-06'
+updated: '2026-11-02'
 origin: 'DW-S158 2026-06-08 - backfilled from the earliest edit_log entry (D127)'
 tags:
   - protocol
@@ -32,19 +32,23 @@ edit_log:
   - "DW-S388 2026-10-06: v4.9 - Orientation Step 6 gains sub-check (d) board
     sweep and the board trace fragment (Coordination Board, T20; details:
     Changelog)"
+  - "DW-S455 2026-11-02: v4.10 - Orientation 6(d) reads the board index plus
+    this project's own inbox (board split into an index and one inbox per
+    project, D165); trace format unchanged; Step 1 compares versions part by
+    part (details: Changelog)"
 ---
 
 
 
 
 `Project home folder: 
-# DataWizard Project Instructions v 4.9
+# DataWizard Project Instructions v 4.10
 
 (Project home folder is the obsidian vault folder where this project's 0.0 / 0.2 / 0.5 files live, e.g. `_DataWizard/`. Cowork: fill this in after pasting the file into Settings - Project Instructions. Claude Code / Sidecar: instead declare it in your vault-root `CLAUDE.md` above the `@import`.)
 
 ---
 
-**Version:** v4.9 (history: `Project Instructions - Changelog.md`; VERSION.md is canonical)
+**Version:** v4.10 (history: `Project Instructions - Changelog.md`; VERSION.md is canonical)
 
 This is the DataWizard behavioral contract, consumed two ways: pasted into Cowork's Settings - Project Instructions, or `@import`ed from a vault-root `CLAUDE.md` (Claude Code / Sidecar). Heed the tool appendix for your surface (`## Cowork tools` or `## Claude Code tools`) and ignore the other. The Seed itself always lives at `_DataWizard/Seed/`.
 
@@ -86,7 +90,7 @@ Skills live in `_DataWizard/Seed/Skills/` (portable Seed skills) and in the proj
 
 ## Orientation (once per thread)
 
-1. Read local `_DataWizard/Seed/VERSION.md`. Compare its `project_instructions` value against the version in this file's header. Ignore any "-local" suffix. If local Seed has a newer version, tell the user: "Your PI is v[yours] but your Seed has v[local]. Copy the updated PI from the Seed into your project settings." If the running PI is newer, that's normal - continue silently. If the running PI version already matches VERSION.md's `project_instructions` value, silently resolve any open "re-paste PI" action item - detect the state, don't wait for the human to report the paste.
+1. Read local `_DataWizard/Seed/VERSION.md`. Compare its `project_instructions` value against the version in this file's header, part by part (4.10 is newer than 4.9). Ignore any "-local" suffix. If local Seed has a newer version, tell the user: "Your PI is v[yours] but your Seed has v[local]. Copy the updated PI from the Seed into your project settings." If the running PI is newer, that's normal - continue silently. If the running PI version already matches VERSION.md's `project_instructions` value, silently resolve any open "re-paste PI" action item - detect the state, don't wait for the human to report the paste.
 2. Read 0.0 Project Guidelines in your home folder in full (project context).
 3. Claim your session ID before your first message to the user - this is claim ceremony, exempt from the share-plan-first / approval rule (Working Rule 1) and any "approval before creating" preference, which govern content, not the claim. Sequence (verify-after-claim, safe under parallel threads):
    a. List the session log section folder; take the next free identifier - above the highest entry AND above any in-progress sibling stub (go above, don't back-fill). Stub file: solo-operator "NN.0 Session NNN - in progress.md"; multi-operator "PROJ_YYYY-MM-DD_INITIALS_NN - in progress.md" (pick the next NN for today + your initials).
@@ -100,8 +104,8 @@ Skills live in `_DataWizard/Seed/Skills/` (portable Seed skills) and in the proj
    a. Flag sweep [multi-operator projects only; solo projects report `n/a (solo)`]. Find files in THIS project whose `flag_for` contains the current operator; surface the top ~5 due-first (count the rest) with title, `flag_note`, `flag_by`, `flag`, and `flag_due`, noting `flag_default` on overdue items. The sweep is read-only -- it does not write `flag_status`; act (name removed) and defer (name kept, `flag_status: deferred`) are explicit operator responses, and the closer's expiry pass is the only automatic writer of `expired-unread`.
    b. Stale-stub reconciliation [all projects]. Among the stubs listed at claim time, detect `in-progress` stubs owned by the CURRENT operator older than the stale threshold and not claimed today; offer to mark each abandoned with a one-line reason. Offer only, never auto-author, never touch another operator's stub. (Backfill-and-close arrives with the git-reconstruction helper in a later build.)
    c. Intake what's-new [optional]. List the project's intake folders (Feature Requests, Bug Reports, Skill Requests, Intake Queue) for items newer than the last session-log entry; surface new ones.
-   d. Board sweep [all projects]. Read `_Coordination/Board.md` (filesystem read, never MCP); surface asks with status open or picked-up addressed to this project or `all`, top five due-first then oldest (count the rest), and live claims (held, heartbeat + ttl not yet passed; any project). Read-only; picking up an ask is an explicit act.
-   Trace format (always, with the running PI version): `flag sweep [PI v4.9]: N surfaced, M handled, K deferred | stubs: P stale, Q reconciled | intake: R new | board: N asks (M shown), K live claims`; gated-off checks report their gate. A missing trace line is a broken sweep, distinguishable from 'nothing was waiting.'
+   d. Board sweep [all projects]. Read the index `_Coordination/Board.md` plus this project's own inbox `_Coordination/Inbox/<ABBR>.md` (filesystem reads, never MCP); surface asks with status open or picked-up addressed to this project or `all` (the inbox holds asks to this project alone, the index those to several projects or `all`), top five due-first then oldest (count the rest), and live claims (in the index; held, heartbeat + ttl not yet passed; any project). Read-only; picking up an ask is an explicit act.
+   Trace format (always, with the running PI version): `flag sweep [PI v4.10]: N surfaced, M handled, K deferred | stubs: P stale, Q reconciled | intake: R new | board: N asks (M shown), K live claims`; gated-off checks report their gate. A missing trace line is a broken sweep, distinguishable from 'nothing was waiting.'
 7. State the project abbreviation and session identifier, then present orientation -- including anything the sweep surfaced -- and confirm the session's direction with the user. Solo-operator identifier: "DW S116". Multi-operator: use the composite format from the session-closer skill's Session Identifier Format section (e.g. "WV_2026-06-10_AA_01").
 8. Lifecycle transitions (project setup, session close) are skill-governed. Read the skill before executing.
 9. Ready to work. Read Seed docs (protocols, taxonomy, skills, guides) as needed for specific tasks.

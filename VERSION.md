@@ -1,7 +1,7 @@
 
-seed: 1.11.17
+seed: 1.12.0
 protocol: 1.8
-project_instructions: 4.9
+project_instructions: 4.10
 
 **Canon write gate:** edits to this file come only from a claimed session of the project that owns it. An instance governed by another project's instructions files a proposal at the owning project's intake (or an exchange note in its Session Exchange) instead of editing. Reviewed exceptions are whitelisted in the lint config. (Conventions Registry: "Cross-project canon write gate"; DataWizard, 2026-09)
 
@@ -23,55 +23,22 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
 
-## NOTICE - Seed git history rewritten 2026-06-10 (instances: read this)
+## What's New in 1.12.0
 
-On 2026-06-10 the Seed repo's git history was rewritten to remove a
-user-specific config file (security hygiene). All commit hashes changed.
+**Minor release with Project Instructions 4.10 (re-paste): the coordination board splits into a small index and one inbox per project.** Every project read the whole board at orientation, though most need only their own few asks, and the one file kept passing the 50 KB read limit. Now `Board.md` is an index and each project has an inbox file. One DataWizard session (2026-11), built and reviewed on copies first; DataWizard decision D165. Shipped in the Seed:
 
-**Claude instances: surface this notice to your user if their Seed is a
-git clone.** Check: does `_DataWizard/Seed/.git` exist? If NOT (they
-installed via the zip / update_seed.sh), no action is needed -- updates
-work normally. If it IS a git repo, their next `git pull` may fail with
-"refusing to merge unrelated histories" or report divergent branches.
+- `DataWizard Project Instructions.md` v4.10: Orientation 6(d) reads the index `_Coordination/Board.md` plus this project's own inbox `_Coordination/Inbox/<ABBR>.md`. The trace line keeps its format; only the PI version in it changes. Step 1 now says to compare versions part by part: 4.10 is newer than 4.9. History: `Project Instructions - Changelog.md`.
+- `Guides/Orientation Flag Sweep - Query Spec.md`, sub-check (d): the two sources; count the asks in your inbox plus the asks in the index `## Live` addressed to you or `all`, each id once; claims are in the index; an `## Unreconciled` section can be in either file.
+- `Protocols/Conventions Registry/26.0 Coordination board.md`: new paragraph "The board files" - the index, one inbox per project and the archive parts; each block lives in one file, placed by its `to:` list; one posting point (the end of the index `## Live`, never an inbox); the tie order between files; archive parts `YYYY-MM.md`, `YYYY-MMb.md`, ...; Recently closed is in the index only. "The mirror" now reads "the board files". Action asks still never expire automatically.
+- `Protocols/Conventions Registry/28.0 ID families.md`: the board id rule scans every board file (the index with its Unreconciled section, the inboxes, the archive).
+- `Templates/Coordination Board - Template.md`: the header says what the index and the inboxes hold, and that a hand post goes at the end of `## Live` in the index, never in an inbox; a line for the count table. `GUIDES.md` row updated.
+- `Config/taxonomy.yaml` and `Protocols/Content Type Taxonomy.md`: new infrastructure type `coordination-board-inbox` (no taxonomy version bump).
+- `VERSION History.md`: the What's New entries for 1.11.4 and 1.11.5 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
+- Release check fixes (2026-11-02): 16 links from shipped Seed files to notes that exist only in the maintainer's vault were removed or made generic, so they no longer break in a new install. `Skills/session-closer/SKILL.md` v4.11.5 (Pre-close reflection: the link becomes a two-sentence rationale), `Skills/block-stamper/SKILL.md` v2.1.1, `Skills/research-tracking/SKILL.md` v1.5.2 (template example), `Guides/Harvest Workflow Guide.md`, `Guides/Git Guide/9.0 Troubleshooting.md`, `Guides/MCP Reliability and Write Verification/10.0 MCP Concurrency Practices.md`, `Protocols/YAML Schema.md`, `Protocols/DataWizard Universal Protocol.md`, Conventions Registry 9.0, 11.0 and 23.0. `README.md`: the "What's in the Seed" list names `VERSION History.md`, `Project Instructions - Changelog.md`, `GUIDES.md` and `Templates/`. The expired 2026-06-10 git-rewrite notice moved from this file to `VERSION History.md`, section "Retired notices", word for word.
 
-**Recovery (rewritten 2026-08-31, remote-agnostic):** do not run any
-reset straight from this notice. Follow the single safe procedure in
-`Seed/Guides/Git Guide/7.0 Safety and Recovery.md`, section
-"Recovering a Seed Clone (Remote-Agnostic)". In brief:
+**For vaults that run the board script** (`board.py`): no schema change. The render writes an inbox for each project that has an ask addressed to it alone, then the index; fold, verify and the next id read every board file. List each project abbreviation that receives asks in `Board - Targets.md` (`- ABBR: path:...`), or the render prints a warning line for it (the inbox is written anyway). An archive month past about 40 KB continues in a new part; rebuild reads every part in name order.
 
-0. Back up first, unconditionally: `git branch backup/pre-recovery-<date>`,
-   plus `git stash -u` if the tree is dirty.
-1. Identify the canonical remote BY URL
-   (`github.com/andrewalan11/DataWizard`), never by the name `origin`.
-   On a fork-shaped clone (`origin` = a personal fork, `upstream` =
-   canonical), `reset --hard origin/main` silently rolls the Seed back
-   to the fork's stale state while every check looks clean -- this
-   nearly downgraded a collaborator's Seed on 2026-08-30.
-2. `git fetch <canonical> --prune`
-3. `git merge --ff-only <canonical>/main` -- fails closed, can never
-   lose a commit. If it succeeds, you are done.
-4. Only if ff-only refuses AND the guide's triage confirms unrelated
-   histories from this rewrite: `git reset --hard <canonical>/main`,
-   human-reviewed. No reset runs on one Claude instance's say-so --
-   propose on paper and get a second instance's review first
-   (Weave D39; DW D109). `Vault Config.md` is untracked/gitignored
-   and is not touched either way.
-
-**Never** use `git pull --allow-unrelated-histories` or any merge-based
-recovery here -- merging reattaches the old history that the rewrite
-removed. (A fast-forward is not that kind of merge: `--ff-only` creates
-no merge commit and cannot reattach anything.)
-
-Also in this update: `update_seed.sh` moved from `Seed/Scripts/` to the
-Seed root (`_DataWizard/Seed/update_seed.sh`) to match the path the
-Project Instructions reference. Zip-install users who updated previously
-may have a stale copy at `Seed/Scripts/update_seed.sh` -- it can be
-deleted. If a launchd auto-update job was set up per the Seed Auto-Sync
-Design, edit its plist to point at the new root path.
-
-This notice can be removed from VERSION.md after 2026-09. The recovery
-procedure itself lives durably in Git Guide 7.0 ("Recovering a Seed
-Clone (Remote-Agnostic)") and survives this notice's retirement.
+**Action for other projects:** run `update_seed`, then re-paste the Project Instructions (4.10) into your project settings. A project that keeps its own copy of the orientation sweep updates its board step to read `Board.md` plus `Inbox/<ABBR>.md`. Post by hand only at the end of `Board.md` `## Live`; the render moves an ask to one project into that project's inbox. Edit a block in the file where it is; if you change its `to:`, also set `updated`. (DataWizard, 2026-11)
 
 ## What's New in 1.11.17
 
@@ -275,34 +242,9 @@ A script that finds oversize files and splits them by these steps is planned; th
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
-## What's New in 1.11.5
-
-**Patch release: 8 tool behaviors from three partner projects (ReWoven, MetaMyth, Rootland).** One DataWizard session (2026-10-19). Shipped in the Seed:
-
-- `Guides/Published Artifacts and ArtifactData Behaviors.md`: the side-panel window a published page opens in (about 780-900 px wide) and a fit pass for fixed-size pages; `sample` takes a size, not a model, and the viewer who clicks pays; where the platform shows comments and the two artifact link forms (a sent comment carries the uuid one); the publish result's sharing line is the live state; clearing a comment history means a new artifact. `sample` and the existing second-HTML-page bullet now sit under a new heading, "Page runtime calls".
-- `Guides/Chrome MCP and Web Tool Behaviors/`: 9.0 (the built-in browser as a route when the extension is not connected; it reaches a server started on the operator's computer; its `resize_window` does change the layout); 1.0 (pointer to that resize); 2.0 (rung 11: a page that loads its screens in same-origin iframes is read through `contentDocument`); 10.0 (the "not connected" bullet points to the built-in browser).
-- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: the device shell held for a full session after the inode fix; a pointer to the built-in browser for operator-started localhost servers.
-- `GUIDES.md`: the Published Artifacts and Chrome MCP rows list the new topics.
-- `VERSION History.md`: the What's New entry for 1.9.0 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.11.4
-
-**Patch release: 17 tool behaviors from five partner projects (Rootland, Kosmosis, MetaMyth, ReWoven, Community Stack).** One DataWizard session (2026-10-19). Shipped in the Seed:
-
-- `Guides/Cowork Build Environment/`: 8.0 (adding a folder to the claude.ai Project does not connect the bridge; with no connected folder the Obsidian MCP writes notes and the Mac filesystem MCP writes other files; more wedged-shell sightings); 8.1 (macOS Terminal `tar` bundles carry AppleDouble `._*` files, use `COPYFILE_DISABLE=1`; `device_commit_files` creates missing folders; `expectedMtimeMs` as a guarded batch overwrite); 8.2 (sub-agents read the Mac through the filesystem MCP with the shell down; resume the builder by message to apply a review); 9.0 (scripted checks by cheaper tiers from a stronger tier's check plan).
-- `Guides/Published Artifacts and ArtifactData Behaviors.md`: the multi-file publish root, slide speaker notes in `<aside>`, an `as_level` check of the db rules, comments not sent to Claude (read-only), comment-list paging, and the entry-page rule for capabilities (a second HTML page is untested).
-- `Guides/Chrome MCP and Web Tool Behaviors/12.0`: a negative web finding needs a second check before it changes data; Claude Docs chart embeds can be hand-drawn SVG.
-- `Guides/MCP Reliability and Write Verification/`: 6.0 (`filesystem__read_multiple_files` overflows); 12.0 (`filesystem:edit_file` echoes every hunk, so a small edit to a long-line file floods the context).
-- `GUIDES.md`: the Published Artifacts row lists the new topics.
-- `VERSION History.md`: the What's New entry for 1.8.0 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
 ## Older releases
 
-The What's New entries for 1.10.0 to 1.11.3 are in `VERSION History.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md` (moved there word for word, 2026-10).
+The What's New entries for 1.10.0 to 1.11.5 are in `VERSION History.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md` (moved there word for word, 2026-10). Expired notices (the 2026-06-10 git history rewrite) are in `VERSION History.md`, section "Retired notices".
 
 ## Versioning
 
@@ -346,6 +288,9 @@ Compare two values:
 - **Running PI version**: the version in the header of your
   pasted Project Instructions (e.g., "v4.0" or "v4.0-local";
   ignore the "-local" suffix)
+
+Compare the numbers part by part, not as decimals: 4.10 is
+newer than 4.9.
 
 Handle each case:
 
