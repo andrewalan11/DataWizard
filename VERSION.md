@@ -1,5 +1,5 @@
 
-seed: 1.12.0
+seed: 1.12.1
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,20 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.12.1
+
+**Patch release: 26 tool behaviors from six partner projects (VibeCut, Rootland, LocationScout, Events Map, Common Woods, Tech Tools).** One DataWizard session (2026-11), planted from ten board asks (B-0261, B-0267, B-0274, B-0285, B-0289, B-0290, B-0292, B-0295, B-0297, B-0298), each checked against its source note in a second review. 15 are new items and 11 extend items that were already there; 3 were already covered. Shipped in the Seed:
+
+- `Guides/Cowork Build Environment/`: 1.0 (a `prunable` git worktree in the device shell is harmless - never prune from there), 4.0 (closing a Terminal window kills a long run - use `caffeinate` and a resumable script), 5.0 (a CLI blocked at the run step in the cloud - hand the operator a Mac command; parallel helpers share one site's failures), 8.0, 8.1 (macOS `tar` keeps the Mac uid, so git in the cloud says "dubious ownership" - `chown -R` first; commit only after an edit returns and check the size; a one-off commit failure; builders work on a copy while the bridge is down), 8.2 (a finished sub-agent cannot be resumed - keep briefs self-contained) and 9.0 (run gate bundles one at a time; test a Referer-locked key on its real origin).
+- `Guides/Chrome MCP and Web Tool Behaviors/`: 2.0 (two new rungs: a lead Chrome pass for a directory helpers cannot read, after a robots.txt check; a classifier refusal is final), 7.0 (the Drive connector cannot edit an existing Google Doc), 9.0 (built-in browser clicks land off target after `resize_window`), 10.0 (the extension refuses `file://`; a screenshot refused on one domain while `get_page_text` works; a 403 and a hung fetch - do not retry in the same tab) and 12.0 (a database connector that allows one migration and denies another; PDF text extraction joins words at line breaks - check quoted text against a second copy).
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`: `obsidian://` links do nothing inside the desktop app - keep the link and add a copy fallback; large pages via patch mode; `get_artifact` wants the full link, not a short slug.
+- `Guides/Script Portability.md`: `set -e` does not stop on a failure inside an `&&` chain.
+- `Protocols/Conventions Registry/7.0 Shell and section architecture.md`: split a note at a heading matched at the start of a line, and assert exactly one match.
+- `Protocols/DataWizard Universal Protocol.md`: a link to an archived note made plain text.
+- `VERSION History.md`: the What's New entries for 1.11.6 and 1.11.7 moved there word for word (size rotation). Nothing was cut.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.12.0
 
@@ -218,33 +232,9 @@ A script that finds oversize files and splits them by these steps is planned; th
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
-## What's New in 1.11.7
-
-**Patch release: 2 tool behaviors from a partner project (LocationScout).** One DataWizard session (2026-10-20). Of the 5 behaviors sent, 3 were already in the guides (translated page text in Chrome, the `[BLOCKED: Cookie/query string data]` result on link URLs, the artifact republish handshake); two of those gain one phrase each. Shipped in the Seed:
-
-- `Guides/Chrome MCP and Web Tool Behaviors/`: 2.0 (new rung 12: a site whose robots.txt blocks `web_fetch` was read in the lead's Chrome pass, so route blocked sources back to the lead; rung 7: `innerText` is auto-translated too, so note the source language when you quote); 10.0 (the "unparseable URLs" refusal also hit a page opened from a hand-built deep URL; follow the site's own link from its home page).
-- `Guides/Cowork Build Environment/9.0 Verification Discipline for Builds.md`: when the explicit-path Playwright launch also fails, match the npm version to the cached browser build (`ls /opt/pw-browsers`), then launch plainly.
-- `Guides/Published Artifacts and ArtifactData Behaviors.md`, "Publishing": `Artifact list` with `scope: files` does not count as viewed either; a second sighting of the refused, refused, publishes sequence.
-- `GUIDES.md`: the Chrome MCP row names the robots-blocked-source route.
-- `VERSION History.md`: the What's New entries for 1.9.1 to 1.9.5 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
-## What's New in 1.11.6
-
-**Patch release: 9 tool behaviors from two partner projects (LocationScout, MetaMyth).** One DataWizard session (2026-10-19). Of the 12 behaviors sent, 3 were not planted: two were facts about particular public data sources (they stay in the project that found them) and one was already in the guides. Shipped in the Seed:
-
-- `Guides/Cowork Scheduled Tasks.md`: a one-time (`run_once_at`) run can start about seven minutes late; `fire_trigger` with `text` makes the run work twice; a run started from a published page reached the artifact store every time but the vault only sometimes; in a timed run the Obsidian MCP wrote the vault while the device shell showed no folders (load the tools with an exact `select:` list); scheduled runs wrote the artifact store with no approval.
-- `Guides/Published Artifacts and ArtifactData Behaviors.md`, "Page runtime calls": a page can start a scheduled task through the `mcp` capability (the task's owner only; gate the button with `user.isOwner()`); count every live subscription before checking the `db` cap (64 per view).
-- `Guides/Cowork Build Environment/5.0 Network and GitHub Data.md`: the device shell failed on Overpass too (HTTP 406, then a timeout); a `fetch` POST from a Chrome tab on `overpass-turbo.eu` worked; one sub-agent got through only on two mirrors after retries. `8.2 Device Bridge - Sub-agents and Orchestration.md`: web-only research sub-agents ran in parallel without the shared-Chrome problem.
-- `Guides/Chrome MCP and Web Tool Behaviors/`: 2.0 (reduce the data in the page before slicing it); 10.0 (the `[BLOCKED: Cookie/query string data]` result also fires on plain text that looks like query parameters; replace `[&=?%]` with spaces).
-- `GUIDES.md`: the Cowork Scheduled Tasks and Published Artifacts rows list the new topics.
-
-**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
-
 ## Older releases
 
-The What's New entries for 1.10.0 to 1.11.5 are in `VERSION History.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md` (moved there word for word, 2026-10). Expired notices (the 2026-06-10 git history rewrite) are in `VERSION History.md`, section "Retired notices".
+The What's New entries for 1.10.0 to 1.11.7 are in `VERSION History.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md` (moved there word for word, 2026-10). Expired notices (the 2026-06-10 git history rewrite) are in `VERSION History.md`, section "Retired notices".
 
 ## Versioning
 

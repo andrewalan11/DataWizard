@@ -2,7 +2,7 @@
 title: Script Portability
 type: guide
 created: '2026-09-23'
-updated: '2026-10-28'
+updated: '2026-11-02'
 operator: Andrew
 status: active
 edit_log:
@@ -14,6 +14,7 @@ edit_log:
   - "Seed 1.11.11 2026-10-26 - new section A launchd job can run the system Python (/usr/bin/python3 3.9; DataWizard backlog)"
   - "DW-S440 2026-10-27 - Shell dialect - an unmatched zsh glob leaves a command substitution empty; refuse an empty file name (DataWizard backlog)"
   - "DW-S443 2026-10-28 - new section The macOS temp folder is a symlink (realpath in tests; board B-0269, Mesocosm)"
+  - "DW-S456 2026-11-02 - 1.12.1: Shell dialect - set -e does not stop inside an && chain; guard each step (B-0267, Rootland)"
 ---
 
 # Script Portability
@@ -35,6 +36,8 @@ macOS ships BSD versions of `sed`, `awk`, `date`, `stat`, `mktemp`; Linux ships 
 Target `bash` explicitly (`#!/usr/bin/env bash`), never `sh`, and do not assume the interactive shell: macOS defaults to zsh, so anything an operator pastes into a terminal runs under zsh semantics (word-splitting differs, `**` globbing differs). Instructions handed to operators must be paste-safe under both.
 
 In zsh an unmatched glob is an error, not an empty list. `CAP="$(ls -t ~/Downloads/name-*.json | head -1)"` with no matching file prints an error and leaves `CAP` empty (bash passes the pattern through and `ls` fails, with the same empty result), and the next command then runs with an empty file name. A script that takes a file name must refuse an empty one and say so. (DataWizard, 2026-10)
+
+`set -e` does not stop a script on a failure inside an `&&` chain unless the failing command is the last one in the chain, so a failed first step can let the script go on to the next. Guard each operator step with an explicit stop, for example `step_a || { echo "STOP: step A failed"; exit 1; }`. (Rootland, 2026-10)
 
 ## Case-insensitive disks
 

@@ -6,6 +6,7 @@ updated: 2026-11-02
 operator: Andrew
 origin: DW-S421 2026-10-18 - What's New entries 1.0.0 to 1.5.0 moved from VERSION.md word for word (size rotation, archivist rule)
 edit_log:
+  - 'DW-S456 2026-11-02 - What''s New 1.11.7 and 1.11.6 moved in from VERSION.md word for word (size rotation before 1.12.1)'
   - 'DW-S456 2026-11-02 - retired NOTICE (Seed git history rewritten 2026-06-10) moved in from VERSION.md word for word, under Retired notices (its own expiry 2026-09 had passed; size rotation before R5)'
   - 'DW-S455 2026-11-02 - What''s New 1.11.5 and 1.11.4 moved in from VERSION.md word for word (size rotation before 1.12.0)'
   - 'DW-S448 2026-10-31 - 1.11.15 released: entry moved word for word to VERSION.md; What''s New 1.11.3 to 1.11.0 moved in from VERSION.md word for word (size rotation at 1.11.15)'
@@ -25,6 +26,30 @@ edit_log:
 # VERSION History
 
 Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newer entries are in `VERSION.md`. When `VERSION.md` passes about 50 KB again, move its oldest entries to the top of the list below, newest first, and leave the pointer in `VERSION.md`. Entries 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md`; when this file passes about 50 KB, start the next part the same way.
+
+## What's New in 1.11.7
+
+**Patch release: 2 tool behaviors from a partner project (LocationScout).** One DataWizard session (2026-10-20). Of the 5 behaviors sent, 3 were already in the guides (translated page text in Chrome, the `[BLOCKED: Cookie/query string data]` result on link URLs, the artifact republish handshake); two of those gain one phrase each. Shipped in the Seed:
+
+- `Guides/Chrome MCP and Web Tool Behaviors/`: 2.0 (new rung 12: a site whose robots.txt blocks `web_fetch` was read in the lead's Chrome pass, so route blocked sources back to the lead; rung 7: `innerText` is auto-translated too, so note the source language when you quote); 10.0 (the "unparseable URLs" refusal also hit a page opened from a hand-built deep URL; follow the site's own link from its home page).
+- `Guides/Cowork Build Environment/9.0 Verification Discipline for Builds.md`: when the explicit-path Playwright launch also fails, match the npm version to the cached browser build (`ls /opt/pw-browsers`), then launch plainly.
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`, "Publishing": `Artifact list` with `scope: files` does not count as viewed either; a second sighting of the refused, refused, publishes sequence.
+- `GUIDES.md`: the Chrome MCP row names the robots-blocked-source route.
+- `VERSION History.md`: the What's New entries for 1.9.1 to 1.9.5 moved there word for word (size rotation, so this file stays under about 50 KB). Nothing was cut.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
+
+## What's New in 1.11.6
+
+**Patch release: 9 tool behaviors from two partner projects (LocationScout, MetaMyth).** One DataWizard session (2026-10-19). Of the 12 behaviors sent, 3 were not planted: two were facts about particular public data sources (they stay in the project that found them) and one was already in the guides. Shipped in the Seed:
+
+- `Guides/Cowork Scheduled Tasks.md`: a one-time (`run_once_at`) run can start about seven minutes late; `fire_trigger` with `text` makes the run work twice; a run started from a published page reached the artifact store every time but the vault only sometimes; in a timed run the Obsidian MCP wrote the vault while the device shell showed no folders (load the tools with an exact `select:` list); scheduled runs wrote the artifact store with no approval.
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`, "Page runtime calls": a page can start a scheduled task through the `mcp` capability (the task's owner only; gate the button with `user.isOwner()`); count every live subscription before checking the `db` cap (64 per view).
+- `Guides/Cowork Build Environment/5.0 Network and GitHub Data.md`: the device shell failed on Overpass too (HTTP 406, then a timeout); a `fetch` POST from a Chrome tab on `overpass-turbo.eu` worked; one sub-agent got through only on two mirrors after retries. `8.2 Device Bridge - Sub-agents and Orchestration.md`: web-only research sub-agents ran in parallel without the shared-Chrome problem.
+- `Guides/Chrome MCP and Web Tool Behaviors/`: 2.0 (reduce the data in the page before slicing it); 10.0 (the `[BLOCKED: Cookie/query string data]` result also fires on plain text that looks like query parameters; replace `[&=?%]` with spaces).
+- `GUIDES.md`: the Cowork Scheduled Tasks and Published Artifacts rows list the new topics.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-10)
 
 ## What's New in 1.11.5
 

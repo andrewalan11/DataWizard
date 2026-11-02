@@ -17,6 +17,7 @@ edit_log:
   - DW-S366 2026-09-22 - v4.8 entry + canon write gate notice
   - DW-S388 2026-10-06 - v4.9 entry + tracker to v4.9 / Seed 1.7.0
   - DW-S455 2026-11-02 - v4.10 entry + tracker to v4.10 / Seed 1.12.0
+  - DW-S456 2026-11-02 - tracker Seed row to v1.12.1 (patch; no PI change)
 ---
 # Project Instructions - Changelog
 
@@ -29,7 +30,7 @@ Version history for the DataWizard Project Instructions (`DataWizard Project Ins
 | What | Version | Last changed |
 |---|---|---|
 | Project Instructions | v4.10 | 2026-11-02 |
-| Seed | v1.12.0 | 2026-11-02 |
+| Seed | v1.12.1 | 2026-11-02 |
 
 ---
 

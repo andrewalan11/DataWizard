@@ -2,7 +2,7 @@
 title: Published Artifacts and ArtifactData Behaviors
 type: guide
 created: 2026-10-12
-updated: 2026-10-31
+updated: 2026-11-02
 operator: Andrew
 origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects); backfilled DW-S428'
 scope: seed
@@ -27,6 +27,7 @@ edit_log:
   - 'DW-S440 2026-10-27 - Publishing - tool behaviors B-0258, B-0257, B-0245 (xlsx and similar not served, base64 plus downloads; per-session connector warning; a sub-agent builds, the lead publishes)'
   - 'DW-S443 2026-10-28 - Reading: assets listing of another owner''s artifact returns not_found; publish a checked copy as a supporting file (board B-0262, MetaMyth)'
   - 'DW-S448 2026-10-31 - tool behaviors B-0275: sandboxed srcdoc iframe for embedded prototypes; a self-publishing page carries other pages as base64 blocks (Kosmosis)'
+  - 'DW-S456 2026-11-02 - 1.12.1: tool behaviors B-0285, B-0297 (get_artifact needs the full link; 3.2 MB page via publish_files patch mode; obsidian:// links dead in the desktop app frame) (LocationScout, Tech Tools)'
 ---
 # Published Artifacts and ArtifactData Behaviors
 
@@ -64,11 +65,11 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 
 **The publish warning "page declares connector X but no successful call to it was observed in this session" is per session.** It appeared on a republish whose connector call had been proven live in an earlier session (a page button that starts a scheduled run through the `mcp` capability, owner only). The declaration was carried forward unchanged and the publish succeeded. Record where the call was last proven; do not read the warning as a sign that the integration broke; and do not re-test a connector that starts a real scheduled run just to silence it. (MetaMyth, 2026-10)
 
-**A sub-agent can build and test an artifact page; the lead publishes it.** A strong-tier sub-agent built a page and tested it (Playwright in the container, files committed back to the device) but did not publish. The lead staged the built file, compared its md5 with the one in the sub-agent's report, read the live artifact in full, diffed, and published (the read gate above applies to the lead, not to the sub-agent). (ReWoven, 2026-10)
+**A sub-agent can build and test an artifact page; the lead publishes it.** A strong-tier sub-agent built a page and tested it (Playwright in the container, files committed back to the device) but did not publish. The lead staged the built file, compared its md5 with the one in the sub-agent's report, read the live artifact in full, diffed, and published (the read gate above applies to the lead, not to the sub-agent). (ReWoven, 2026-10) In another session a cloud sub-agent built a 3.2 MB single-file page, and the lead published it with `publish_files` from the container path, in patch mode as `index.html`, with `base_version` from `get_artifact`; it worked first time. (LocationScout, 2026-10)
 
 ## Reading
 
-**`Artifact read` needs the full `https://claude.ai/artifact/<id>` URL.** A bare `claude.ai/artifact/<id>` (or a bare id) is refused as "not an artifact URL". (Evolutionary Media Commons, 2026-10)
+**`Artifact read` needs the full `https://claude.ai/artifact/<id>` URL.** A bare `claude.ai/artifact/<id>` (or a bare id) is refused as "not an artifact URL". (Evolutionary Media Commons, 2026-10) `get_artifact` behaved the same way: it refused the short slug as "invalid slug" and accepted the full `https://claude.ai/artifact/<id>` link, which returned the UUID slug. (LocationScout, 2026-10)
 
 **A large read is saved to a tool-results file; only the head shows inline.** A ~700 KB page came back head-only, with the full HTML in a tool-results file; extract what you need (e.g. a baked data constant) from that file with a script rather than re-reading. An `Artifact` read of an artifact this session did not publish saves the full HTML to a local file (the result names it, as `.../tool-results/artifact-<id>-<version>.html`). Sub-agents in the same container can read that path, so a large page (an 870 KB deck here) can go to a reviewer agent without passing through the lead's context. (Holonic Canvas, 2026-10; ReWoven, 2026-10)
 
@@ -121,6 +122,8 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 **Type sizes with a pixel minimum stop shrinking in a small panel, and the text runs over what sits below it.** In a slide deck, type set with `max(15px, ...)` stopped scaling below a stage width of about 970 px. What fixed it: a small fit script that steps a slide's type and gap scale down (to 66% at most) when its content does not fit, runs again on slide change, resize and font load, and lets the slide scroll as the last resort. (ReWoven, 2026-10; seen once)
 
 **Browser automation cannot act inside a published artifact's frame.** The page runs in a nested cross-origin frame; Claude in Chrome and the built-in browser pane cannot click, type, read or run script inside it. The store read-back is the only automatable evidence of what a page wrote - in-memory page state has to be read by the person or shown on the page. (Holonic Canvas, 2026-10)
+
+**An `obsidian://` link on a published page does nothing inside the Claude desktop app.** The app's frame blocks the custom scheme. The same link works when the artifact URL is open in a normal web browser, and pasting the copied link into the browser's address bar also opens Obsidian. Keep the direct link, add a "Copy obsidian link" button as a fallback, and tell the user to open the page in a browser. (Tech Tools, 2026-11)
 
 **Nothing in an artifact link reaches the page, so a published page has no deep links.** The page runs in a frame on its own host whose URL carries no query or fragment: opened at `https://claude.ai/artifact/<id>?x=1#y=2`, a probe page saw empty `location.search`, `location.hash` and `document.referrer`, and the host's `postMessage` traffic to the frame carried theme, viewport and capability settings but no route. No runtime capability offers a link channel either (checked against runtime contract 0.2.75). A `#route=` scheme in a published page can never be hit from a link: route through a channel the page owns (a paste field, a `db` document another page writes, a sync), and probe with a scratch page that prints what it sees before building any routing. (Holonic Canvas, 2026-10)
 

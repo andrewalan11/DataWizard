@@ -12,6 +12,7 @@ edit_log:
   - 'DW-S183 2026-06-14: repointed Protocol Summary ref to Conventions Registry'
   - 'DW-S189 2026-06-18: repointed 3.0 row to Working Principles companion'
   - 'DW-S456 2026-11-02 - removed dead link(s) to maintainer-only design notes (release smoke test, full-Seed link sweep)'
+  - 'DW-S456 2026-11-02 - Protocol Summary link made plain text (archived note, not in the Seed; found by the new lint check C20)'
 ---
 # DataWizard Universal Protocol (retired)
 
@@ -45,4 +46,4 @@ edit_log:
 - [[Content Type Taxonomy]] - `type:` values
 - [[Quest Lifecycle]] - quest states and transitions
 
-The former [[Protocol Summary]] quick-reference was archived (S183, D99); its role is now covered by the [[Conventions Registry]] and the Project Instructions.
+The former Protocol Summary quick-reference was archived (S183, D99); its role is now covered by the [[Conventions Registry]] and the Project Instructions.
