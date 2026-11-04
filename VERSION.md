@@ -1,5 +1,5 @@
 
-seed: 1.12.2
+seed: 1.12.3
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,14 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.12.3
+
+**Patch release: edit_log trim rule for script-generated notes (D127 amended).** One DataWizard session (DW-S466, 2026-11). Shipped in the Seed:
+
+- `Protocols/YAML Schema.md`, edit_log rules: trimmed lines are still copied nowhere for hand-stamped files; a script-generated note (an index or catalog a script rewrites) moves its trimmed lines into its own edit-log archive note, because no session-log manifest holds those run records.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.12.2
 

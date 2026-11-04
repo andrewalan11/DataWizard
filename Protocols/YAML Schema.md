@@ -2,7 +2,7 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: '2026-11-02'
+updated: 2026-11-04
 origin: DW-S182 2026-06-13
 operator: Andrew
 priority: high
@@ -43,6 +43,7 @@ edit_log:
   - 'DW-S453 2026-11-01 - Session Log Fields: late-close fields (outcome, closed_after_fact, closed_by, close_sources, chat_gate; late-close tier design DW-S452)'
   - 'DW-S456 2026-11-02 - removed dead link(s) to maintainer-only design notes (release smoke test, full-Seed link sweep)'
   - 'DW-S460 2026-11-02 - 1.12.2: Tool Evaluation Notes gain source_url (link from a tool note to its intake item; board B-0296 part 1, Tech Tools)'
+  - DW-S466 2026-11-04
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. One exception: `core_note` on a holonic projection is a plain path (see Holonic Records). Obsidian resolves a bare `[[Note Name]]` by exact path, then a note in the same folder, then the shortest path, so the short form is safe only while the name is unique in the vault (MCP Reliability and Write Verification, 12.0). Quote the link: write `"[[Note Name]]"`, because an unquoted `[[Note Name]]` parses as a nested list. (DataWizard, 2026-10)
@@ -528,7 +529,7 @@ edit_log:
 - **Always single-quote entries.** Unquoted colons and wrapped long lines have twice broken whole-file frontmatter parsing; quoting kills the failure class regardless of length.
 - One entry per session (deduplicated), stamped once per file at session close - not on every touch.
 - Entries are one compact line: session ID + date (agent edits `'ProjectAbbrev-SNN YYYY-MM-DD'`, human edits `'Name YYYY-MM-DD'`), plus an optional short clause of a few words. Narrative belongs in the session log entry, not here.
-- When appending would exceed 5 entries, drop the oldest **in the same write**. Nothing is copied anywhere at trim time: the trimmed history is already recorded in the session log manifests.
+- When appending would exceed 5 entries, drop the oldest **in the same write**. Nothing is copied anywhere at trim time for hand-stamped files: the trimmed history is already recorded in the session log manifests. A script-generated note is the exception: its generator moves trimmed lines into that note's own edit-log archive (D127, amended 2026-11-04).
 - **Section files:** required. **Infrastructure files (0.x) and standalone docs:** recommended (a new file gets it at birth - Creation-Time Metadata Contract). **Shell files:** none - shells are assembly surfaces; their `updated` field bumps when sections change, but they do not accumulate a log.
 - Preferred writer: `stamp_editlog.py` (quote-on-write, append-and-trim, `--manifest` batch mode). Hand edits are legal under the same contract: pass the full windowed list back in a single write (never a bare append via `update_frontmatter` merge - see the MCP Reliability guide's array-wipe warning).
 - **A new `edit_log` line goes after the last line of the last entry, never after the first line of an older entry.** A long entry wraps onto an indented second line. A line inserted between the first line and its wrapped half leaves the wrapped half with no parent: the block fails to parse, or, when the entry was a plain value, the two halves join and two entries read as one (that case parses, so a parse check does not see it). Both happened in one vault, in two action-items files, always near the top of the list, which points at a writer that inserts at a fixed position. `stamp_editlog.py` inserts at the true tail, after the last continuation line. (DataWizard, 2026-10)
