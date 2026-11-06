@@ -2,7 +2,7 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: 2026-11-04
+updated: 2026-11-06
 origin: DW-S182 2026-06-13
 operator: Andrew
 priority: high
@@ -44,6 +44,7 @@ edit_log:
   - 'DW-S456 2026-11-02 - removed dead link(s) to maintainer-only design notes (release smoke test, full-Seed link sweep)'
   - 'DW-S460 2026-11-02 - 1.12.2: Tool Evaluation Notes gain source_url (link from a tool note to its intake item; board B-0296 part 1, Tech Tools)'
   - DW-S466 2026-11-04
+  - 'DW-S470 2026-11-06 - Harvest Tracking: harvest_log grammar for any multi-project source (keepers and transcripts), roll-up, backfill rule, fathom_id and fathom_recording_id; harvest_for promoted from deferred (D168)'
 ---
 
 > **Wikilinks everywhere.** Any YAML field that references another vault note should use `[[Note Name]]` syntax. This makes references clickable in the Obsidian properties panel. Applies to: `harvested_into`, `federated_from`, `federated_to`, `transcript`, `source_note`, `companion`, and any other cross-reference field. One exception: `core_note` on a holonic projection is a plain path (see Holonic Records). Obsidian resolves a bare `[[Note Name]]` by exact path, then a note in the same folder, then the shortest path, so the short form is safe only while the name is unique in the vault (MCP Reliability and Write Verification, 12.0). Quote the link: write `"[[Note Name]]"`, because an unquoted `[[Note Name]]` parses as a nested list. (DataWizard, 2026-10)
@@ -260,22 +261,49 @@ harvest_notes: "Initial enrichment. Manual harvest extracted bonding curves fram
 
 **Field definitions:**
 
-- **`harvest_status`**: Pipeline state. See status values table above. **Never** add a blank or placeholder `harvest_status` field -- absence means untouched, and that's meaningful information.
+- **`harvest_status`**: Pipeline state. See status values table above. **Never** add a blank or placeholder `harvest_status` field -- absence means untouched, and that's meaningful information. On a source routed to two or more projects it is a roll-up of the `harvest_log` lines (below), never hand-set.
 - **`harvested_into`**: Array of wikilinks to ALL destinations -- companion notes (`c_` prefix) and project documents. Use section-level anchors as standard (e.g. `[[Codex#Section XIV]]`). The `c_` prefix naturally distinguishes pipeline enrichment from manual harvest.
 - **`harvest_date`**: ISO date (YYYY-MM-DD) of harvest actions. Single value for first harvest; array for re-harvests (most recent last). Preserves the full trail of when the source was touched.
 - **`harvest_notes`**: The "commit message" of the harvest -- editorial judgment about interpretive moves, filtered content, or skip reasons. One or two sentences. Most valuable for `reviewed` and `superseded` statuses where the *reason* matters more than the routing.
+- **`harvest_for`**: The project(s) a source is routed to, by canonical name (the name in the project's 0.0 file name). An intake keeper writes them as wikilinks, a transcript as plain names; readers accept both. String for single-project (`harvest_for: ReWoven`), array for multi-project (`harvest_for: [ReWoven, MetaMyth]`). Required on any source outside a project folder (like `_Transcripts/`) and on any source with `harvest_log`.
 
-**Enrichment is harvesting.** When the pipeline creates a companion note, it writes back to the source YAML: adds the `c_` link to `harvested_into` and sets `harvest_status: harvested`. When an agent manually harvests into a project document, same pattern. One status field, one destinations array, one concept.
+**Enrichment is harvesting.** When the pipeline creates a companion note, it writes back to the source YAML: adds the `c_` link to `harvested_into` and sets `harvest_status: harvested`. When an agent manually harvests into a project document, same pattern. One status field, one destinations array, one concept. On a source routed to two or more projects, each project closes its own `harvest_log` line instead, and `harvest_status` follows from those lines.
 
-**The `companion:` field.** The unified `harvested_into` array makes the standalone `companion:` field on source files partially redundant -- the same `c_` link appears in both places. Keep `companion:` for now: pipeline scripts may prefer a dedicated field for quick companion lookup without parsing an array. Do not rely on `companion:` alone for provenance -- `harvested_into` is the canonical routing record.
+**The `companion:` field.** The unified `harvested_into` array makes the standalone `companion:` field on source files partially redundant -- the same `c_` link appears in both places. Keep `companion:` for now: pipeline scripts may prefer a dedicated field for quick companion lookup without parsing an array. Do not rely on `companion:` alone for provenance -- `harvested_into` is the canonical routing record. On a call a harvest hub reads for several projects, the router writes `companion:` at routing time, before the synth note is finished, as the claim that the call is taken (harvest-router skill, Hub mode).
+
+**Per-project done record (`harvest_log`).** Plant `harvest_log` on any source routed to two or more projects: an intake link keeper, a transcript, any multi-project source. One project's `harvest_status` would overwrite another's, so each project keeps its own line and the status becomes a roll-up. One grammar serves keepers and transcripts, so one parser reads both:
+
+```yaml
+harvest_log:
+  - "Project A - pending - 2026-11-04 - <session> - decision #- - routed by the hub - section: Project A - Topic of its section"
+  - "Project B - harvested - 2026-11-06 - <session> - decision #- - accepted into <destination note> - section: Project B - Another topic"
+  - "Project C - harvested - 2026-10-21 - <session> - decision #12 - noted in the tools list"
+```
+
+`<Project> - <state> - <date> - <session> - decision #<N or -> - <outcome> - section: <heading>`
+
+- **`<Project>`** is the project's canonical name, exactly as it is written in `harvest_for` (the name in the project's 0.0 file name) - not an abbreviation. Write the bare name, without `[[ ]]`, even where `harvest_for` holds wikilinks (keepers do): readers strip the brackets from `harvest_for`, not from the line. Tools match a line to its project by this string.
+- **`<state>`** is one of `pending` (routed, not yet worked by that project), `harvested` (accepted or edited into the project's own documents), `reviewed` (read and declined - nothing placed), `superseded` (the project was dropped from the routing, or the source was replaced).
+- **`<date>`** is ISO (YYYY-MM-DD); **`<session>`** is the identifier of the session that wrote the line.
+- **`decision #<N>`** is the routing decision number of an intake keeper; write `decision #-` where no decision id applies (a transcript).
+- **`<outcome>`** is a short free-text note: where it went, or why not.
+- **`section: <heading>`** is optional and always last: the heading of the hub section this line answers (a transcript a hub routed). Keepers usually omit it.
+
+**Parsing.** Split the line on ` - ` at most five times, giving six fields; the sixth holds the outcome and, when present, the section. Split the sixth once on ` - section: ` and take everything after it as the heading, as it is - headings contain ` - `, so a parser never splits the heading. A reader that does not know the section field still parses the line: the section stays inside the outcome. **Quote the whole line** in YAML: it contains `: ` and ` #`, and unquoted, ` #` starts a comment and `: ` breaks the block (the callout at the top of this schema).
+
+**Append-only, latest line wins.** A project's state is its latest line. Each project writes only its own lines; the router or hub writes the first `pending` line for each target at routing. A project closes by adding one new line after its latest line, never by editing or deleting an earlier one. Add the line as a one-line text edit of the frontmatter and parse the frontmatter back after: a frontmatter tool that rewrites the whole list rewraps long strings and can change other projects' lines. **Each line is one physical line in the file, however long** - no continuation lines. The tools read only the first line of a list item, so a wrapped line reads as another project's line, or as no line. After the edit, check that every `harvest_log` item is one line beginning `  - "` with no continuation line under it; a frontmatter or properties editor that rewraps at 80 columns breaks every long line in the list.
+
+**Roll-up.** On a source with `harvest_log`, `harvest_status` is computed, never hand-set: `pending` while any project in `harvest_for` has no line or its latest line is `pending`; otherwise `harvested` if any latest line is `harvested`; otherwise `reviewed` (every latest line is `reviewed` or `superseded`). The session or tool that adds a line recomputes the roll-up in the same edit. The intake-handoff helper does this for keepers.
+
+**Backfill rule.** When a project harvested a source itself before the hub read it (the first touch), the hub's section for that project points at the project's own harvest. That project's line is `harvested` only when the section is pointer-only; if the section carries any evidence the first harvest did not, the line stays `pending` until the project accepts or declines the section.
+
+**Fathom ids** (on any Fathom-sourced transcript): **`fathom_id`** is the call id in the call's URL (`fathom.video/calls/<id>`, an integer) - the id people see and the one timestamp links use; **`fathom_recording_id`** is the API recording id the connector tools return. The transcript carries both; its synth note needs only `fathom_id`. (DataWizard, 2026-11)
 
 **Deferred fields** (add to a source file only when the use case exists, not before):
 
 - **`harvest_agent`**: Who performed the harvest. Currently tracked in the session log. Add to YAML if computed views need to filter by agent.
 - **`harvest_type`** (initial / supplemental / review-only / superseded): Categorizes the transformation. Add if harvest-log queries need to filter by type.
 - **`harvest_confidence`** (high / medium / low): For automated pipeline harvests that may need human review. Add when automated steps write to project documents.
-- **`harvest_for`**: Which project(s) this source should be harvested into. String for single-project (`harvest_for: ReWoven`), array for multi-project (`harvest_for: [ReWoven, MetaMyth]`). Add to sources in shared locations (like `_Transcripts/`) that aren't inside a project folder.
-- **`fathom_id`**: The Fathom recording ID (integer). Bridges between the Fathom Meeting Index and transcript files. Add to any Fathom-sourced transcript.
 
 **Backward compatibility.** Existing source files don't need migration -- they gain new fields when next harvested. `harvested_date` (old) and `harvest_date` (new) are the same concept; instances should accept either when reading. `last_agent` (old) maps to session log entries; no YAML migration needed.
 

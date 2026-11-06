@@ -6,8 +6,8 @@ description: >-
   transcripts with harvest_status: pending, or any transcript with harvest_for
   YAML set. Covers video, podcast, meeting, and voice memo transcripts.
 type: skill
-updated: '2026-11-02'
-version: '0.9.4'
+updated: '2026-11-06'
+version: '0.10.0'
 edit_log:
   - DW-S158 2026-06-08
   - "MMM meta-learning plant 2026-06-09: added Step 4 (check existing vault
@@ -26,6 +26,7 @@ edit_log:
     Reader-Facing Prose Style guide when the destination is read-aloud-class)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v0.9.3 Harvest Log name'
   - 'DW-S456 2026-11-02 - v0.9.4: depersonalized examples (names replaced with neutral placeholders)'
+  - 'DW-S470 2026-11-06 - v0.10.0: Step 8 harvest_status is a roll-up on multi-project sources; new Accept a hub section step; speaker-label slip line in Segmentation; Step 2 stops pointing at the Fathom Meeting Index (D167, D168)'
 ---
 
 # Transcript Harvest Skill
@@ -51,13 +52,13 @@ Harvest content from transcripts (video, podcast, meeting, voice memo) into proj
 ## Workflow
 
 1. **Check source YAML** — read `harvest_status`. If already `harvested`, confirm with user before re-harvesting.
-2. **Check project assignment** — look for `harvest_for` in the transcript's YAML. If missing but the transcript has a `fathom_id`, look it up in `_DataWizard/Workshop/Fathom Meeting Index.md` and check the Project column. If the index has a project assignment, add `harvest_for` to the transcript's YAML before proceeding. If neither the YAML nor the index has a project, ask the user which project this transcript belongs to. Do not harvest without knowing the destination project.
+2. **Check project assignment** — look for `harvest_for` in the transcript's YAML. If a harvest hub has already read the call for several projects (the transcript has a `companion:` synth note with an Embed Map and your project has a `harvest_log` line), do not re-harvest: work your section ("Accept a hub section" below). If `harvest_for` is missing and the transcript sits in a project folder, the project is implicit; otherwise ask the user which project this transcript belongs to. Do not harvest without knowing the destination project.
 3. **Check segmentation** — look for `segmented: true` in YAML. If missing, the transcript needs `##` section headers first. Either run `segment_transcript.py` or add headers manually.
 4. **Check for existing vault sources** -- before declaring any referenced source inaccessible (paywalled, offline, video-only), search `_Clippings/` and `_Transcripts/` for existing copies. YouTube auto-transcripts, previously clipped articles, and federated documents are easy to overlook and may already be in the vault. In MMM S07, a DISI talk initially dismissed as "YouTube-only" was already in `_Clippings/` as a full transcript and turned out to be the most project-relevant source of the entire batch.
 5. **Read the transcript** — understand the full content before extracting anything.
 6. **Triage multi-topic sources** -- if the transcript covers multiple topics or threads, surface the topic list to the user and offer to skip stale or low-relevance items before writing. This keeps the harvest lean and avoids over-capturing content the user has already moved past. Especially valuable for chat-style transcripts and multi-meeting catch-up conversations where some threads may be outdated by harvest time.
 7. **Harvest into destination docs** — synthesize relevant content into project documents. Use citation format: `([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]])`. Don't transcribe — synthesize.
-8. **Update source YAML** -- set `harvest_status`, `harvested_into` (with section-level anchors), `harvest_date`, and `harvest_notes`. For re-harvests, append to `harvested_into` and convert `harvest_date` to an array (most recent last). Or set `harvest_status: reviewed` with `harvest_notes` explaining why nothing was harvested.
+8. **Update source YAML** -- set `harvested_into` (with section-level anchors), `harvest_date`, and `harvest_notes`. For re-harvests, append to `harvested_into` and convert `harvest_date` to an array (most recent last). **Single-project source:** also set `harvest_status` (`harvested`, or `reviewed` with `harvest_notes` explaining why nothing was harvested). **Source routed to two or more projects** (`harvest_for` lists two or more): add your own `harvest_log` line instead and never hand-set `harvest_status` - it is a roll-up of every project's latest line (grammar, roll-up and backfill rule: [[YAML Schema]], Harvest Tracking).
 9. **Update Harvest Log** -- add or update a row in `0.4 Harvest Log - [Project].md` with source, harvest date, destinations, and agent.
 10. **Session log** -- add harvest details to `0.2 Session Log.md` at the end of the session as part of normal session logging -- not after each individual source.
 
@@ -83,6 +84,8 @@ Bad headers (too generic):
 - `## Continued`
 
 Add headers on a first read-through, before extracting content. For very short transcripts (under ~1,000 words) headers may not be necessary - use judgment.
+
+**Speaker labels slip.** Automatic transcription (Fathom especially) often swaps speaker labels at turn changes. Credit a point to the speaker by what was said - the content, who the call is about, who answers whom - not by the label alone, and note the slip where you correct a label (for example "label shows B; the content is A's"). (DataWizard, 2026-11)
 
 ## Chunk and Route
 
@@ -116,12 +119,29 @@ Harvest destinations keep section anchors as their default *by design* - this di
 
 When a harvest routes to **multiple destinations, or to a destination that is contested or not yet ready** (mid-edit under concurrent operation, or awaiting a team decision), don't synthesize straight into those docs. Harvest once into a `c_` synth note built from self-contained, embeddable `##` sections, add an Embed Map near the top, and let each destination transclude the section it needs (`![[synth-note#Section]]`) when its thread is ready. The full convention -- synth-note structure, Embed Map with per-section embed-vs-native routing, team-download header, sensitivity marking, graduation, and the on-disk heading-parity close step -- is the canonical statement in [[Conventions Registry]] (Harvest via embeddable synth note); the `embed_targets` provenance field is in [[YAML Schema]]. For a single ready destination the instance owns, the standard direct synthesis above is simpler.
 
+## Accept a hub section
+
+When a harvest hub project has read a call once for every project (harvest-router, Hub mode), the target project does not re-harvest the call: it works its own section of the hub's synth note. The pointer is a line marked `<!-- harvest-handoff -->` in the project's 0.5 Action Items; the orientation sweep lists the open ones. The hub never edits the target's documents, so these steps run in the target project's own session.
+
+1. **Read your section** in the synth note (the transcript's `companion:`), and the transcript turns it cites where you need more context (read a long transcript by line range). A section is evidence - what was said, the speaker, the timestamp, the Content Interests line it matched - not a finished draft.
+2. **Decide:** accept it, edit it (take part of it or rework it), or decline it (nothing worth placing; say why).
+3. **Place it** in your own documents (accept or edit). Follow the section's Route in the Embed Map: `native` (write the content in, cite the section) for a destination in a shared layer, `embed` for a private-layer destination ([[Conventions Registry]], Harvest via embeddable synth note). Keep the section's sensitivity marks, and run [[shared-layer-redaction]] when the destination is a shared layer.
+4. **Close it in four places**, in the same sitting:
+   - (a) **The destination note** - the content is placed (step 3); on a decline, nothing is.
+   - (b) **The Embed Map row** for your project in the synth note: fill Destination (a wikilink, or `-` on a decline) and set Status to one word from the fixed list in [[Conventions Registry]] 9.0 (Hub mode), followed by your session id in parentheses; and, unless you declined, append the same destination wikilink to the synth note's `embed_targets` (same note, same edit).
+   - (c) **Your `harvest_log` line** on the transcript: add one new line after your project's latest line - `harvested` for accepted or edited, `reviewed` for declined - with `decision #-` and, last, `section: <your section heading>` ([[YAML Schema]], Harvest Tracking). Make it a one-line text edit of the frontmatter, quoted; never rewrite the list with a frontmatter tool, which rewrites the whole list and rewraps long strings. The line must stay one physical line however long: check after the edit that every `harvest_log` item is one line beginning `  - "` with no continuation line under it (the tools read only an item's first line). Then recompute `harvest_status` by the roll-up rule (compute it, never choose it) and parse the frontmatter back.
+   - (d) **Tick your `<!-- harvest-handoff -->` line** in your 0.5 (in a sectioned 0.5, the line lives in the section file the shell embeds). Tick it when every section that handoff names is closed; otherwise update its count.
+5. **Log it.** Add the 0.4 Harvest Log row as in Step 9 (source: the synth-note section), and log the harvest in your session log at close (Step 10).
+
 ## Common Mistakes
 
 - Harvesting without checking segmentation first -- citations can't deep-link without `##` headers
 - Transcribing instead of synthesizing -- one idea per paragraph, don't reproduce the conversation
 - Flattening tensions and disagreements -- preserve nuance
 - Forgetting to update source YAML -- the next agent won't know this was already processed
+- Hand-setting `harvest_status` on a source routed to two or more projects -- it is a roll-up of the `harvest_log` lines; close your own line instead
+- Rewriting the `harvest_log` list with a frontmatter tool -- it rewraps long strings and can change other projects' lines; add your one line as a text edit
+- Re-harvesting a call a hub has already read -- accept, edit or decline your section instead
 - Skipping `harvest_notes` -- the "commit message" is the most valuable part, especially for `reviewed` or partial harvests
 - Forgetting the Harvest Log -- source YAML is the truth, but the log is how humans and agents scan routing at a glance
 - Harvesting without checking project assignment -- content ends up in the wrong project docs or gets orphaned

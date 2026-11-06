@@ -13,12 +13,13 @@ edit_log:
   - 'DW-S446 2026-10-31 - Seed error-check fixes: null-sort rationale corrected'
   - 'DW-S449 2026-11-01 - sub-check (d): skip an awareness ask whose seen_by holds this project; lapsed asks no longer show'
   - 'DW-S455 2026-11-02 - sub-check (d): read the index Board.md plus your own Inbox/<ABBR>.md; claims in the index; trace format unchanged (lands with PI 4.10)'
+  - 'DW-S470 2026-11-06 - sub-check (c): harvest handoffs line - list open <!-- harvest-handoff --> lines in the 0.5, section files included; trace format unchanged (D168)'
 maturity: working
 operator: Andrew
 seed_version: 1.2.0
 title: Orientation Flag Sweep - Query Spec
 type: guide
-updated: 2026-11-02
+updated: 2026-11-06
 origin: 'DW-S272 2026-08-18 - backfilled from the earliest edit_log entry (D127)'
 ---
 # Orientation Flag Sweep - Query Spec
@@ -27,7 +28,7 @@ origin: 'DW-S272 2026-08-18 - backfilled from the earliest edit_log entry (D127)
 
 ## What the sweep is
 
-At orientation, one step runs four conditionally-gated checks and writes a single compliance-trace line into the session claim stub. It surfaces to the current operator what is already waiting on them -- flags addressed to them, their own stale stubs, newly filed intake, asks and live claims on the coordination board -- at the one lifecycle point guaranteed to run in their own session. Full behavioral rationale: the Flag Surfacing Chain design (four-link delivery chain; orientation is the reader-path choke point).
+At orientation, one step runs four conditionally-gated checks and writes a single compliance-trace line into the session claim stub. It surfaces to the current operator what is already waiting on them -- flags addressed to them, their own stale stubs, newly filed intake and open harvest handoffs, asks and live claims on the coordination board -- at the one lifecycle point guaranteed to run in their own session. Full behavioral rationale: the Flag Surfacing Chain design (four-link delivery chain; orientation is the reader-path choke point).
 
 ## Read-only by design (conscious deviation, pinned)
 
@@ -147,6 +148,8 @@ v1 is detect + offer + mark-abandoned. Backfill-and-close (reconstructing the en
 ## Sub-check (c) -- intake what's-new [optional, cheap]
 
 List the project's intake folders and surface items added since the last session. **Comparison anchor:** an item is "new" if its frontmatter `created` date is on or after the date of the most recent session-log entry (fall back to file mtime where `created` is absent). Anchoring on the last log entry's date -- not "since I last looked" -- makes two instances compute the same answer. Intake folders for DataWizard: `Feature Requests/`, `Bug Reports/`, `Skill Requests/`, `Intake Queue/` (the canonical intake registry; see the Conventions Registry).
+
+**Harvest handoffs (one line, same check).** Also list the open lines marked `<!-- harvest-handoff -->` in this project's 0.5 Action Items: an unticked line (`- [ ]`) carrying the marker is a hub section, or other routed content, waiting for this project (harvest-router Step 6; the accept step is in the transcript-harvest skill, "Accept a hub section"). When the 0.5 is a sectioned shell, read the section files it embeds - the lines live there, not in the shell. Read from the filesystem where it is available (the reasons under sub-check (a)). Surface each open line with its date and source list. This line runs even when the folder listing above is skipped: it is one file read, and a handoff missed here is missed until someone opens the 0.5 by hand. It does not change the trace: report open handoffs in the orientation message, not as a new trace fragment. (DataWizard, 2026-11)
 
 ## Sub-check (d) -- board sweep [all projects]
 

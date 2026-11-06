@@ -1,5 +1,5 @@
 
-seed: 1.12.3
+seed: 1.13.0
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,22 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.13.0
+
+**Minor release: one harvest of a multi-project call, with each project accepting its own section.** A hub project reads a call once and writes one shared note with a section for each project; each project accepts, edits or declines its section in its own session. One DataWizard session (2026-11), from a hand pilot on three calls, an independent review of the pilot, an Opus build on copies and a second independent review; DataWizard decisions D167 and D168. Shipped in the Seed:
+
+- `Protocols/YAML Schema.md`, Harvest Tracking: `harvest_log` for any source routed to two or more projects (link keepers and transcripts), one grammar: `<Project> - <state> - <date> - <session> - decision #<N or -> - <outcome>[ - section: <heading>]`. `<Project>` is the bare project name; each line is one physical line (no continuation lines - check after the edit); lines are only appended, never rewritten (a migration is the one exception). `harvest_status` is a roll-up, never set by hand. A first-touch project's line is `harvested` only when the hub section is pointer-only. `harvest_for` is promoted from deferred; `fathom_id` (the call id in the URL) and `fathom_recording_id` (the API id) on the transcript.
+- `Skills/transcript-harvest/SKILL.md` v0.10.0: new step "Accept a hub section" - accept, edit or decline; place it in your own documents; then touch four places (the destination note; the Embed Map row and `embed_targets`; your own `harvest_log` line; your harvest-handoff line in 0.5) and add the Harvest Log row. Step 8 no longer sets `harvest_status` by hand. Segmentation: Fathom speaker labels slip at turn changes - credit by what was said and note the slip. No pointer to a Fathom Meeting Index.
+- `Skills/harvest-router/SKILL.md` v1.3.0: the Fathom path is the connector path (find the call, get the transcript, write it, segment; there is no export tool; read long calls in parts). New "Hub mode": an Embed Map with a Project column; `companion:` written at routing as the claim; a checklist pass over every project's Content Interests after the first reading; a direct project-name hit gets a short section even with no Content Interests, plus a board ask to write them; check `_Entities/` and existing notes for a name's spelling; `native` route for shared-layer targets. Every Step 6 action-item line carries `<!-- harvest-handoff -->`.
+- `Guides/Orientation Flag Sweep - Query Spec.md`: sub-check (c) also lists open `<!-- harvest-handoff -->` lines in your 0.5 (sectioned 0.5 files included), and runs even when the optional intake check is skipped. The trace format is unchanged.
+- `Protocols/Conventions Registry/`: 9.0 (`native` route for any target in a shared layer, `embed` only for private-layer targets; the fixed Embed Map status list - open, accepted, edited, declined; sensitivity marks mandatory when any target is a shared layer), 11.0 (call timestamps as `[@mm:ss](url?timestamp=s)`, plain `@mm:ss` as the fallback), 17.0 (a transcript's shared note is its synth note), 7.0 (raw transcripts are exempt from the split rule; read them by line range).
+- `Guides/Harvest Workflow Guide.md`: the multi-project paragraph follows the roll-up rule; speaker-label slip; no Fathom Meeting Index.
+- `SKILLS.md`: harvest-router and transcript-harvest rows.
+
+**For vaults that run the intake scripts** (`ih_tool.py` 1.1.3, `intake_apply.py` 0.1.6, vault-specific, not in the Seed): list items folded onto continuation lines by Obsidian's frontmatter tools are now read as one value; unfolded input reads as before.
+
+**Action for other projects:** run `update_seed`. When a hub harvest-handoff line is in your 0.5, follow transcript-harvest "Accept a hub section". Keep each `harvest_log` line on one physical line. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.12.3
 
@@ -229,7 +245,7 @@ A script that finds oversize files and splits them by these steps is planned; th
 
 ## Older releases
 
-The What's New entries for 1.10.0 to 1.11.7 are in `VERSION History.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md` (moved there word for word, 2026-10). Expired notices (the 2026-06-10 git history rewrite) are in `VERSION History.md`, section "Retired notices".
+The What's New entries for 1.10.0 to 1.11.9 are in `VERSION History.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md` (moved there word for word, 2026-10). Expired notices (the 2026-06-10 git history rewrite) are in `VERSION History.md`, section "Retired notices".
 
 ## Versioning
 

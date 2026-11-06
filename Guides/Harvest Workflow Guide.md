@@ -2,7 +2,7 @@
 title: Harvest Workflow Guide
 type: guide
 created: '2026-04-25'
-updated: '2026-11-02'
+updated: '2026-11-06'
 operator: Andrew
 status: active
 edit_log:
@@ -13,6 +13,7 @@ edit_log:
   - 'DW-S446 2026-10-31 - Seed error-check fixes: Harvest Log name'
   - 'DW-S456 2026-11-02 - removed two dead links to a maintainer-only design note (release smoke test blocker)'
   - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
+  - 'DW-S470 2026-11-06 - Fathom Meeting Index reference removed (index archived); speaker-label slip line; multi-project sources close per-project harvest_log lines (D168)'
 tags:
   - protocol
   - harvesting
@@ -58,7 +59,7 @@ Read the source file's YAML frontmatter. Look at `harvest_status`:
 Look for `harvest_for` in the source YAML. This tells you which project(s) the content belongs to.
 
 - If `harvest_for` is set, you know the destination project.
-- If missing but the source has a `fathom_id`, look it up in the Fathom Meeting Index and check the Project column.
+- If a harvest hub has already read the call for several projects, `harvest_for` and your `harvest_log` line were set at routing: work your section (transcript-harvest skill, Accept a hub section) instead of re-harvesting.
 - If neither exists and the source is in a project folder, the project is implicit.
 - If none of the above, ask the user which project this source belongs to. Do not harvest without a destination.
 
@@ -80,7 +81,7 @@ Use wikilink citations with section anchors: `([[Source Title#Section Header|YYY
 
 - Synthesize, don't transcribe. Restate ideas; don't reproduce the conversation.
 - Preserve tensions and disagreements. Don't flatten nuance.
-- Include speaker attribution where relevant.
+- Include speaker attribution where relevant. Transcription speaker labels slip at turn changes (Fathom especially): credit a point by what was said, and note the slip where you correct a label.
 - Extract `lexicon_candidates` if the source contains novel language or framings.
 - For sources with `highlighted_by_hand: true`, focus on highlighted passages first.
 
@@ -172,7 +173,7 @@ When returning to a previously harvested source (e.g., a supplemental pass or ne
 
 ### Multi-project sources
 
-Sources with `harvest_for: [ProjectA, ProjectB]` need harvest into each project's documents. A source is only fully harvested when `harvested_into` covers all projects listed in `harvest_for`. Update the log in each project.
+Sources with `harvest_for: [ProjectA, ProjectB]` need harvest into each project's documents. Each project closes its own `harvest_log` line on the source, and `harvest_status` is the roll-up of those lines - never hand-set it on a multi-project source (grammar and roll-up: [[YAML Schema]], Harvest Tracking). Update the log in each project.
 
 ### Multi-destination or not-ready destinations
 

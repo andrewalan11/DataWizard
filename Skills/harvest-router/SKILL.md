@@ -9,14 +9,15 @@ description: >-
   correct folders, sets routing YAML, and appends action items to target
   projects.
 type: skill
-version: '1.2.1'
-updated: '2026-11-02'
+version: '1.3.0'
+updated: '2026-11-06'
 origin: 'DW-S312 2026-09-06 - backfilled DW-S448 from the earliest edit_log entry (D127)'
 operator: Andrew
 edit_log:
   - 'DW-S312 2026-09-06 - v1.2: Fathom zero-token export folded from the retired Harvest Agent (D128)'
   - 'DW-S448 2026-10-31 - example project name made generic (Media Project); no behavior change'
   - 'DW-S456 2026-11-02 - v1.2.1: depersonalized examples (names replaced with neutral placeholders)'
+  - 'DW-S470 2026-11-06 - v1.3.0: Fathom paragraph rewritten to the connector path (no export tool); harvest-handoff marker on the Step 6 line; new Hub mode section (D167, D168)'
 ---
 # Harvest Router Skill
 
@@ -35,7 +36,7 @@ transcript-harvest and document-harvest skills execute.
 
 - User says "what needs harvesting?", "scan for new content", "route this",
   "where does this go?", "check what's new"
-- After a bulk import (Fathom export, Reddit batch, clippings dump, Whisper
+- After a bulk import (Fathom calls, Reddit batch, clippings dump, Whisper
   transcripts from Piezo recordings)
 - Periodically as vault hygiene — especially when files accumulate at the
   vault root or in `_!nbox/`
@@ -110,7 +111,7 @@ just those files and route them. Same logic as vault scan but scoped
 to the import location.
 
 **Common batch-import sources:**
-- Fathom transcript exports (land in `_Transcripts/` or root)
+- Fathom transcripts (filed by hand via the connector - see Fathom Awareness)
 - Whisper Transcription app output from Piezo recordings of Signal/Telegram
   calls (land at vault root as `.md` files, typically named with date and
   participant names)
@@ -120,33 +121,39 @@ to the import location.
 ## Fathom Awareness
 
 Before scanning transcripts, optionally check Fathom for recent meetings
-that may not have been exported to the vault yet. Use the Fathom MCP
+that may not have been filed in the vault yet. Use the Fathom MCP
 `list_meetings` tool with a `created_after` date (default: 2 weeks ago)
 to see what's available. If Fathom tools aren't connected, skip this step.
 
 Cross-reference against files already in `_Transcripts/` and at the vault
 root by matching dates and participant names. Flag any Fathom meetings that
-don't have a corresponding vault file — these are candidates for export.
+don't have a corresponding vault file — these are candidates for filing.
 
 Report Fathom gaps to the user: "Found N Fathom meetings without vault
-transcripts: [list with dates and titles]. Want me to export any of these?"
+transcripts: [list with dates and titles]. Want me to file any of these?"
 
 Don't block the routing workflow on Fathom — check it, report gaps, then
 continue with what's already in the vault.
 
-**Zero-token export (preferred when exporting a missing meeting).** When the
-user asks to pull a Fathom meeting into the vault, try `fathom:export_meeting`
-FIRST, with `output_dir` set to the vault's `_Transcripts/` folder — Fathom
-writes the file directly, so the transcript body never passes through the
-context window. The export arrives pre-structured with `##` section headers
-(no segmentation needed). After export: confirm the file exists via
-frontmatter/file-info tools rather than reading it (a full read defeats the
-zero-token purpose), rename to the `YYYY-MM-DD Speaker Name.md` convention if
-the export used underscores, set `segmented: true`, then run the normal
-routing loop on it. If `export_meeting` fails (common for older recordings),
-fall back to `fathom:get_transcript`, write the content manually, and prompt
-for segmentation as usual. (Folded from the retired standalone Harvest Agent,
-D128.)
+**Filing a Fathom call (the connector path).** The Fathom connector has no
+export tool: nothing writes the file for you, so file a call in four steps.
+(1) **Find the call** - `list_meetings` with a date range, or the call id
+from a pasted URL (`fathom.video/calls/<id>`) via the recording-by-call-id
+or recording-by-URL tool. (2) **Get the transcript** with
+`get_meeting_transcript`; pass the call URL so each turn carries a
+timestamp link. (3) **Write it** to `_Transcripts/` as
+`YYYY-MM-DD Speaker Name.md`, with `fathom_id` (the URL call id) and
+`fathom_recording_id` (the API id) in frontmatter ([[YAML Schema]],
+Harvest Tracking). (4) **Segment it** - the connector output has per-turn
+`[mm:ss](url)` links but no `##` headers; add them by hand
+(transcript-harvest, Segmentation) or prompt for the script (Segmentation
+Prompt below), then set `segmented: true`. **Long calls:** a long call's transcript can
+overflow the tool output into a container file; build the vault note from
+that file rather than retyping it, and from then on read the transcript by
+line range (outline first), never whole. Raw transcripts are exempt from
+the split rule (Conventions Registry, Shell and section architecture).
+Speaker labels slip at turn changes (transcript-harvest, Segmentation).
+(DataWizard, 2026-10; 2026-11)
 
 ## The Routing Loop
 
@@ -259,7 +266,7 @@ For each project that received routed content, append a line to that
 project's action items file (`0.5 Action Items - [Project].md`):
 
 ```markdown
-- [ ] **Harvest pending content ([date])** — [N] new items routed. Sources: [brief list of filenames]. Use transcript-harvest or document-harvest skill.
+- [ ] **Harvest pending content ([date])** — [N] new items routed. Sources: [brief list of filenames]. Use transcript-harvest or document-harvest skill. <!-- harvest-handoff -->
 ```
 
 **Finding action items files:** Action items files follow the pattern
@@ -267,9 +274,80 @@ project's action items file (`0.5 Action Items - [Project].md`):
 `_Infrastructure - [Project]/` folder. If you can't find one, tell the user rather than
 creating one.
 
+The `<!-- harvest-handoff -->` marker lets the orientation sweep list the
+project's open handoff lines. When the 0.5 is a sectioned shell, the line
+goes in the section file the shell embeds, not in the shell.
+
 **Deduplication:** Before appending, check if there's already a pending
 harvest action item. If so, update the count and source list rather than
 adding a duplicate entry.
+
+## Hub mode (one reading for many projects)
+
+When the vault runs a harvest hub project - the default first reader for
+calls and transcripts - the hub reads each call once against every
+project's Content Interests (read from each project's 0.0 on disk) and
+writes one embeddable synth note ([[Conventions Registry]], Harvest via
+embeddable synth note) with one evidence section per project. Each target
+project then accepts, edits or declines its own section in its own session
+(transcript-harvest, "Accept a hub section"). The hub never edits another
+project's documents. The first-touch rule stays: a project may still
+harvest a call itself, and the hub then backfills the other projects.
+
+**What the hub writes, per call:**
+
+1. **The transcript** in `_Transcripts/` (Fathom: the connector path
+   above), segmented, with `harvest_for` (canonical project names),
+   `fathom_id` and `fathom_recording_id`, and
+   `companion: "[[c_<transcript name>]]"` - written **at routing, as the
+   claim**: a session that finds `companion:` set knows the call is taken.
+2. **One `harvest_log` line per target**, state `pending`, with
+   `decision #-` and the section heading last ([[YAML Schema]], Harvest
+   Tracking). `harvest_status` is the roll-up; never hand-set it (at
+   routing the roll-up is `pending`, which is what Step 5 writes).
+3. **The synth note** in `_Companions/_Transcripts/c_<transcript name>.md`:
+   a Synopsis (the team-download header: what the call was, and the
+   projects that have sections), an **Embed Map** with a Project column
+   (Project, Abbr, Section, Embed string, Route, Destination, Status;
+   Status starts `open`, from the fixed list in Conventions Registry 9.0,
+   Hub mode), a **Segment Map**, then one `##` section per project,
+   headed `<Project> - <topic>`. A section is evidence, not a draft: what
+   was said, the speaker, a linked timestamp (Conventions Registry,
+   Citation format), and the Content Interests line it matched.
+4. **The pointer**: the Step 6 line, with its `<!-- harvest-handoff -->`
+   marker, in each target's 0.5 - never anything inside the target's own
+   documents.
+
+**Rules for the reading:**
+
+- **Route.** The Embed Map Route is `native` for any target whose
+  destination is in a shared layer (a shared folder or a team repo);
+  `embed` only for private-layer targets (Conventions Registry, Harvest via
+  embeddable synth note).
+- **The Segment Map names project segments only** - topic, timestamp,
+  projects. It never describes a skipped or private part of the call.
+- **Second pass.** After the reading, run a checklist pass over the
+  Content Interests digest: for each project, check each Content Interests
+  line's names, projects and key terms against the call. One reading
+  alone tends to miss a project per call.
+- **A name hit with no Content Interests.** A project named directly in
+  the call gets a short section even when its 0.0 has no Content
+  Interests list, and the hub posts that project a board ask to write
+  them (content-interests-review skill).
+- **Check the spelling of names.** Before writing a person's or an
+  organisation's name, check `_Entities/` and existing vault notes for the
+  spelling in use. Transcription hears one name many ways, and a new
+  spelling mints a duplicate entity across projects. Note the variants
+  once in the Synopsis.
+- **Sensitivity marks are mandatory** when any target is a shared layer:
+  mark candid remarks about named people inline (Conventions Registry,
+  Harvest via embeddable synth note, step 3). A very candid call may stay
+  in `_Private/`.
+- **Backfill.** When a project harvested the call first, its section
+  points at that harvest and adds only the evidence the first harvest did
+  not carry; its line is `harvested` only when the section is pointer-only
+  ([[YAML Schema]], Harvest Tracking, backfill rule).
+(DataWizard, 2026-11)
 
 ## After the Scan
 
@@ -298,8 +376,9 @@ less effective.
 
 **Check each routed transcript for:**
 - `segmented: true` in YAML — already segmented, skip
-- Existing `##` headers in the body — Fathom exports come pre-structured,
-  these are ready
+- Existing `##` headers in the body — ready. Fathom connector output is
+  not pre-structured (per-turn timestamp links, no `##` headers): it needs
+  headers
 - No headers and no `segmented` field — needs segmentation
 
 **For unsegmented transcripts**, prompt the user to run
@@ -345,7 +424,7 @@ stack. Just identify which files need it and give the user the commands.
 - **Routing into xArchive.** Never move files into archive folders. If a
   file should be archived, tell the user.
 - **Blocking on Fathom.** The Fathom check is informational. Report gaps
-  and move on. Don't stall the vault scan waiting for Fathom exports.
+  and move on. Don't stall the vault scan waiting for Fathom calls to be filed.
 
 ## Principles
 
