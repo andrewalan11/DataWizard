@@ -2,12 +2,13 @@
 title: Published Artifacts and ArtifactData Behaviors
 type: guide
 created: 2026-10-12
-updated: 2026-11-02
+updated: 2026-11-08
 operator: Andrew
 origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects); backfilled DW-S428'
 scope: seed
 status: active
 edit_log:
+  - 'DW-S479 2026-11-08 - page cannot fetch other hosts; own files load (Page runtime calls)'
   - 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects)'
   - 'DW-S400 2026-10-12 - Publishing: data-file-only republish needs the page, self-saving page merge; new Local testing and vault copies section (viewer reset, window.claude mock, fragment skeleton) (ReWoven FR intake)'
   - 'DW-S403 2026-10-13 - Rendering constraints: no deep-link channel into a published page; Publishing: pre-publish byte check from a path read, recipe strips the trailing close tags (board intake B-0072, Holonic Canvas)'
@@ -142,6 +143,8 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 **Count every live subscription before checking the cap.** The `db` cap is 64 active subscriptions per view, that is per open page, and the 65th rejects `resource_exhausted` (runtime contract 0.2.85). One page checked its count before its reply and thread listeners had started, so the check read 62 while the real total reached 79 with 40 people in the store. Count after all listeners are planned, then drop the optional ones if the total is over. (MetaMyth, 2026-10; seen once)
 
 **A page that republishes itself sends one HTML document, so pages it carries must be inside it.** `artifact.publish(html)` sends only the document, not supporting files. To carry other pages (prototypes shown in an in-page viewer), embed each as base64 in a `<script type="text/plain" id="...">` and add those ids to the elements the page re-emits; each blob's sha256 was unchanged after a stubbed owner save. Put the blobs after the app script so first paint does not wait on them. (Kosmosis, 2026-10)
+
+**A page cannot fetch other hosts; it can read files published with it.** A private page (contract 0.2.96, opened as the owner) that called `fetch()` on a public `raw.githubusercontent.com` file and on a `github.io` address got `TypeError: Failed to fetch` for both; a JSON file published beside `index.html` (publish_files) and read by relative path (`./data.json`) loaded with HTTP 200. The pages guide says the same: fetch, XMLHttpRequest and WebSocket to other hosts are blocked. No capability fetches an arbitrary URL. To give a page outside data, publish it as one of the page's own files (republish replaces it whole; db rows survive), or read it through the viewer's connectors with `mcp`. (DataWizard, 2026-11)
 
 ## Local testing and vault copies
 

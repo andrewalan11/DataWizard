@@ -3,9 +3,10 @@ title: Cowork Scheduled Tasks
 type: guide
 scope: seed
 created: '2026-06-15'
-updated: 2026-10-21
+updated: 2026-11-08
 operator: Andrew
 edit_log:
+  - 'DW-S479 2026-11-08 - classifier blocks disabling a task; audit tasks of quiet projects'
   - 'DW-S433 2026-10-21 - Other known failure modes: a task prompt''s stated premise is a snapshot; read the live last_* stamp first (meta-learning review S405-S422)'
   - 'DW-S427 2026-10-19 - tool behaviors B-0190 (a one-time run can start late; fire_trigger text runs the task twice; page-started runs reach the artifact store but only maybe the vault; Obsidian MCP works in a timed run when the device shell shows no folders; store writes need no approval)'
   - 'DW-S424 2026-10-19 - folders not attached unless passed; one-time test run of the exact prompt'
@@ -74,6 +75,9 @@ A task that runs without a human in the loop needs all of:
 - **Device-bound tasks are disabled when the computer is absent.** If the Mac is asleep or the desktop app is closed at fire time, the scheduler disables the task (`suspension_reason: device_absent`) and it does not resume on its own. Check device-bound tasks' enabled state in the morning (`list_triggers`) and re-enable with a promptless `update_trigger` (`enabled: true`) - schedule and run history are kept. (Holonic Canvas, 2026-10)
 - **`last_run` can read PENDING for hours and then resolve SUCCEEDED.** Read it twice, some minutes apart, before calling a run stalled - the status alone does not prove a stall. (Holonic Canvas, 2026-10)
 - **A task prompt's stated premise is a snapshot from when the prompt was written.** A monthly review task said its review was last done four months earlier and long overdue; the project's live `last_*` stamp showed two weeks, so the run was a short drift check. Read the live stamp (or whatever state the premise describes) before you size the run: the stamp is the ground truth, the prompt is not. The same rule for handoffs: Conventions Registry, Carry the probe, not the snapshot. (DataWizard, 2026-10)
+
+- **Disabling a task from a chat session can be refused by the auto-mode classifier.** `update_trigger` with `enabled: false` returned "Permission ... denied by the Claude Code auto mode classifier. Reason: [Cowork Scheduled Task Delete]" even with the operator's approval in chat. Do not work around it: ask the operator to turn the task off in the scheduled-tasks list. (DataWizard, 2026-11)
+- **Audit tasks that serve a quiet project.** A daily Opus task kept running for three weeks after its project's last session, mostly with 0 writes and failing commits; nobody looked. Check `list_triggers` (enabled, model, last run) against each project's last session now and then. (DataWizard, 2026-11)
 
 ## Native schedulers (launchd, cron): no PATH, no profile
 
