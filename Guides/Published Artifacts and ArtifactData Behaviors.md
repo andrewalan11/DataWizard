@@ -29,6 +29,7 @@ edit_log:
   - 'DW-S443 2026-10-28 - Reading: assets listing of another owner''s artifact returns not_found; publish a checked copy as a supporting file (board B-0262, MetaMyth)'
   - 'DW-S448 2026-10-31 - tool behaviors B-0275: sandboxed srcdoc iframe for embedded prototypes; a self-publishing page carries other pages as base64 blocks (Kosmosis)'
   - 'DW-S456 2026-11-02 - 1.12.1: tool behaviors B-0285, B-0297 (get_artifact needs the full link; 3.2 MB page via publish_files patch mode; obsidian:// links dead in the desktop app frame) (LocationScout, Tech Tools)'
+  - 'DW-S480 2026-11-08 - ArtifactData store: whole-store export needs out_dir (Cowork ArtifactData); the claude.ai db tools return documents inline'
 ---
 # Published Artifacts and ArtifactData Behaviors
 
@@ -81,6 +82,8 @@ Runtime behaviors of published claude.ai artifacts (the Artifact tool: publish, 
 ## ArtifactData store
 
 **`list` with `out_dir` writes bodies only; versions live in the result text.** Large documents move as files both ways: `set` / `update` take `file_path` (a local JSON file), and `get` / `list` / `query` take `out_dir` (each document saved as `<out_dir>/<collection>/<doc_id>.json`); a 166 KB document round-tripped byte-identical, so large artifact data can enter a vault workflow without retyping. The files hold document bodies; versions appear only in the tool's result text, so a run that must pin writes captures them from there. A `~` in a document id is spelled `@` in the file name (map it back). Past 50 documents the result folds the rest into one text line (`[N more saved documents ... "<id>" <v>, ...]`), so a parser that reads only the per-line form sees a fraction of the collection; an empty collection prints `No documents matched` and makes no folder. (Holonic Canvas, Evolutionary Media Commons, 2026-10)
+
+**A whole-store export needs `out_dir`; the claude.ai chat database tools cannot do it.** The claude.ai chat surface reads an artifact's database with `db_list` / `db_get`, which return every document inline into the conversation, with no `out_dir` and no file output. Two documents of a change log came to about 15,000 tokens. A store of about 3,000 documents (7 MB) cannot be exported that way, and a model that retypes documents into files does not make a byte-exact copy. Run a whole-store export in a Cowork desktop session, where `ArtifactData list` with `out_dir` saves each document straight to disk; hand it a short brief. `db_usage` (document count and bytes) works from chat and is a cheap size check first. (DataWizard, 2026-11)
 
 **Pinned writes are all-or-nothing.** A `batch` with any pinned entry is atomic: one stale pin returns `version_mismatch` naming the entry and its current version, and nothing is written. A pinned whole-document `set` (`if_version`) on a stale pin is refused the same way and lands on the current one. (Holonic Canvas, 2026-10)
 

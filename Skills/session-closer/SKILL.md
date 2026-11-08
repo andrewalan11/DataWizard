@@ -7,16 +7,16 @@ description: >-
   pick up where we left off' in a new thread and there's no log entry for the
   previous session.
 type: skill
-updated: '2026-11-02'
+updated: '2026-11-08'
 origin: 'DW-S158 2026-06-08 - backfilled from the earliest edit_log entry (D127)'
-version: '4.11.5'
+version: '4.11.6'
 edit_log:
+  - 'DW-S480 2026-11-08 - v4.11.6: Step 3.14 branch for a hub-project session that edited files of a solo project (Registry 15.0 exception; D173)'
   - 'DW-S456 2026-11-02 - v4.11.5: Pre-close reflection - dead link to a maintainer-only note replaced with its two-sentence rationale (release smoke test blocker; Fable-reviewed)'
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v4.11.4 gate rows, board ids, Harvest Log'
   - 'DW-S443 2026-10-28 - v4.11.3: Step 3.5 tool-behavior bullet - close the source note and its board ask in the same pass as the plant'
   - 'DW-S433 2026-10-21 - v4.11.2: Step 2 a proposed Decision Log entry is written into the entry or a working doc before close (Community Stack ask); Step 3.11 uses the 30 / 50 KB sizes and points at Conventions Registry 7.0'
   - 'DW-S424 2026-10-19 - v4.11.1: Step 3.10 also surfaces pending Look-Back Reports (session look-back scan, leak prevention fix 3)'
-  - 'DW-S422 2026-10-18 - v4.11.0: landing rule - Step 4 action-items bullet made a required landing rule with one dated Waiting-on checklist; Step 2.6 ledger next: is the owed list; Step 3.5 tracking-claim verification; Step 0 lite list; output-format landing check and Waiting-on pointer; Common Mistakes bullet (leak prevention fix 1)'
 ---
 
 # Session Closer Skill
@@ -316,6 +316,7 @@ Answer one question from the session's own history: **did this session create or
 
 - **No** -- done; nothing to write.
 - **Yes, and it was an inbound/outbound note filed to the other project's intake or Session Exchange** -- that is the sanctioned path; just confirm the session log records what was filed where.
+- **Yes, a hub-project session edited a solo project's files (Registry 15.0 exception)** -- list each file in the session log; check the pre-edit copy and the edit_log line.
 - **Yes, anything else** -- surface it to the operator now, before the log is finalized: name each file and say plainly that another project's canon was touched. The gate rule ("Cross-project canon write gate", Conventions Registry) says such changes belong in the owning project's intake as a proposal, not as a direct edit. With the operator, either (a) revert/move the change into a proposal at the owning project's intake, or (b) record the operator's explicit acceptance in this session's log AND leave a note in the owning project's intake so its next session reviews it. Never close silently over a cross-project canon write -- the write may be sound, but the owning project must be able to see it happened.
 
 This check exists because the offending session is the only place with perfect knowledge of what it wrote; target-side detection (lint) is the backstop, not the primary. (DataWizard, 2026-09)

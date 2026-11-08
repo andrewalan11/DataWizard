@@ -3,7 +3,7 @@ title: 'Changelog'
 type: skill-reference
 parent: "[[_DataWizard/Seed/Skills/session-closer/SKILL|session-closer]]"
 created: '2026-10-18'
-updated: '2026-10-31'
+updated: '2026-11-08'
 operator: Andrew
 origin: 'DW-S422 2026-10-18 - moved verbatim from session-closer SKILL.md v4.10.3'
 edit_log:
@@ -16,6 +16,7 @@ edit_log:
   - 'DW-S433 2026-10-21 - v4.11.2: the v4.10.2 line moved in verbatim from SKILL.md frontmatter (rolling window)'
   - 'DW-S443 2026-10-28 - v4.11.3: the v4.10.3 line moved in verbatim from SKILL.md frontmatter (rolling window)'
   - 'DW-S446 2026-10-31 - v4.11.4: the v4.10.4 line moved in verbatim from SKILL.md frontmatter (rolling window)'
+  - 'DW-S480 2026-11-08 - v4.11.6: the v4.11.0 line moved in verbatim from SKILL.md frontmatter (rolling window)'
 ---
 
 *Part of the [[_DataWizard/Seed/Skills/session-closer/SKILL|session-closer]] skill*
@@ -23,6 +24,7 @@ edit_log:
 # Changelog
 
 ```yaml
+  - 'DW-S422 2026-10-18 - v4.11.0: landing rule - Step 4 action-items bullet made a required landing rule with one dated Waiting-on checklist; Step 2.6 ledger next: is the owed list; Step 3.5 tracking-claim verification; Step 0 lite list; output-format landing check and Waiting-on pointer; Common Mistakes bullet (leak prevention fix 1)'
   - 'DW-S422 2026-10-18 - v4.10.4: sectioned - output templates, multi-operator flag steps, no-ledger roster, triage guidance and old edit_log moved verbatim to references/; steps unchanged'
   - 'DW-S402 2026-10-13 - v4.10.3: Step 3.14 board asks posted at write time; close verifies and backfills (B-0081)'
   - 'DW-S400 2026-10-12 - v4.10.2: Step 3.8 link-resolution check (dw_lint C5 or find recipe)'

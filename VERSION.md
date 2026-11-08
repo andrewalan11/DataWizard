@@ -1,5 +1,5 @@
 
-seed: 1.13.0
+seed: 1.13.1
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,17 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.13.1
+
+**Patch release (2026-11-08): Conventions Registry 15.0: solo-project exception for the hub project; session-closer 3.14: branch for hub edits to solo projects (DW D173).** Shipped in the Seed:
+
+- `Protocols/Conventions Registry/15.0 Cross-project canon write gate.md`: new "Exception - the hub project" paragraph after the Rule. The project that keeps the Seed may edit any file of a solo project (one operator, who also runs the hub) directly when necessary; by default the project does its own work. It keeps a pre-edit copy, names its session and the ruling in the edit_log, and lists the file at the cross-project write check. A shared project gets a pickup note instead.
+- `Skills/session-closer/SKILL.md` v4.11.6: Step 3.14 gains a branch for a hub-project session that edited a solo project's files - list each file in the session log; check the pre-edit copy and the edit_log line. `references/changelog.md` takes the oldest edit_log line (rolling window).
+- `SKILLS.md`: session-closer row synced.
+- `Guides/Published Artifacts and ArtifactData Behaviors.md`: ArtifactData store - a whole-store export needs `out_dir` (Cowork desktop `ArtifactData`); the claude.ai chat database tools return documents inline and cannot export a large store.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.13.0
 
