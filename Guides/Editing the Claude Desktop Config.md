@@ -2,7 +2,7 @@
 title: Editing the Claude Desktop Config
 type: guide
 created: '2026-03-21'
-updated: '2026-08-24'
+updated: '2026-11-08'
 status: active
 scope: seed
 edit_log:
@@ -11,6 +11,7 @@ edit_log:
   - DW-S285 2026-08-24 - quit-before-edit rule (app rewrites config on quit),
     TextEdit .rtf risk, raw sed repair with app closed (S234; meta-learning
     review S231-S246)
+  - 'DW-S484 2026-11-08 - tool behaviors B-0347 (Python edit, Screen Recording grant; Lane B plants P22, P23)'
 ---
 
 # Editing the Claude Desktop Config
@@ -36,6 +37,7 @@ The config is a `.json` file. You can open it with any text editor:
 - **TextEdit** — right-click the file → Open With → TextEdit. Works but be careful: TextEdit sometimes converts straight quotes to curly quotes, which breaks JSON. If you use TextEdit, go to TextEdit → Settings → uncheck "Smart quotes" first. It can also save the file as rich text (`.rtf`) if the format was ever switched; confirm the saved file is still plain `.json`. When a hand edit has already gone wrong, a raw `sed` replacement on the file in Terminal with the app closed is the most reliable repair.
 - **VS Code** — best option if you have it installed. Validates JSON syntax and highlights errors. Right-click → Open With → Visual Studio Code.
 - **Terminal** — `open -a TextEdit ~/Library/Application\ Support/Claude/claude_desktop_config.json` or use `nano` / `vim` if you're comfortable with terminal editors.
+- **Python script** -- the safest scripted edit. With the app closed (Cmd+Q), first copy `claude_desktop_config.json` to a backup file. Then run a short Python script that loads the file with `json.load`, changes the `mcpServers` entry, and writes it back with `json.dump` (indent 2). A script cannot leave the missing comma or curly quote that a hand edit can. (Kosmosis, 2026-09)
 
 ## What the Config Looks Like
 
@@ -88,6 +90,7 @@ Add a new entry inside `mcpServers`. Follow the server's installation docs for t
 - **Claude can't see your files?** Check that the folder path is in the filesystem server's `args` array, and that you quit and relaunched after saving.
 - **JSON syntax error?** The most common mistakes are missing commas between items, trailing commas after the last item, or curly/smart quotes instead of straight quotes. Use VS Code to validate — it underlines errors in red.
 - **MCP server not connecting?** Check the Developer console in Claude Desktop (Settings → Developer) for error messages.
+- **Screenshots still fail after a macOS Screen Recording grant?** The grant for the Claude desktop app took effect only after a full quit (Cmd+Q) and reopen; closing the window was not enough. Check that a screenshot works before you rely on it. (Kosmosis, 2026-10)
 
 ## Keeping a Backup
 

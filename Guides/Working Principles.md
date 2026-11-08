@@ -4,7 +4,7 @@ type: guide
 status: active
 maturity: working
 created: '2026-06-18'
-updated: 2026-10-31
+updated: '2026-11-08'
 operator: Andrew
 tags:
   - protocol
@@ -64,6 +64,7 @@ edit_log:
   - 'DW-S440 2026-10-27 - fail closed and fail visibly clause (A completion is a disk fact); memory, notes and search hits are claims clause (Verify the drift) (intake lessons, Seed 1.11.14)'
   - 'DW-S443 2026-10-28 - Verify the drift: a gap found by name needs an alias grep first (board B-0265, Community Stack)'
   - 'DW-S448 2026-10-31 - Hallucination vigilance: web-tool quotes can be paraphrases - label and spot-check (board B-0279, LocationScout)'
+  - 'DW-S484 2026-11-08 - Working Rule 12 pointer names the YAML Schema section (sectioned)'
 ---
 # Working Principles
 
@@ -95,7 +96,7 @@ This is DW's three-layer pattern applied to its own protocol: the PI ([[DataWiza
 
 **11. MCP concurrency.** The session log shell (the 0.2 file) is a shared resource when more than one instance works a project at once. Patch it only at session close, verify immediately, and retry once before flagging a human, so concurrent patches don't silently collide.
 
-**12. Document metadata.** New files are born with their metadata (type, created, updated, operator, origin, edit_log) rather than having it bolted on at session close, because sessions that never close would otherwise leave unattributed, undiscoverable files. On later edits, set `updated:` to the current date. The metadata is what makes the vault queryable by downstream pipelines. Full contract: [[YAML Schema]] Section 4.
+**12. Document metadata.** New files are born with their metadata (type, created, updated, operator, origin, edit_log) rather than having it bolted on at session close, because sessions that never close would otherwise leave unattributed, undiscoverable files. On later edits, set `updated:` to the current date. The metadata is what makes the vault queryable by downstream pipelines. Full contract: [[YAML Schema]], Creation-Time Metadata Contract (section 1.0).
 
 **13. Frontmatter safety.** Always use `update_frontmatter` with `merge: true`. `merge: false` replaces the entire frontmatter block and silently deletes any field you didn't restate - this caused real data loss more than once. One default, no exceptions unless you genuinely intend to wipe fields.
 

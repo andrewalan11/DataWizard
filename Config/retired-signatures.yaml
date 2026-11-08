@@ -21,7 +21,7 @@ signatures:
     note: "START HERE files retired; use Vault Config + 0.0 (migrated from C7)"
     decision: D62
   - pattern: "team_attention"
-    note: "Deprecated for the flag* cluster (Seed 1.3.0 / YAML Schema S4)"
+    note: "Deprecated for the flag* cluster (Seed 1.3.0 / YAML Schema, Team Coordination Fields - section 1.0)"
   - pattern: "! Action Items"
     note: "Bang-prefix action-items filename retired at PI v4.0 (migrated from C7)"
   - pattern: "datawizard_protocol_version"

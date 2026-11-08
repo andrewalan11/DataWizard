@@ -23,6 +23,7 @@ edit_log:
     no-PATH-no-profile section (S261, closes Backlog P1) + hybrid
     on-demand/backstop trigger pattern (S261) (meta-learning review S256-S266)
   - "WV_2026-09-07_AA_03 2026-09-09 - added: the report lives only in the run's own session (verify content by paste; persist via a Project state doc)"
+  - 'DW-S484 2026-11-08 - tool behaviors B-0347, B-0359 (local tasks, scheduled run limits; Lane B plants P18, P19, P20, P21)'
 ---
 
 # Cowork Scheduled Tasks
@@ -50,6 +51,8 @@ Tasks fire with up to roughly 8 minutes of jitter past their cron time. Hourly c
 A task that runs without a human in the loop needs all of:
 
 - **Self-contained prompt.** Everything the run needs stated in the prompt itself: source folder, output folder, config identifiers, and the governing skill. No reliance on conversation context, which the run will not have.
+- **A non-interactive scheduled run may have only its project folders connected, so the Seed is unreachable.** A task must not depend on reading a Seed skill or script at run time. Keep a run-time copy of everything it needs inside the project (one project keeps its scripts and its scheduled skills in two Workshop folders). (Kosmosis, 2026-09)
+- **A scheduled run must not make probe or write-test files in the vault.** An overnight run created its own write-test files in the vault; the mount cannot delete, so they stayed. Use the sandbox temp folder (`/tmp`) for probes and scratch. (Kosmosis, 2026-09)
 - **Deterministic batch ordering.** Process items in a stable, sorted order so reruns and resumes are predictable.
 - **Existing-output detection (idempotency).** Check whether an item's output already exists before producing it. This is what makes a task safe to re-fire, and it is the guard against context-compaction re-stamping: when a long run's context compacts mid-task, the instance can lose track of what it already wrote and redo or re-stamp work. An existing-output check plus post-write verification prevents duplicate or re-stamped output.
 - **Persisted tool approvals.** Obsidian MCP (and any other) tool approvals must be granted on a manual first run before automated firing works; without them the task stalls waiting on an approval no one is there to give. (S165)
@@ -72,12 +75,13 @@ A task that runs without a human in the loop needs all of:
 ## Other known failure modes
 
 - **Runtime-constructed URLs.** `web_fetch` inside a scheduled task rejects URLs constructed at runtime (discovered mid-run rather than passed in the prompt). For URLs the run discovers, route through the Chrome MCP instead.
-- **Device-bound tasks are disabled when the computer is absent.** If the Mac is asleep or the desktop app is closed at fire time, the scheduler disables the task (`suspension_reason: device_absent`) and it does not resume on its own. Check device-bound tasks' enabled state in the morning (`list_triggers`) and re-enable with a promptless `update_trigger` (`enabled: true`) - schedule and run history are kept. (Holonic Canvas, 2026-10)
+- **Device-bound tasks are disabled when the computer is absent.** If the Mac is asleep or the desktop app is closed at fire time, the scheduler disables the task (`suspension_reason: device_absent`) and it does not resume on its own. Check device-bound tasks' enabled state in the morning (`list_triggers`) and re-enable with a promptless `update_trigger` (`enabled: true`) - schedule and run history are kept. (Holonic Canvas, 2026-10) A local desktop task also simply produced no run on two nights when the Mac was closed; the nightly job needs the Mac awake, so say so in the task's own guide. (Kosmosis, 2026-11)
 - **`last_run` can read PENDING for hours and then resolve SUCCEEDED.** Read it twice, some minutes apart, before calling a run stalled - the status alone does not prove a stall. (Holonic Canvas, 2026-10)
 - **A task prompt's stated premise is a snapshot from when the prompt was written.** A monthly review task said its review was last done four months earlier and long overdue; the project's live `last_*` stamp showed two weeks, so the run was a short drift check. Read the live stamp (or whatever state the premise describes) before you size the run: the stamp is the ground truth, the prompt is not. The same rule for handoffs: Conventions Registry, Carry the probe, not the snapshot. (DataWizard, 2026-10)
 
 - **Disabling a task from a chat session can be refused by the auto-mode classifier.** `update_trigger` with `enabled: false` returned "Permission ... denied by the Claude Code auto mode classifier. Reason: [Cowork Scheduled Task Delete]" even with the operator's approval in chat. Do not work around it: ask the operator to turn the task off in the scheduled-tasks list. (DataWizard, 2026-11)
 - **Audit tasks that serve a quiet project.** A daily Opus task kept running for three weeks after its project's last session, mostly with 0 writes and failing commits; nobody looked. Check `list_triggers` (enabled, model, last run) against each project's last session now and then. (DataWizard, 2026-11)
+- **A local desktop scheduled task (the desktop app on macOS) keeps its prompt in a protected folder that a Cowork session cannot edit.** The prompt of a task that runs on the operator's computer lives at `~/Documents/Claude/Scheduled/<task>/SKILL.md`. Such a task did not appear in `list_triggers` (so "every task on the account" in Managing tasks above does not include it), and `update_trigger` could not change it. `device_request_folder_access` for a folder under that path was refused by the auto-mode check with no prompt to the operator. Two routes work: the operator makes the edit in Terminal (hand over a command block that runs `diff` against the archived copy before `cp`, then a verification `diff`), or the task reads its real instructions from a file in the project, so no deployed copy needs editing. (Kosmosis, 2026-08; Kosmosis, 2026-11)
 
 ## Native schedulers (launchd, cron): no PATH, no profile
 
