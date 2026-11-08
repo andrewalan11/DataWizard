@@ -1,5 +1,5 @@
 
-seed: 1.13.1
+seed: 1.13.2
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,26 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.13.2
+
+**Patch release (2026-11-08): two files sectioned, VERSION.md rotated, 31 tool behaviors planted from six projects.** One DataWizard session. Shipped in the Seed:
+
+- `Protocols/YAML Schema.md` is now a shell plus four section files in `Protocols/YAML Schema/`: 1.0 Core Fields (the two top callouts, Document Weighting, Work-Item Status, Session Log Fields, Creation-Time Metadata Contract, Team Coordination Fields and the rest of the general fields), 2.0 Harvest and Federation, 3.0 Holonic Records and Tool Evaluation, 4.0 Dates, Provenance and AI Content. Content moved byte for byte (Conventions Registry 7.0); no heading was renamed, so a pointer that names a heading still finds it. Edit the section files, never the shell. A link to a heading inside the schema now names the section file: `[[1.0 YAML Schema - Core Fields#Team Coordination Fields]]`.
+- `Guides/Published Artifacts and ArtifactData Behaviors.md` is now a shell plus `1.0 Published Artifacts - Publishing and Reading` and `2.0 Published Artifacts - Store, Sharing, Comments, Rendering and Runtime` in the folder of the same name. Content moved byte for byte.
+- `VERSION.md` rotated: What's New 1.11.10 to 1.11.15 moved to `VERSION History.md`, and 1.10.0 to 1.11.3 moved from there to a new closed part, `VERSION History - 1.10.0 to 1.11.3.md`. All word for word; nothing deleted.
+- `Guides/Cowork Build Environment/`: 3.0 (on a device VM with an older Python, `pip install --target` into a scratch folder works - probe before you rule a test run out); 4.0 (a sub-agent's Write tool can turn escape sequences into real invisible characters; a long heredoc pasted from chat into zsh can be cut off - ship the script as a file and give one command); 5.0 (behind the cloud workspace proxy, GDAL `/vsicurl/` needs the proxy CA bundle; Python `urllib` got 403 where `curl` worked); 8.0 (the default device shell call limit and `timeout_ms`; `nohup` still dies at the end of a call; a vault-wide recursive grep timed out and then the bridge dropped for minutes - scope searches to one folder; on a network loss every remote-device tool drops and comes back on its own; call `get_device_info` before `device_request_folder_access`; a folder added in the desktop app mid-session did not reach the device shell, an in-session grant did); 8.1 (the device shell's `/tmp` can be cleared between calls; a same-path re-commit sent stale bytes again); 9.0 (no Playwright on the device VM; an interrupted git fetch leaves the old HEAD, so a check can look like a broken build); 11.0 (in one cloud session, sub-agents with only Read and Grep never stalled, while one that used Bash once waited on an approval prompt; `add_repo` with push access can be refused - stage and build instead).
+- `Guides/MCP Reliability and Write Verification/12.0 Obsidian Behavioral Gotchas.md`: one write path per file per session; `patch_note` with several matches errors; `move_note` creates missing folders and cannot remove the empty one (seen 2026-06); the note-only rule also covers `.yaml` config files.
+- `Guides/Cowork Scheduled Tasks.md`: a local desktop task's prompt lives in a protected folder; a scheduled run may mount only the project folders; no probe or write-test files in the vault from a scheduled run; a local desktop task does not run while the Mac is closed.
+- `Guides/Editing the Claude Desktop Config.md`: a safe scripted edit of `claude_desktop_config.json`; on macOS a Screen Recording grant needs a full quit and reopen of the app.
+- `Guides/Chrome MCP and Web Tool Behaviors/`: 2.0 (`get_page_text` can return nothing on a single-page app while `find` and `read_page` work; a tab on a browser error page cannot be scripted; a shell crawl with a browser User-Agent was refused by the permission check); 4.0 (a map site built as a JS app returns a config blob to web fetch, and the map position is in the URL; rental-site data shapes - amenity JSON, totals for the searched dates, price estimates).
+- `Guides/Published Artifacts and ArtifactData Behaviors/1.0`: `publish_files` refuses the id in a page address ("invalid slug") - use the UUID slug that `get_artifact` returns; a Docs-type artifact can be born with its full markdown in one batch call.
+- `Guides/Working Principles.md` and `Config/retired-signatures.yaml`: pointers name the YAML Schema section that now holds the part ("Section 4" and "S4" were stale).
+- `GUIDES.md`: Published Artifacts row.
+
+Sources: Tech Tools, Kosmosis, Rootland, LocationScout, ReWoven and DataWizard (2026-11).
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. A note that links to a YAML Schema heading with `[[YAML Schema#...]]` should repoint to the section file. (DataWizard, 2026-11)
 
 ## What's New in 1.13.1
 
