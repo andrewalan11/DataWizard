@@ -1,6 +1,7 @@
 ---
 created: 2026-08-26
 edit_log:
+  - 'DW-S491 2026-11-09 - Incidental concurrency: A ruling can land under you (meta-learning review S423-S434)'
   - 'DW-S433 2026-10-21 - Pattern 2: write-order safety points at Conventions Registry 7.0 for the splitting procedure'
   - 'DW-S419 2026-10-18 - Pattern 3 step 3: operator-run runbooks - rehearse on a copy, predict every number the operator will see, STOP per step, gate the live run on the predictions; check scripts reach the operator as vault files with a checksum, pointer to supervised-build (codified on second use: Kosmosis 2026-10, DW-S418 Seed history purge)'
   - 'DW-S403 2026-10-13 - Pattern 3 step 3: execute-verifying review of a run card (board intake B-0065, Kosmosis)'
@@ -32,7 +33,7 @@ operator: Andrew
 seed_version: 1.3.1
 title: Multi-Instance Coordination Patterns
 type: guide
-updated: '2026-10-21'
+updated: '2026-11-09'
 ---
 # Multi-Instance Coordination Patterns
 
@@ -55,6 +56,7 @@ The baseline is already in place if the Project Instructions and the MCP guide a
 - **Array fields clobber on contended files.** `update_frontmatter` replaces array fields wholesale even with `merge: true`, so a sibling's `edit_log` entry written between your read and your write is silently lost. The MCP guide names the safe append path.
 - **A stub claimed today is never stale.** The orientation sweep offers to reconcile stale stubs; it must be structurally incapable of offering a live sibling's stub. Three sessions can be live in one project on one day.
 - **Same day, same block: defer.** If you know a sibling advanced a shared block today (a ledger row, a decision-log section), leave that block to its close, or to the next close, rather than patching it too. A supervising session that had every reason to update a thread's ledger row left it to the build session's close for exactly this reason (DataWizard, 2026-08). Two patches to one block on one day is the collision the concurrency rule exists to prevent; the row is not urgent, the collision is expensive.
+- **A ruling can land under you.** On a day with live siblings, re-read the decision log tail and the governing registry entry before each write a convention governs (a backup, a decision number, a file's place). If a sibling's ruling changed the rule after your earlier writes, do not redo them mid-session: list them in your entry as a follow-up for the session that does the move. (DataWizard, 2026-10)
 - **Foreign writes are unverified writes.** A sibling instance - especially one running under another project's instructions - can leave a shared file in a state your own checks never saw (an unparseable frontmatter block, an unresolvable path). Treat the first read after a foreign write as a verification read, not a trusting one. Working Rule 5 has a write-side twin: what you did not write, you still verify before building on. The session-scale form: before building on a prior session's close, spend one context-light verification pass reading each of its claims against disk - including a fingerprint check of any script it shipped. It converts the log's claims into verified state for the cost of a single chunk; one such pass over a full close confirmed every claim landed before the next build stacked on it (DataWizard, 2026-08).
 
 - **Git working-tree state distinguishes a sibling's in-progress work from stale drift.** An artifact that looks wrong on a high-concurrency day may be a parallel session's work in flight, not rot: uncommitted changes plus a file mtime newer than the last commit say "in progress - leave it", while a clean tree with an old mtime says "drift - investigate". On vault-mounted repos, run this read via a Terminal command on the operator's machine or the sync tooling, never through the bridged shells (the MCP guide's no-git-through-the-bridge rule). (DataWizard, 2026-09)

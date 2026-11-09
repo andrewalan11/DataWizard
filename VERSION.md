@@ -1,5 +1,5 @@
 
-seed: 1.13.2
+seed: 1.13.3
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,19 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.13.3
+
+**Patch release (2026-11-09): one skill step and six guide rules from a meta-learning review.** One DataWizard session reviewed the learnings of twelve sessions; a fresh reviewer checked the four rules named here. Shipped in the Seed:
+
+- `Skills/supervised-build/SKILL.md` v1.6.3: In-thread variant, new bullet "A third seat" - after the builder and the first review, a fresh reviewer who did not see the build runs the write paths on a copy and writes exact fix text; a fixer applies it; the lead installs with a hash check. The Scratch bullet now covers every builder, not only device-shell builders. The 12 oldest edit_log lines moved word for word to the new `references/changelog.md`.
+- `Guides/Working Principles.md`: "A completion is a disk fact, not a claim" names its fifth home, the session-closer's tracking-claim verification.
+- `Guides/Multi-Instance Coordination Patterns.md`: Incidental concurrency, "A ruling can land under you" - re-read the decision log tail before a write a convention governs; list earlier writes as a follow-up, do not redo them mid-session.
+- `Guides/MCP Reliability and Write Verification/1.0 Known MCP Issues.md`: append a new `edit_log` line after the whole last entry (long entries wrap), match the file's order, parse the frontmatter after the write.
+- `Guides/Cowork Build Environment/`: 8.0 (after Quit, `pgrep` can still list Chrome helper processes that do not hold the session disk - go by `lsof`); 8.1 (install a reviewed Mac-side script beside the live file, then md5, backup and swap by the operator); 8.2 (scratch output outside the vault for every builder on any surface); 9.0 (new first bullet: test under the runtime that will run it - interpreter, flags, environment).
+- `SKILLS.md`: supervised-build row synced.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.13.2
 

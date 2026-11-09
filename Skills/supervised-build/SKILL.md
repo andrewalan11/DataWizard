@@ -11,40 +11,15 @@ description: >-
   (Pattern 3), a build with no reviewer available, or incidental concurrency
   between unrelated sessions.
 type: skill
-version: '1.6.2'
+version: '1.6.3'
 created: '2026-08-30'
-updated: 2026-10-27
+updated: 2026-11-09
 operator: Andrew
 edit_log:
+  - 'DW-S491 2026-11-09 - v1.6.3: In-thread variant - A third seat (fresh pre-flight after the first pass, fixer seat, hash-checked install; codified on second field use); Scratch bullet covers every builder; 12 older edit_log entries moved verbatim to references/changelog.md (meta-learning review S423-S434)'
   - 'DW-S440 2026-10-27 - v1.6.2: Reviewer Steps - private sources, the builder gets the team-safe extract and the reviewer greps the seeds (Seed 1.11.13; MetaMyth)'
   - 'DW-S430 2026-10-21 - v1.6.1: Reviewer Steps - exact current -> replacement text goes in the review file the fixer reads, never only in the hand-back; In-thread variant - device_bash builders write output to an absolute path outside the vault (Seed 1.11.8)'
   - 'DW-S422 2026-10-18 - v1.6.0: Builder 5 chunk done-mark - every leftover becomes its own tracking line before the chunk is marked done, and the chunk report quotes the lines; Reviewer 2 checks they exist (leak prevention fix 2)'
-  - 'DW-S419 2026-10-18 - v1.5.2: Reviewer Steps - operator-run check scripts travel as vault files with sha256 checked against the rehearsal copy, never heredoc pastes; in-thread delivery bullet points to it (DW-S418 Seed history purge)'
-  - 'DW-S403 2026-10-13 - v1.5.1: in-thread variant - per-builder worktree and output folder, no git stash across worktrees (board intake B-0072, Holonic Canvas)'
-  - 'DW-S398 2026-10-12 - v1.5.0: Reviewer 3 fixture experiments (two runs, partial apply, re-plan); forced event ordering for a claimed flake; in-thread variant: lead re-counts from files, resume the plan reviewer for verification, cancelled launch may have run (board intake)'
-  - 'DW-S397 2026-10-12 - v1.4.0: In-thread variant section (sub-agent builder; codified on second use); Builder 4 ship-the-spec-surface-early; Reviewer 3 independent classifier over rollback copies; whole-build sweep = blind hand run for skills; chunk-vs-pre-flight instruments (meta-learning review S377-S392)'
-  - "DW-S306 2026-08-30 - v1.0: codified from Coordination Patterns Pattern 4
-    after four field runs; owns the reviewer's mandated State Board write (five
-    fields) and the build-side review gate"
-  - "DW-S303 2026-08-30 - v1.1: real-file probe rule added to Reviewer
-    verification (probe a copy of the hottest real file, not only fixtures;
-    field-grounded)"
-  - "DW-S317 2026-08-31 - v1.2: silent-drops probe added to Reviewer Steps (any
-    silently discarded input gets a counter/warning; second field arc -
-    stamp_blocks S294, dw_status S319 - met codify-on-second-use)"
-  - "DW-S333 2026-09-05 - v1.3: harness-validation rule added to Reviewer Steps
-    (validate the harness against the real tool's actual output; per-scenario
-    expected-message assertions) - second field arc of the
-    instrument-measures-itself class (S268 flag distribution, S333 insteadOf
-    harness) met codify-on-second-use"
-  - 'DW-S327 2026-09-06 - v1.3.1: Shared Setup step 0 - charter authors grep the shared canon before scoping (field-grounded)'
-  - "DW-S374 2026-09-23 - v1.3.2: owning-project supervisor orientation
-    (Shared Setup 2); same-session review->build sequencing note (seats
-    section). Meta-learning review S301-S323."
-  - "DW-S374 2026-09-23 - v1.3.3: fresh-eyes definition (Reviewer Steps;
-    meta-learning review S324-S337)"
-  - "DW-S374 2026-09-23 - v1.3.4: reviewer-lands-cheap-guards boundary
-    (Reviewer Steps; meta-learning review S338-S362)"
 ---
 
 # Supervised Build Skill
@@ -137,13 +112,14 @@ Codified on second use (two projects, 2026-10). The whole build runs inside ONE 
 - **The relay collapses to turns.** Exchange notes between seats become sub-agent briefs and hand-backs; chunk plans live in the lead's brief, not in the Session Exchange folder. The **driver doc and its State Board stay mandatory** - the session's context is still a viewport, and a fresh instance must still answer "where are we at" from the board.
 - **The gate does not weaken.** Sub-agent builders remove the human relay without weakening the gate only while the supervisor verifies from disk and runs the shipped scripts itself (Reviewer Steps 2-3). A hand-back is a report; the run is the evidence. Seven chunks across two sessions landed with zero defects on disk this way.
 - **Delivery is by fresh-named artifacts with a hash on both sides.** A builder delivers each iteration under a new name (`.v2`, `.v3`) and the lead compares `sha256` container-side and device-side before running anything - same-path re-use is stale in both bridge directions (Cowork Build Environment, Device Bridge). Operator deliveries follow the same rule (Reviewer Steps, "Operator-run scripts travel as vault files").
-- **Scratch, never the vault.** The reviewer still runs the server or script on a scratch copy outside the working tree; builders write to the vault only through the gate. Brief every `device_bash` builder to write all its output (logs, grep results, scratch files) to an absolute path outside the vault, and never to `cd` into the vault and use a relative file name: a sub-agent seat has no delete grant on the mount, so a stray file stays until the lead asks for the grant or the operator removes it (Cowork Build Environment, 8.2). (DataWizard, 2026-10)
+- **Scratch, never the vault.** The reviewer still runs the server or script on a scratch copy outside the working tree; builders write to the vault only through the gate. Brief every builder (every `device_bash` builder in particular) to write all its output (logs, grep results, scratch files) to an absolute path outside the vault, and never to `cd` into the vault and use a relative file name: a sub-agent seat has no delete grant on the mount, so a stray file stays until the lead asks for the grant or the operator removes it (Cowork Build Environment, 8.2). (DataWizard, 2026-10)
 - **Re-count from the files.** Never carry a number from a sub-agent report into canon without re-deriving it from the files: a worker's prose misstated a count that its own export had right. (Holonic Canvas, 2026-10)
 - **The done-mark is the lead's.** A sub-agent hand-back lists the chunk's leftovers; the lead writes their tracking lines (Builder Step 5) and checks them on disk (Reviewer Step 2) before marking the chunk done.
 - **Resume the plan reviewer for verification.** Resume the sub-agent that reviewed the plan by message (SendMessage to the same agent) for the verification seat: it keeps fresh eyes - it did not author the code - and saves the re-orientation a second fresh instance costs. (Holonic Canvas, 2026-10)
 - **One file set per builder, no sharing.** When several builder sub-agents run in parallel, give each a disjoint set of target files and have each back up its targets first; the lead merges nothing. Six parallel builders over fifteen files produced no write conflicts under this rule; the one near-miss was a shared mirror file edited by a sibling session mid-run, caught by an mtime guard. (DataWizard, 2026-10) In a git repo, give each parallel builder its own worktree (`git worktree add ../<tree> -b <branch>`) and its own output folder for patches, logs and checksums, and brief each never to enter a sibling's tree and never to use `git stash` - the stash is shared across worktrees. The lead still verifies each tree on disk and re-runs each suite itself; two builders on two folders of one repo landed clean this way in about 30 minutes of wall time. (Holonic Canvas, 2026-10)
 - **A cancelled launch may have run.** A sub-agent launch rejected or cancelled at the approval prompt may still have run and left files behind; before relaunching, check disk state (`git status`, the outputs folder) and tell the next agent what is there. Three field instances; the full behavior is in the Cowork Build Environment guide. (Evolutionary Media Commons, Holonic Canvas, 2026-10)
 - **Topology and casting.** The repeatable shape: a synthesis-tier reviewer in-thread, a worker-tier builder seat and (when the deliverable is prose) a worker-tier writer seat as sub-agents, and one living supervision note per session holding the chunk verdicts. Cast the seats with the model-casting skill; the reviewer writes the supervision note while the builder runs, not after.
+- **A third seat: fresh pre-flight after the first pass.** After the builder's hand-back and the first review (the supervisor's own test pass, or a worker-tier review), dispatch a fresh synthesis-tier reviewer who did not see the build. It runs the write paths itself on a copy (real migration, real apply, real suite), not only reads the diff, and writes exact current -> replacement text for each defect. A fixer seat (the builder resumed, or a fresh worker) applies that text; the lead installs with a hash check. The third seat has found defects the first two passed in six of six runs, including one that a passing 111-test suite missed. (DataWizard, 2026-10)
 
 ## When NOT to Use
 
