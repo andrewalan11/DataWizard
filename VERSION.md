@@ -1,5 +1,5 @@
 
-seed: 1.13.3
+seed: 1.13.4
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,20 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.13.4
+
+**Patch release (2026-11-09): two skill updates, three guide rules, one corrected guide line and one template note from three meta-learning reviews.** One DataWizard session reviewed the learnings of about forty sessions; fresh reviewers checked every rule named here. Shipped in the Seed:
+
+- `Skills/supervised-build/SKILL.md` v1.6.4: "Probe for silent drops" now covers what a pipeline reports - a bare result word ("not covered", "nothing found", a status code) is a pointer, not a verdict; the output states a reason specific enough to tell an empty target from a broken one, and a check that could not run says so.
+- `Skills/model-casting/SKILL.md` v1.2: Handoffs, "Lead to reviewer" - pass the sources, not only a brief; name the unit of any count the reviewer checks.
+- `Guides/Multi-Instance Coordination Patterns.md`: Pattern 3 - a review round that adds a new rule or new code gets its own short delta review of just that addition.
+- `Guides/Cowork Build Environment/8.2`: a message sent to a sub-agent after it has begun its final answer is not read - send scope changes early, or resume it after.
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0`: the Reddit bullet no longer suggests resolving a share link from the shell with a crawler User-Agent (the permission check refuses it); open the link in the browser tools.
+- `Templates/Coordination Board - Template.md`: hand path - the render checks hand blocks only when it runs (unknown key, summary over 120 characters) and leaves a refused block in `## Unreconciled`; put free-text notes in a one-line HTML comment.
+- `SKILLS.md`: supervised-build and model-casting rows synced.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.13.3
 

@@ -10,11 +10,12 @@ description: >-
   Model routing entry (tier heuristic for queued work); this skill adds role
   casting and execution mechanics.
 type: skill
-version: '1.1'
+version: '1.2'
 created: '2026-09-08'
-updated: 2026-10-12
+updated: 2026-11-09
 operator: Andrew
 edit_log:
+  - 'DW-S492 2026-11-09 - v1.2: Handoffs - lead to reviewer: pass the sources, not only a brief; name the unit (meta-learning review S462-S478)'
   - 'DW-S397 2026-10-12 - v1.1: Path 1 - model: fable accepted for sub-agents; Fable sub-agent reaches web tools (meta-learning review S377-S392)'
   - "DW-S349 2026-09-08 - v1.0: created from field finding that frontier
     synthesis models write dense, hard-to-read-aloud prose; roles, casting
@@ -60,6 +61,7 @@ Casting is per-vault judgment, not doctrine. Another operator may cast different
 The seams are where multi-model work degrades, so keep the interfaces explicit:
 
 - Orchestrator to researcher: a brief per item - the question, why it matters, depth wanted, where the findings note goes.
+- Lead to reviewer: pass the sources, not only a brief. The lead reads or stages the files the reviewer must check before it starts, and sends them with any earlier agent's summary. A reviewer that checks against a brief only re-checks the brief's errors. Name the unit of any count the reviewer is asked to check (Working Principles, 'Ground-truth the substrate'). (DataWizard, 2026-11)
 - Researcher to writer: findings notes plus a one-paragraph writer brief - audience, register, length target, what the document is for. The writer gets facts and framing, never a half-drafted document to polish (rewriting existing prose anchors the writer to its phrasing and the tells survive).
 - Writer to orchestrator: the drafted deliverable plus the verification-pass counts from the prose guide. The orchestrator reviews substance against the findings notes before ship.
 

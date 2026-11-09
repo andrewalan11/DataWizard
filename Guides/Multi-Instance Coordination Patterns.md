@@ -1,6 +1,7 @@
 ---
 created: 2026-08-26
 edit_log:
+  - 'DW-S492 2026-11-09 - Pattern 3: delta review for a round that adds a new rule (meta-learning review S446-S461)'
   - 'DW-S491 2026-11-09 - Incidental concurrency: A ruling can land under you (meta-learning review S423-S434)'
   - 'DW-S433 2026-10-21 - Pattern 2: write-order safety points at Conventions Registry 7.0 for the splitting procedure'
   - 'DW-S419 2026-10-18 - Pattern 3 step 3: operator-run runbooks - rehearse on a copy, predict every number the operator will see, STOP per step, gate the live run on the predictions; check scripts reach the operator as vault files with a checksum, pointer to supervised-build (codified on second use: Kosmosis 2026-10, DW-S418 Seed history purge)'
@@ -33,7 +34,7 @@ operator: Andrew
 seed_version: 1.3.1
 title: Multi-Instance Coordination Patterns
 type: guide
-updated: '2026-11-09'
+updated: 2026-11-09
 ---
 # Multi-Instance Coordination Patterns
 
@@ -113,7 +114,7 @@ The evidence for keeping the roles adversarial: the cross-model review caught re
 
 Three consecutive load-bearing builds each had real defects pre-empted this way at near-zero cost: a phantom re-serializer risk and a trimmed-line trap; fence-bounded frontmatter scanning and spacing edge cases; a case-insensitive recipient test and flag-date staleness (DataWizard, 2026-08).
 
-**Design the chain with an author-response round.** In a plan -> review -> author response -> review round-2 chain, the sharpest insight surfaced in the author's **rebuttal**, not in either critique - the author, forced to answer the reviewer's question, unified it with a separate finding and saw the cheapest moment to adopt a pending convention (DataWizard, 2026-08). A review chain that ends at the critique leaves that round on the table. Two rounds converge; a third rarely earns its cost.
+**Design the chain with an author-response round.** In a plan -> review -> author response -> review round-2 chain, the sharpest insight surfaced in the author's **rebuttal**, not in either critique - the author, forced to answer the reviewer's question, unified it with a separate finding and saw the cheapest moment to adopt a pending convention (DataWizard, 2026-08). A review chain that ends at the critique leaves that round on the table. Two rounds converge; a third rarely earns its cost - except that a round which adds a new rule or new code gets its own short delta review of just that addition (one repro per new rule): in one build each of three fix rounds introduced one defect in the rule it added, and the delta reviews stayed cheap (DataWizard, 2026-11; the Kosmosis confirmation pass above is the same move).
 
 ## Pattern 4 - Supervised build (per-chunk review relay)
 
