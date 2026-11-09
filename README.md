@@ -295,7 +295,9 @@ _DataWizard/Seed/
 
 **Two layouts.** The tree above is the default nested layout (`_DataWizard/Seed/`). The Seed can also be a flat clone: the Seed files sit directly in the clone folder, with no `Seed/` level. **Claude Code users:** point your import at `PI.md` in the Seed root, not at the Project Instructions file. `PI.md` works in both layouts. Where the pointer goes, and how to check that it loaded: `Guides/Seed Install and Update.md`, section "Claude Code and Obsidian sidebar plugins".
 
-One file you may see referenced that is NOT in the shipped Seed: `Vault Config.md` (user-specific paths and settings). It is deliberately kept out of the shared Seed so each vault keeps its own. (For the technically inclined: it's listed in `.gitignore`.) If a guide or skill asks for it and it doesn't exist yet, create it at `_DataWizard/Seed/Vault Config.md` with the paths it asks about.
+In a flat clone, `update_seed.sh` and `update_seed.ps1` still work, and they print a short notice. Agent sessions expect `_DataWizard/Seed/`, so nesting is the better long-term shape: see `Guides/Seed Install and Update.md`, section "Nesting a flat clone".
+
+One file you may see referenced that is NOT in the shipped Seed: `Vault Config.md` (user-specific paths and settings). It is deliberately kept out of the shared Seed so each vault keeps its own. (For the technically inclined: it's listed in `.gitignore`.) If a guide or skill asks for it and it doesn't exist yet, create it in your Seed folder (`_DataWizard/Seed/`, or `_DataWizard/` in a flat clone) as `Vault Config.md`, with the paths it asks about.
 
 ---
 
@@ -339,6 +341,12 @@ Run the install command from Step 4 again. If it persists, download the ZIP manu
 
 **Config file already had content and something broke:**
 The Step 6 command merges safely with existing config content. But if something went wrong, view your current config (see the commands above). Check that the JSON is valid (matching braces, no trailing commas) -- you can paste it into https://jsonlint.com to verify. If it's broken, the simplest fix is to restore from a backup or rebuild it manually.
+
+---
+
+## Bugs and requests
+
+Found a bug or want a change? If you use the Seed on your own, open an issue at https://github.com/andrewalan11/DataWizard/issues. If you share a vault with the Seed maintainer, leave a note in your shared outbox instead. Issues are public, so leave out vault names, people's names and session IDs.
 
 ---
 

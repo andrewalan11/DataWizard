@@ -1,5 +1,5 @@
 
-seed: 1.13.4
+seed: 1.13.5
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,20 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.13.5
+
+**Patch release (2026-11-09): the update scripts now work from a flat git clone, plus two guide rules.** One DataWizard session; a fresh reviewer ran the write paths on copies before install. Shipped in the Seed:
+
+- `update_seed.sh` and `update_seed.ps1` find the Seed from the script's own folder. Nested (`_DataWizard/Seed/`) is the default. A flat clone (the clone at `_DataWizard/` itself) is supported: the scripts no longer update a second, phantom install one folder too high. With `--vault` / `-Vault` they take nested only when `_DataWizard/Seed/VERSION.md` exists, flat only when `_DataWizard/` already holds a Seed, and otherwise do a fresh nested install. In a flat layout they print a one-line notice. A warning shows when both shapes are present. The four git recovery messages name the real guide path. New flag `--print-paths` / `-PrintPaths` shows which Seed would be updated, then stops before any write or download; `--help` shows usage.
+- `Guides/Seed Install and Update.md`: new section "Nesting a flat clone" (copy-paste moves for macOS/Linux and PowerShell that keep `.git` and ignored files, move your own project files back up, then verify and re-point autosync and DW Save), and "Bugs and requests" (GitHub Issues for Seed users; issues are public, so no names or session ids). Manual Update names both layouts.
+- `README.md`: "Two layouts" points at the nesting section; `Vault Config.md` goes in your Seed folder in either layout; new "Bugs and requests".
+- `Guides/Published Artifacts and ArtifactData Behaviors/1.0`: sub-agents in the same container can read the file that an `Artifact` read saves, so a large page can go to a reviewer without passing through the lead.
+- `Guides/Cowork Build Environment/8.2`: a cheap-tier search agent's "not found" is a claim to sample - brief it to search case-insensitively with two or three wordings, and re-check a sample before writing.
+
+**Not tested:** Windows PowerShell 5.1 on Windows and macOS bash were checked by reading, not run (tests ran under bash 3.2 and 5, and PowerShell 7 on Linux). Please report what you see.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste; the Project Instructions still expect `_DataWizard/Seed/`, so flat-clone users should nest (see the guide). (DataWizard, 2026-11)
 
 ## What's New in 1.13.4
 

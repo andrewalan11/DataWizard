@@ -1,14 +1,24 @@
 #!/bin/bash
 # update_seed.sh - Download or update the DataWizard Seed from GitHub
-# Lives in _DataWizard/Seed/ (project root) and works from anywhere.
+# Lives in the Seed folder and works from anywhere.
 #
 # Usage:
 #   bash update_seed.sh [--vault /path/to/vault]
 #   bash update_seed.sh --install-autosync [--hour N] [--vault /path]
 #   bash update_seed.sh --uninstall-autosync
+#   bash update_seed.sh --print-paths [--vault /path]
+#   bash update_seed.sh --help
 #
-# If run from within the Seed, auto-detects vault root.
-# If run standalone (e.g. first install), pass --vault explicitly.
+# Two Seed layouts are supported:
+#   nested (default): <vault>/_DataWizard/Seed/ holds the Seed
+#   flat (a git clone): <vault>/_DataWizard/ itself holds the Seed
+# Run from inside the Seed, the script finds the layout from its own folder.
+# With --vault it probes <vault>/_DataWizard/Seed, then a populated flat
+# <vault>/_DataWizard; a fresh install is always nested.
+# The Seed Sync Log sits in _DataWizard/ in both layouts.
+#
+# --print-paths prints the resolved layout and paths, then exits 0 without
+# writing anything or touching the network.
 #
 # --install-autosync (macOS only) installs a launchd agent that runs this
 # script daily at --hour (default 6:00) AND at every login. launchd runs a
@@ -16,7 +26,7 @@
 # machine that was powered off at the scheduled hour. The machine does NOT
 # need to be awake at the scheduled time to stay in sync.
 #
-# If the Seed is a git clone (Seed/.git exists), sync uses git fetch +
+# If the Seed is a git clone (a .git folder in the Seed folder), sync uses git fetch +
 # fast-forward merge instead of the zip download, and refuses to touch a
 # working tree with local changes or local commits. Git mode verifies that
 # origin points at the canonical repo; a clone whose origin is a fork is
@@ -47,6 +57,18 @@ VAULT_ROOT=""
 INSTALL_AUTOSYNC=false
 UNINSTALL_AUTOSYNC=false
 SYNC_HOUR=6
+PRINT_PATHS=false
+
+usage() {
+  echo "Usage:"
+  echo "  bash update_seed.sh [--vault /path/to/vault]"
+  echo "  bash update_seed.sh --install-autosync [--hour N] [--vault /path]"
+  echo "  bash update_seed.sh --uninstall-autosync"
+  echo "  bash update_seed.sh --print-paths [--vault /path]"
+  echo "  bash update_seed.sh --help"
+  echo ""
+  echo "--print-paths shows the Seed layout and paths, then exits without changes."
+}
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -66,24 +88,91 @@ while [ $# -gt 0 ]; do
       SYNC_HOUR="$2"
       shift 2
       ;;
+    --print-paths)
+      PRINT_PATHS=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
     *)
       echo "Unknown argument: $1"
+      usage
       exit 1
       ;;
   esac
 done
 
-# --- Determine vault root ---
+# --- Resolve layout and paths ---
+# SEED_DIR is the folder that holds the Seed files. DW_DIR is _DataWizard/.
+# nested: DW_DIR/Seed = SEED_DIR.  flat: DW_DIR = SEED_DIR (a git clone).
+# A flat Seed is recognized by these two files at the _DataWizard/ root.
+is_flat_seed() {
+  [ -f "$1/VERSION.md" ] && [ -f "$1/update_seed.sh" ]
+}
+
 if [ -z "$VAULT_ROOT" ]; then
-  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  # Script lives at _DataWizard/Seed/update_seed.sh
-  # Vault root is 2 levels up
-  VAULT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+  # No --vault: the script's own folder is the Seed.
+  SEED_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  SEED_PARENT="$(dirname "$SEED_DIR")"
+  if [ "$(basename "$SEED_DIR")" = "Seed" ] && [ "$(basename "$SEED_PARENT")" = "_DataWizard" ]; then
+    LAYOUT="nested"
+    DW_DIR="$SEED_PARENT"
+  elif [ "$(basename "$SEED_DIR")" = "_DataWizard" ]; then
+    LAYOUT="flat"
+    DW_DIR="$SEED_DIR"
+  else
+    echo "ERROR: cannot tell where the Seed is."
+    echo "  This script is in: $SEED_DIR"
+    echo "  Expected <vault>/_DataWizard/Seed/ (nested) or <vault>/_DataWizard/ (flat clone)."
+    echo "  Run the copy inside your Seed, or pass --vault /path/to/vault."
+    exit 1
+  fi
+  VAULT_ROOT="$(dirname "$DW_DIR")"
+else
+  # --vault given: probe a populated nested Seed first (VERSION.md, not just
+  # the folder - a flat clone may hold a config-only Seed/ subfolder), then a
+  # populated flat Seed. Anything else is a fresh install, always nested.
+  case "$VAULT_ROOT" in
+    */) [ "$VAULT_ROOT" = "/" ] || VAULT_ROOT="${VAULT_ROOT%/}" ;;
+  esac
+  DW_DIR="$VAULT_ROOT/_DataWizard"
+  if [ -f "$DW_DIR/Seed/VERSION.md" ]; then
+    LAYOUT="nested"
+    SEED_DIR="$DW_DIR/Seed"
+  elif is_flat_seed "$DW_DIR"; then
+    LAYOUT="flat"
+    SEED_DIR="$DW_DIR"
+  else
+    LAYOUT="nested"
+    SEED_DIR="$DW_DIR/Seed"
+  fi
 fi
 
-SEED_DIR="$VAULT_ROOT/_DataWizard/Seed"
-SYNC_LOG="$VAULT_ROOT/_DataWizard/Seed Sync Log.md"
+SYNC_LOG="$DW_DIR/Seed Sync Log.md"
 VAULT_CONFIG="$SEED_DIR/Vault Config.md"
+RECOVERY_GUIDE="$SEED_DIR/Guides/Git Guide/7.0 Safety and Recovery.md"
+if [ -d "$SEED_DIR/.git" ]; then GIT_MODE="yes"; else GIT_MODE="no"; fi
+
+if [ "$LAYOUT" = "flat" ]; then
+  echo "Flat layout detected (_DataWizard/ is the Seed). Agent sessions under the current Project Instructions expect _DataWizard/Seed/. To nest it, see Guides/Seed Install and Update.md, section \"Nesting a flat clone\"."
+  if [ -f "$SEED_DIR/Seed/VERSION.md" ]; then
+    echo "WARNING: a second Seed copy sits at $SEED_DIR/Seed. This run updates $SEED_DIR only."
+  fi
+elif is_flat_seed "$DW_DIR"; then
+  echo "WARNING: $DW_DIR also looks like a flat Seed. This run updates $SEED_DIR only."
+fi
+
+if [ "$PRINT_PATHS" = true ]; then
+  echo "layout:     $LAYOUT"
+  echo "SEED_DIR:   $SEED_DIR"
+  echo "DW_DIR:     $DW_DIR"
+  echo "VAULT_ROOT: $VAULT_ROOT"
+  echo "sync log:   $SYNC_LOG"
+  echo "git mode:   $GIT_MODE"
+  exit 0
+fi
 
 log_entry() {
   local timestamp
@@ -300,7 +389,7 @@ else
 fi
 
 # --- Git mode: Seed is a git clone ---
-if [ -d "$SEED_DIR/.git" ]; then
+if [ "$GIT_MODE" = "yes" ]; then
   if ! command -v git >/dev/null 2>&1; then
     log_entry "ERROR: Seed is a git clone but git is not installed."
     exit 1
@@ -356,13 +445,13 @@ if [ -d "$SEED_DIR/.git" ]; then
         echo "Seed self-healed and up to date at $SEED_DIR"
         exit 0
       fi
-      log_entry "ERROR: detected a zip-over-git collision but the reset failed. Follow the recovery procedure in Seed/Guides/Git Guide/7.0 Safety and Recovery.md (Recovering a Seed Clone, Remote-Agnostic)."
+      log_entry "ERROR: detected a zip-over-git collision but the reset failed. Follow the recovery procedure in $RECOVERY_GUIDE (Recovering a Seed Clone, Remote-Agnostic)."
       exit 1
     fi
     if [ "$ORIGIN_IS_CANONICAL" = true ]; then
-      log_entry "SKIPPED: Seed git working tree has local edits to tracked files. Commit, stash, or discard them, then sync again. If this is a stuck clone (files show as modified but are identical to the remote), follow the recovery procedure in Seed/Guides/Git Guide/7.0 Safety and Recovery.md (Recovering a Seed Clone, Remote-Agnostic) - do not reset by hand."
+      log_entry "SKIPPED: Seed git working tree has local edits to tracked files. Commit, stash, or discard them, then sync again. If this is a stuck clone (files show as modified but are identical to the remote), follow the recovery procedure in $RECOVERY_GUIDE (Recovering a Seed Clone, Remote-Agnostic) - do not reset by hand."
     else
-      log_entry "SKIPPED: Seed git working tree has local edits to tracked files, and this clone's origin is not the canonical Seed repo. Do NOT run 'git reset --hard origin/main' here - on a fork-shaped clone it can roll the Seed back to a stale state. Follow Seed/Guides/Git Guide/7.0 Safety and Recovery.md (Recovering a Seed Clone, Remote-Agnostic)."
+      log_entry "SKIPPED: Seed git working tree has local edits to tracked files, and this clone's origin is not the canonical Seed repo. Do NOT run 'git reset --hard origin/main' here - on a fork-shaped clone it can roll the Seed back to a stale state. Follow $RECOVERY_GUIDE (Recovering a Seed Clone, Remote-Agnostic)."
     fi
     exit 3
   fi
@@ -392,7 +481,7 @@ if [ -d "$SEED_DIR/.git" ]; then
   fi
 
   if ! git -C "$SEED_DIR" merge --ff-only origin/main --quiet; then
-    log_entry "ERROR: git fast-forward merge failed (divergent history?). Do not merge and do not reset by hand - follow Seed/Guides/Git Guide/7.0 Safety and Recovery.md (Recovering a Seed Clone, Remote-Agnostic)."
+    log_entry "ERROR: git fast-forward merge failed (divergent history?). Do not merge and do not reset by hand - follow $RECOVERY_GUIDE (Recovering a Seed Clone, Remote-Agnostic)."
     exit 1
   fi
 

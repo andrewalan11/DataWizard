@@ -17,12 +17,13 @@ edit_log:
   - 'DW-S400 2026-10-12 - distribution model: Seed-embedded-in-shared-vault-repo shape (update path, social pinning, onboarding presence check)'
   - 'DW-S447 2026-10-31 - new section: Claude Code and Obsidian sidebar plugins (per-person PI pointer, PI.md, import facts, external-import dialog, checks)'
   - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
+  - 'DW-S493 2026-11-09 - flat-clone support in both update scripts (--print-paths / -PrintPaths); new sections Nesting a flat clone and Bugs and requests'
 operator: Andrew
 purpose: Canonical guide for installing, manually updating, and auto-syncing the
   DataWizard Seed
 title: Seed Install and Update
 type: guide
-updated: 2026-11-02
+updated: 2026-11-09
 ---
 # Seed Install and Update
 
@@ -96,7 +97,7 @@ If the Seed already exists, use `update_seed.sh`:
 bash "/path/to/vault/_DataWizard/Seed/update_seed.sh"
 ```
 
-The script auto-detects the vault path if run from within the Seed folder. It compares versions and only downloads if there's a newer version available.
+The script auto-detects the vault path if run from within the Seed folder, in the nested or the flat layout. To see which folder it will update without changing anything, add `--print-paths` (`-PrintPaths` on Windows). It compares versions and only downloads if there's a newer version available.
 
 If `update_seed.sh` doesn't exist (older install), use the curl command from the Fresh Install section above -- it handles both fresh installs and updates.
 
@@ -185,6 +186,112 @@ Start-ScheduledTask -TaskName "DataWizard Seed Update"
 Results log to `_DataWizard\Seed Sync Log.md`, the same log the Mac path writes.
 
 > Note: the Windows installer has not yet been validated on a live Windows machine -- confirm the first run against the Seed Sync Log before relying on the schedule.
+
+---
+
+## Nesting a flat clone
+
+A flat clone keeps the Seed files directly in `_DataWizard/`, with no `Seed/` level. Both update scripts handle it and print a notice. Agent sessions under the current Project Instructions expect `_DataWizard/Seed/`, so moving a flat clone into the nested shape is worth doing. The move keeps `.git` and your gitignored files (such as `Vault Config.md`), because the whole folder moves as one. Do not use a symlink instead.
+
+Before you start, close Obsidian and stop DW Save and any other sync job, so nothing writes to the folder during the move.
+
+Each block below starts with a `VAULT=` line (`$Vault =` in PowerShell). Change that one line to your vault folder. Nothing else needs editing.
+
+**1. See what else is in the folder.** Files marked `??` are not part of the Seed repo. Step 2 moves them back up to `_DataWizard/` after the move: your project notes, `Seed Sync Log.md` and its archive.
+
+```bash
+VAULT="/path/to/vault"   # <- change to your vault folder
+git -C "$VAULT/_DataWizard" status --short --untracked-files=normal
+```
+
+**2. Move the clone (macOS / Linux).** It changes nothing unless `_DataWizard/` is a flat Seed and the two target names are free:
+
+```bash
+VAULT="/path/to/vault"   # <- change to your vault folder
+cd "$VAULT" && \
+test -f _DataWizard/VERSION.md && test ! -e _DataWizard/Seed && test ! -e _DataWizard-nesting && \
+mv _DataWizard _DataWizard-nesting && \
+mkdir _DataWizard && \
+mv _DataWizard-nesting _DataWizard/Seed && \
+for f in "Seed Sync Log.md" "Seed Sync Log Archive.md"; do if [ -f "_DataWizard/Seed/$f" ]; then mv -n "_DataWizard/Seed/$f" "_DataWizard/$f"; fi; done && \
+cd "$VAULT/_DataWizard/Seed" && \
+git ls-files -z --others --exclude-standard --directory | while IFS= read -r -d '' p; do p="${p%/}"; case "$p" in */*|"Seed Sync Log"*) ;; *) mv -n "$p" "../$p";; esac; done && \
+echo "Done: the Seed is now at _DataWizard/Seed." || echo "STOP: not moved - see the checks above"
+```
+
+The last loop moves each untracked top-level file or folder (your project notes, such as `0.0` files or `_Sections`) back up to `_DataWizard/`. Gitignored files such as `Vault Config.md` stay with the Seed.
+
+If it prints STOP because `_DataWizard/Seed` already exists, look inside that folder. If it holds only `Vault Config.md`, move that file up into `_DataWizard/`, delete the empty `Seed` folder, and run the block again. If it holds a full Seed (a `VERSION.md`), you have two copies: stop and sort out which one is current first.
+
+**2. Move the clone (Windows PowerShell):**
+
+```powershell
+$Vault = "C:\path\to\vault"   # <- change to your vault folder
+$Dw = Join-Path $Vault "_DataWizard"
+$Tmp = Join-Path $Vault "_DataWizard-nesting"
+$Seed = Join-Path $Dw "Seed"
+if ((Test-Path -LiteralPath (Join-Path $Dw "VERSION.md")) -and -not (Test-Path -LiteralPath $Seed) -and -not (Test-Path -LiteralPath $Tmp)) {
+    Move-Item -LiteralPath $Dw -Destination $Tmp -ErrorAction Stop
+    New-Item -ItemType Directory -Path $Dw -ErrorAction Stop | Out-Null
+    Move-Item -LiteralPath $Tmp -Destination $Seed -ErrorAction Stop
+    foreach ($f in "Seed Sync Log.md", "Seed Sync Log Archive.md") {
+        if (Test-Path -LiteralPath (Join-Path $Seed $f)) { Move-Item -LiteralPath (Join-Path $Seed $f) -Destination (Join-Path $Dw $f) -ErrorAction Stop }
+    }
+    foreach ($p in (git -C $Seed -c core.quotePath=false ls-files --others --exclude-standard --directory)) {
+        $p = $p.TrimEnd('/')
+        if ($p -like "*/*" -or $p -like "Seed Sync Log*") { continue }
+        if (-not (Test-Path -LiteralPath (Join-Path $Dw $p))) { Move-Item -LiteralPath (Join-Path $Seed $p) -Destination (Join-Path $Dw $p) -ErrorAction Stop }
+    }
+    Write-Host "Done: the Seed is now at _DataWizard\Seed."
+} else {
+    Write-Host "STOP: not moved - _DataWizard is not a flat Seed, or _DataWizard\Seed or _DataWizard-nesting already exists."
+}
+```
+
+**Where the sync log goes.** The scripts write `Seed Sync Log.md` (and its archive) in `_DataWizard/` in both layouts. In a flat clone that is inside the clone folder, so the move carries it into `Seed/`. Step 2 brings it back up to `_DataWizard/`.
+
+**3. Verify (macOS / Linux):**
+
+```bash
+VAULT="/path/to/vault"   # <- change to your vault folder
+ls -d "$VAULT/_DataWizard/Seed/.git" "$VAULT/_DataWizard/Seed/VERSION.md" && \
+bash "$VAULT/_DataWizard/Seed/update_seed.sh" --print-paths && \
+git -C "$VAULT/_DataWizard/Seed" status --short --untracked-files=no
+```
+
+You should see `layout: nested` and `git mode: yes`, and `git status` should list no changed files. On Windows:
+
+```powershell
+$Vault = "C:\path\to\vault"   # <- change to your vault folder
+powershell -ExecutionPolicy Bypass -File (Join-Path $Vault "_DataWizard\Seed\update_seed.ps1") -PrintPaths
+```
+
+Look for `layout: nested`.
+
+**4. Update what pointed at the old path (macOS).**
+
+- **DW Save.** In `~/.datawizard-sync.conf`, change the Seed line from `<vault>/_DataWizard` to `<vault>/_DataWizard/Seed` (open it with `nano ~/.datawizard-sync.conf`). Then re-run DW Save's installer from its new place, so its launchd job and hotkey point there too.
+- **Seed auto-sync and a leftover copy.** Older versions of `update_seed.sh`, run from a flat clone, worked one folder too high. They may have made a second, unused Seed at `<vault>/../_DataWizard/Seed`, and pointed auto-sync at it. Check both:
+
+```bash
+VAULT="/path/to/vault"   # <- change to your vault folder
+grep -n "_DataWizard" ~/.datawizard-sync.conf
+ls -la "$VAULT/../_DataWizard"
+plutil -p ~/Library/LaunchAgents/com.datawizard.seed-update.plist
+```
+
+  Then re-install auto-sync from the nested Seed. This replaces the old job:
+
+```bash
+VAULT="/path/to/vault"   # <- change to your vault folder
+bash "$VAULT/_DataWizard/Seed/update_seed.sh" --install-autosync
+bash "$VAULT/_DataWizard/Seed/Scripts/datawizard-sync.sh" --install
+```
+
+  If `$VAULT/../_DataWizard` exists and holds only `Seed/` and `Seed Sync Log.md`, it is the leftover copy. Move it to the Trash by hand once you have checked that it is not the home folder of another vault.
+- **Claude Code users:** point your import at `_DataWizard/Seed/PI.md` (see "Claude Code and Obsidian sidebar plugins" below).
+
+Then reopen Obsidian and restart DW Save.
 
 ---
 
@@ -280,6 +387,12 @@ Obsidian sidebar plugins (which run Claude Code inside Obsidian) usually start C
 ### Several worktrees
 
 A gitignored `CLAUDE.local.md` exists only in the worktree where you made it. Make one in each worktree. The Claude Code docs suggest an import from `~/.claude/` for people with several worktrees. Do not use that route if you also use Cowork (see "Cowork users").
+
+---
+
+## Bugs and requests
+
+Found a bug or want a change? If you use the Seed on your own, open an issue at https://github.com/andrewalan11/DataWizard/issues. If you share a vault with the Seed maintainer, leave a note in your shared outbox instead. Issues are public, so leave out vault names, people's names and session IDs.
 
 ---
 

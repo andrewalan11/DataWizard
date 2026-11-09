@@ -1,15 +1,24 @@
 #Requires -Version 5.1
 <#
   update_seed.ps1 - Download or update the DataWizard Seed from GitHub.
-  Windows twin of update_seed.sh. Lives in _DataWizard\Seed\ and works from anywhere.
+  Windows twin of update_seed.sh. Lives in the Seed folder and works from anywhere.
 
   Usage:
     powershell -ExecutionPolicy Bypass -File update_seed.ps1 [-Vault C:\path\to\vault]
     powershell -ExecutionPolicy Bypass -File update_seed.ps1 -InstallAutosync [-Hour 6] [-Vault C:\path\to\vault]
     powershell -ExecutionPolicy Bypass -File update_seed.ps1 -UninstallAutosync
+    powershell -ExecutionPolicy Bypass -File update_seed.ps1 -PrintPaths [-Vault C:\path\to\vault]
 
-  If run from within the Seed, auto-detects the vault root (two levels up).
-  If run standalone (e.g. first install), pass -Vault explicitly.
+  Two Seed layouts are supported:
+    nested (default): <vault>\_DataWizard\Seed\ holds the Seed
+    flat (a git clone): <vault>\_DataWizard\ itself holds the Seed
+  Run from inside the Seed, the script finds the layout from its own folder.
+  With -Vault it probes <vault>\_DataWizard\Seed, then a populated flat
+  <vault>\_DataWizard; a fresh install is always nested.
+  The Seed Sync Log sits in _DataWizard\ in both layouts.
+
+  -PrintPaths prints the resolved layout and paths, then exits 0 without
+  writing anything or touching the network.
 
   -InstallAutosync registers a Windows Scheduled Task that runs this script
   daily at -Hour (default 6:00) AND at every logon. StartWhenAvailable means
@@ -17,7 +26,7 @@
   machine is next available - the computer does NOT need to be awake at the
   scheduled time to stay in sync. No admin rights required.
 
-  Note: if your Seed is a git clone (Seed\.git exists), sync it with git
+  Note: if your Seed is a git clone (a .git folder in the Seed folder), sync it with git
   instead of this script - the zip copy would leave the working tree dirty.
 
   Exit codes: 0 = updated/ok, 1 = error, 2 = already current, 3 = skipped (guard)
@@ -28,6 +37,7 @@ param(
     [string]$Vault = "",
     [switch]$InstallAutosync,
     [switch]$UninstallAutosync,
+    [switch]$PrintPaths,
     [ValidateRange(0,23)][int]$Hour = 6
 )
 
@@ -38,18 +48,81 @@ $TmpDir  = Join-Path $env:TEMP "dw-seed-update"
 $TmpZip  = Join-Path $env:TEMP "dw-seed.zip"
 $TaskName = "DataWizard Seed Update"
 
-# --- Determine vault root ---
-$VaultRoot = $Vault
-if ([string]::IsNullOrWhiteSpace($VaultRoot)) {
-    # Script lives at _DataWizard\Seed\update_seed.ps1 ; vault root is two levels up.
-    $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-    $VaultRoot = (Resolve-Path (Join-Path $ScriptDir "..\..")).Path
+# --- Resolve layout and paths ---
+# $SeedDir is the folder that holds the Seed files. $DwDir is _DataWizard.
+# nested: $DwDir\Seed = $SeedDir.  flat: $DwDir = $SeedDir (a git clone).
+# A flat Seed is recognized by these two files at the _DataWizard root.
+function Test-FlatSeed {
+    param([string]$Dir)
+    return ((Test-Path -LiteralPath (Join-Path $Dir "VERSION.md") -PathType Leaf) -and
+            (Test-Path -LiteralPath (Join-Path $Dir "update_seed.sh") -PathType Leaf))
 }
 
-$SeedDir = Join-Path $VaultRoot "_DataWizard\Seed"
-$SyncLog = Join-Path $VaultRoot "_DataWizard\Seed Sync Log.md"
+$VaultRoot = $Vault
+if ([string]::IsNullOrWhiteSpace($VaultRoot)) {
+    # No -Vault: the script's own folder is the Seed.
+    $SeedDir = (Resolve-Path -LiteralPath (Split-Path -Parent $MyInvocation.MyCommand.Path)).Path
+    $SeedParent = Split-Path -Parent $SeedDir
+    if (((Split-Path -Leaf $SeedDir) -eq "Seed") -and ((Split-Path -Leaf $SeedParent) -eq "_DataWizard")) {
+        $Layout = "nested"
+        $DwDir = $SeedParent
+    } elseif ((Split-Path -Leaf $SeedDir) -eq "_DataWizard") {
+        $Layout = "flat"
+        $DwDir = $SeedDir
+    } else {
+        Write-Host "ERROR: cannot tell where the Seed is."
+        Write-Host "  This script is in: $SeedDir"
+        Write-Host "  Expected <vault>\_DataWizard\Seed\ (nested) or <vault>\_DataWizard\ (flat clone)."
+        Write-Host "  Run the copy inside your Seed, or pass -Vault C:\path\to\vault."
+        exit 1
+    }
+    $VaultRoot = Split-Path -Parent $DwDir
+} else {
+    # -Vault given: probe a populated nested Seed first (VERSION.md, not just
+    # the folder - a flat clone may hold a config-only Seed subfolder), then a
+    # populated flat Seed. Anything else is a fresh install, always nested.
+    if ($VaultRoot.Length -gt 3) { $VaultRoot = $VaultRoot.TrimEnd('\', '/') }
+    $DwDir = Join-Path $VaultRoot "_DataWizard"
+    $NestedDir = Join-Path $DwDir "Seed"
+    if (Test-Path -LiteralPath (Join-Path $NestedDir "VERSION.md") -PathType Leaf) {
+        $Layout = "nested"
+        $SeedDir = $NestedDir
+    } elseif (Test-FlatSeed -Dir $DwDir) {
+        $Layout = "flat"
+        $SeedDir = $DwDir
+    } else {
+        $Layout = "nested"
+        $SeedDir = $NestedDir
+    }
+}
+
+$SyncLog = Join-Path $DwDir "Seed Sync Log.md"
 $VaultConfig = Join-Path $SeedDir "Vault Config.md"
 $ScriptPath = Join-Path $SeedDir "update_seed.ps1"
+$IsGitClone = Test-Path -LiteralPath (Join-Path $SeedDir ".git")
+
+if ($Layout -eq "flat") {
+    Write-Host "Flat layout detected (_DataWizard\ is the Seed). Agent sessions under the current Project Instructions expect _DataWizard\Seed\. To nest it, see Guides\Seed Install and Update.md, section `"Nesting a flat clone`"."
+    if (Test-Path -LiteralPath (Join-Path (Join-Path $SeedDir "Seed") "VERSION.md")) {
+        Write-Host "WARNING: a second Seed copy sits at $(Join-Path $SeedDir 'Seed'). This run uses $SeedDir only."
+    }
+} elseif (Test-FlatSeed -Dir $DwDir) {
+    Write-Host "WARNING: $DwDir also looks like a flat Seed. This run uses $SeedDir only."
+}
+
+if ($PrintPaths) {
+    Write-Host "layout:     $Layout"
+    Write-Host "SEED_DIR:   $SeedDir"
+    Write-Host "DW_DIR:     $DwDir"
+    Write-Host "VAULT_ROOT: $VaultRoot"
+    Write-Host "sync log:   $SyncLog"
+    if ($IsGitClone) {
+        Write-Host "git mode:   yes (this script skips git clones; sync with git)"
+    } else {
+        Write-Host "git mode:   no"
+    }
+    exit 0
+}
 
 function Get-VersionField {
     param([string]$File, [string]$Field)
@@ -114,7 +187,7 @@ if ($InstallAutosync) {
         Write-LogEntry "REFUSED: -InstallAutosync blocked. Vault Config marks this machine as the Seed upstream (seed_role: upstream)."
         exit 3
     }
-    if (Test-Path (Join-Path $SeedDir ".git")) {
+    if ($IsGitClone) {
         Write-LogEntry "REFUSED: -InstallAutosync blocked. This Seed is a git clone - the zip sync would dirty the working tree. Sync it with git instead."
         exit 3
     }
@@ -151,7 +224,7 @@ if (Test-Upstream) {
     exit 3
 }
 
-if (Test-Path (Join-Path $SeedDir ".git")) {
+if ($IsGitClone) {
     Write-LogEntry "SKIPPED: this Seed is a git clone. Sync it with git (fetch + fast-forward) instead of the zip copy."
     exit 3
 }
