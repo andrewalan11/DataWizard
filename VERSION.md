@@ -1,5 +1,5 @@
 
-seed: 1.14.0
+seed: 1.14.1
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,16 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.1
+
+**Patch release (2026-11-10): the capture pointer rule now lives in the YAML Schema.** Docs only; no script changes. Release 1.14.0 said not to add `core_id` to a clipping by hand until the YAML Schema described the pointer. It now does, so that hold is lifted: you may add `core_id` to a `homepage` or a clipped `person` page once you have confirmed the match (the name matches, or the clipping's URL host is exactly the core's `website` host). Never guess a match, and never add `hid`, `entity_kind` or other `core_*` fields to a clipping. Shipped in the Seed:
+
+- `Protocols/YAML Schema/3.0 YAML Schema - Holonic Records and Tool Evaluation.md`: new entry "Capture pointer". A capture carries `core_id` only; the value is the core's `core_id` string, not a wikilink or a path; the core does not list its captures and the index derives the back-list; `core_id` is written only for a human-confirmed match, never by the classifier. A note about several subjects joins cores through its companion's `entities:` list (`slug` = `core_id`); no core is made from a mention. The projection writer rule now names a capture's `core_id` as its one exception. The "On every projection" block is unchanged.
+- `Protocols/Content Type Taxonomy.md` (still v2.8): the `homepage` and `person` entries point at that rule instead of saying to wait for it.
+- `Config/taxonomy.yaml` (taxonomy_version still 2.8): the `homepage` and `person` `yaml_note` say the same.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.14.0
 

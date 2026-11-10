@@ -19,6 +19,7 @@ edit_log:
   - 'DW-S449 2026-11-01 - infrastructure types gain coordination-board-targets (board well-known targets file; no version bump)'
   - 'DW-S455 2026-11-02 - infrastructure types gain coordination-board-inbox (one inbox per project beside the board index; no version bump)'
   - 'DW-S496 2026-11-10 - v2.8: new homepage type for a clipped organization page; entity narrowed to core records only (never classifier-assigned); person and event lines and the decision tree follow'
+  - 'DW-S496 2026-11-10 - homepage and person: the wait-for-the-schema hold replaced by a pointer to YAML Schema Holonic Records (Capture pointer); wording only, no version bump (Seed 1.14.1)'
 ---
 
 # Content Type Taxonomy v2.8
@@ -62,7 +63,7 @@ A clipped web page of one organization, company, collective, project, or initiat
 
 **Signals**: URL, "About us" language, mission statement, team listings, programs/services, calls to action (join, donate, partner). No specific event dates.
 **YAML additions**: `core_id:` when that organization has a core record (`type: entity`). Never `hid` or `entity_kind` - those belong to the core.
-**Link to the core**: the homepage points at the core through `core_id`; the core does not list its clippings. The classifier never writes `core_id`. YAML Schema, "Holonic Records" does not describe this pointer yet; until it does, do not add `core_id` to a clipping by hand.
+**Link to the core**: the homepage points at the core through `core_id`; the core does not list its clippings. The classifier never writes `core_id`. The pointer rule is in YAML Schema, "Holonic Records" (Capture pointer).
 
 ---
 
@@ -78,7 +79,7 @@ A clipped event listing page — gathering, conference, festival, or convergence
 A note about one person that is not a core - a clipped personal page, profile, bio, portfolio, or a people-folder note. A person core record is not this type: it is `type: entity` with `entity_kind: person` (see `entity`).
 
 **Signals**: First-person or biographical language, headshot, role/title, personal projects.
-**YAML additions**: `core_id:` when that person has a core record. Never `hid` or `entity_kind`. The classifier never writes `core_id`. YAML Schema, "Holonic Records" does not describe this pointer yet; until it does, do not add `core_id` to a clipping by hand.
+**YAML additions**: `core_id:` when that person has a core record. Never `hid` or `entity_kind`. The classifier never writes `core_id`. The pointer rule is in YAML Schema, "Holonic Records" (Capture pointer).
 
 ---
 
