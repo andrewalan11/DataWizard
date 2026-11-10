@@ -171,6 +171,24 @@ def write_file(path, content):
         f.write(content)
 
 
+def _fm_unquote(v):
+    """One frontmatter scalar as text: 'single' -> inner text with '' undoubled;
+    "double" -> JSON-style escapes decoded; other text stripped of stray quotes
+    as before. Needed once a frontmatter writer quotes every string.)"""
+    v = v.strip()
+    if len(v) >= 2 and v[0] == v[-1] == "'":
+        return v[1:-1].replace("''", "'")
+    if len(v) >= 2 and v[0] == v[-1] == '"':
+        try:
+            out = json.loads(v)
+            if isinstance(out, str):
+                return out
+        except ValueError:
+            pass
+        return v[1:-1]
+    return v.strip('"').strip("'")
+
+
 def parse_frontmatter(content):
     """Extract frontmatter fields as a dict (simple regex-based parser)."""
     match = FM_PATTERN.match(content)
@@ -186,7 +204,7 @@ def parse_frontmatter(content):
         kv_match = re.match(r'^(\w[\w-]*)\s*:\s*(.+)$', line.strip())
         if kv_match:
             key = kv_match.group(1)
-            value = kv_match.group(2).strip().strip('"').strip("'")
+            value = _fm_unquote(kv_match.group(2))
             fields[key] = value
 
     # Also grab the raw frontmatter text for modification

@@ -1,5 +1,5 @@
 
-seed: 1.14.1
+seed: 1.14.2
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,14 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.2
+
+**Patch release (2026-11-10): `classify.py` reads quoted frontmatter values correctly.** Its simple frontmatter reader only stripped the outer quotes, so a single-quoted value with an apostrophe (`'Let''s GROW'`) came back with the doubled `''`, and a double-quoted value kept its escapes. A new helper `_fm_unquote` reads a single-quoted value with `''` undoubled and a double-quoted value with its escapes decoded; a plain value reads as before. This matters once a frontmatter writer quotes every string. Standard library only.
+
+- `Scripts/classify.py`: new `_fm_unquote()`; `parse_frontmatter()` calls it for each scalar. No other behaviour change.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.14.1
 
