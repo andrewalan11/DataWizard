@@ -48,9 +48,12 @@ ROUTING_TABLE = {
     # People
     "person":                "_People",
 
-    # Clippings (articles, videos)
+    # Clippings (articles, videos, organization homepages)
+    # homepage stays in _Clippings, where the web clipper saves it; it is
+    # retyped in place. entity (above) is a core record only (taxonomy v2.8).
     "article":               "_Clippings",
     "video":                 "_Clippings",
+    "homepage":              "_Clippings",
 
     # Transcripts
     "video-transcript":      "_Transcripts",
@@ -104,6 +107,21 @@ def extract_type(filepath):
         return match.group(1).lower().strip()
 
     return None
+
+
+def has_core_id(filepath):
+    """True when the frontmatter carries a non-empty core_id (a core record)."""
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read(4000)
+    except (UnicodeDecodeError, FileNotFoundError):
+        return False
+    if not content.startswith('---'):
+        return False
+    end = content.find('---', 3)
+    if end == -1:
+        return False
+    return re.search(r'^core_id:\s*["\']?[a-z0-9]', content[3:end], re.MULTILINE) is not None
 
 
 def scan_folder(vault_path, folder, recursive=False):
@@ -165,6 +183,12 @@ def route_notes(vault_path, folder, dry_run=True, recursive=False):
 
         # Type not in routing table -> skip
         if note_type not in ROUTING_TABLE:
+            skipped_needs_human.append((rel_path, note_type))
+            continue
+
+        # entity is a core record only (taxonomy v2.8): route it only when it
+        # carries core_id; an old entity-typed clipping waits for a retype
+        if note_type == "entity" and not has_core_id(filepath):
             skipped_needs_human.append((rel_path, note_type))
             continue
 

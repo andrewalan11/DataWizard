@@ -1,5 +1,5 @@
 
-seed: 1.13.5
+seed: 1.14.0
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,21 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.0
+
+**Minor release (2026-11-10): a new content type `homepage`, and `entity` now means a core record only.** A clipped web page of one organization was typed `entity`, the same type as the one canonical core record for that organization. The two now have separate types: a clipped organization page is `homepage` and stays in `_Clippings/`, where the web clipper saves it; `entity` is kept for core records (with `entity_kind` and `core_id`), which the federating skill makes and the classifier never assigns.
+
+A `homepage`, or a clipped `person` page, carries `core_id` when its subject has a core; never `hid` or `entity_kind`. The note points at the core; the core does not list its clippings. One DataWizard session. Shipped in the Seed:
+
+- `Protocols/Content Type Taxonomy.md` v2.8: new `homepage` entry; `entity` narrowed to core records; `person` says a person core is `type: entity`, `entity_kind: person`; `event` and the Classifier Decision Tree name `homepage` where they named `entity`; 20 active types.
+- `Config/taxonomy.yaml` (taxonomy_version 2.8): new `homepage` key with `yaml_additions: [core_id]`; `entity` described as a core record, `classifier_assignable: false`; `person` gains `yaml_additions: [core_id]`.
+- `Scripts/classify.py`: `homepage` is a valid type and is in the prompt; `entity` stays valid (existing cores count as classified) but the classifier never outputs it - an `entity` answer from the model, a rule or an old dry-run log is written as `homepage`, and a note already typed `entity` is never rewritten, by any path. The classifier never writes `core_id`. Stale taxonomy version and type count fixed.
+- `Scripts/route_notes.py`: `homepage` routes to `_Clippings`; one already there stays put. `entity` routes to `_Entities` only when the note carries `core_id`; an `entity` note without one is listed for a human, not moved.
+
+**Existing notes:** a clipping already typed `entity` keeps that type until it is retyped to `homepage`; the classifier skips notes that already carry a valid type. Nothing breaks if you leave them. To convert one, change `type: entity` to `type: homepage` by hand; no script does it. `route_notes.py` then moves it to `_Clippings/`. Until then it is listed under "needs human routing" and not moved. Do not add `core_id` to a clipping by hand until YAML Schema, "Holonic Records" describes this pointer.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.13.5
 

@@ -17,9 +17,12 @@
 #   (board well-known targets file; no taxonomy_version bump)
 # DW-S455 2026-11-02: infrastructure_types + coordination-board-inbox
 #   (board index plus one inbox per project, D165; no taxonomy_version bump)
+# DW-S496 2026-11-10: taxonomy_version 2.8 - new content type homepage (a
+#   clipped organization page, carries core_id when a core exists); entity
+#   narrowed to core records only, never assigned by the classifier
 
 meta:
-  taxonomy_version: "2.7"
+  taxonomy_version: "2.8"
   schema_version: 1
   source_doc: "Seed/Protocols/Content Type Taxonomy.md"
   decisions: [D83, D84, D89, D92]
@@ -32,15 +35,23 @@ content_types:
     description: "Prose content - essays, blog posts, reports, opinion pieces, academic writing"
     signals: "Narrative paragraphs, byline/author, publication date, no product/service offerings"
   entity:
-    description: "Organization, company, collective, project, or initiative homepage; persistent, not time-bounded"
-    signals: "About-us language, mission statement, team listings, programs, calls to action; no specific event dates"
+    description: "Core record only - the one canonical record for an org, person, tool or other subject, in the owning vault's _Entities/, with entity_kind and core_id (YAML Schema, Holonic Records); a clipped web page is never entity"
+    signals: "None for the classifier - made by the federating skill, never classifier-assigned"
+    classifier_assignable: false   # documentation only; classify.py hardcodes the entity -> homepage remap
+  homepage:
+    description: "Clipped web page of one organization, company, collective, project, or initiative; persistent, not time-bounded; lives in _Clippings/"
+    signals: "URL, about-us language, mission statement, team listings, programs, calls to action; no specific event dates"
+    yaml_additions: [core_id]
+    yaml_note: "core_id only when that organization has a core; never hid or entity_kind; the classifier never writes core_id; not added by hand until YAML Schema Holonic Records describes this pointer"
   event:
     description: "Clipped event listing - gathering, conference, festival with specific dates, location, program"
     signals: "URL + specific dates + physical location + agenda/lineup/speakers; registration links"
     yaml_additions: [event_date, event_location]
   person:
-    description: "Individual's personal page, profile, bio, portfolio"
+    description: "A note about one person that is not a core - clipped personal page, profile, bio, portfolio, or people-folder note; a person core is type entity, entity_kind person"
     signals: "Biographical language, headshot, role/title, personal projects"
+    yaml_additions: [core_id]
+    yaml_note: "core_id only when that person has a core; never hid or entity_kind; the classifier never writes core_id; not added by hand until YAML Schema Holonic Records describes this pointer"
   document:
     description: "Purposefully constructed working doc - proposals, pitches, strategy docs, plans"
     signals: "Constructed toward a specific goal or audience; no publication intent; project-specific"

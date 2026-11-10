@@ -7,7 +7,8 @@ Classifies .md notes in your vault by content type using:
   2. LLM fallback via Ollama — for ambiguous notes
 
 Implements D29 (classification-first batch processing) from the Decision Log.
-Uses the Content Type Taxonomy v2.5 (21 active types).
+Uses the Content Type Taxonomy v2.8 (20 active types; the classifier
+assigns every one except entity and garden - see VALID_V2_TYPES).
 
 No heavy dependencies — uses regex-based YAML parsing (same as taxonomy_migrate.py)
 and `requests` for Ollama API calls.
@@ -52,10 +53,15 @@ except ImportError:
 # Constants
 # ─────────────────────────────────────────────────────────
 
-# The 21 active types from Content Type Taxonomy v2.5
+# Valid content types from Content Type Taxonomy v2.8 (taxonomy.yaml).
+# "entity" stays valid so existing core records count as already classified,
+# but it is a core record only and the classifier never outputs it (see
+# CLASSIFIER_TYPE_REMAP). "garden" is not listed: gardens are synthesis
+# notes, not classifier output.
 VALID_V2_TYPES = {
     "article",
     "entity",
+    "homepage",
     "event",
     "person",
     "document",
@@ -73,6 +79,24 @@ VALID_V2_TYPES = {
     "video",
     "companion",
 }
+
+# Types the classifier must never output, mapped to what it outputs instead.
+# entity is a core record only (made by the federating skill, never by the
+# classifier); a clipped organization page is homepage (taxonomy v2.8).
+CLASSIFIER_TYPE_REMAP = {
+    "entity": "homepage",
+}
+
+
+def to_assignable_type(type_value):
+    """Map a predicted type to one the classifier may write.
+
+    The classifier never outputs entity and never writes or guesses core_id.
+    """
+    if type_value is None:
+        return None
+    return CLASSIFIER_TYPE_REMAP.get(type_value, type_value)
+
 
 # Retired types that should NOT count as "already classified"
 RETIRED_TYPES = {
@@ -107,7 +131,7 @@ YOUTUBE_PATTERN = re.compile(r'(youtube\.com|youtu\.be)', re.IGNORECASE)
 # Podcast / RSS URL pattern
 PODCAST_PATTERN = re.compile(r'(podcasts\.apple\.com|open\.spotify\.com/episode|overcast\.fm|pocketcasts\.com|pod\.link|anchor\.fm|buzzsprout\.com|simplecast\.com|transistor\.fm|feeds\.|rss\.|/podcast/|/episodes?/)', re.IGNORECASE)
 
-# Event date pattern — specific dates suggest an event listing, not an entity
+# Event date pattern - specific dates suggest an event listing, not a homepage
 EVENT_DATE_PATTERN = re.compile(
     r'(\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|'
     r'Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)'
@@ -216,7 +240,9 @@ def classify_by_rules(rel_path, fields, body):
     """
     Apply deterministic rules. Returns (type, rule_description) or (None, None).
 
-    Rule order matches the Classifier Decision Tree from Content Type Taxonomy v2.5.
+    Rule order matches the Classifier Decision Tree from Content Type Taxonomy v2.8.
+    No rule returns entity (core records only); run_classification also maps
+    any rule result through to_assignable_type.
     """
     url = get_url_field(fields) or ""
     rel_str = str(rel_path)
@@ -256,7 +282,7 @@ def classify_by_rules(rel_path, fields, body):
         return 'video', 'YouTube/Vimeo URL detected (D35: always video)'
 
     # 7. URL + specific dates + event location keywords → event (D38)
-    # Check before entity — event pages often look like entity pages
+    # Check before homepage - event pages often look like organization homepages
     if url:
         body_and_title = title + ' ' + body_preview
         if EVENT_DATE_PATTERN.search(body_and_title) and EVENT_LOCATION_PATTERN.search(body_and_title):
@@ -282,9 +308,9 @@ regenerative systems, bioregionalism, decentralized governance, and related fiel
 
 Given the following content, determine its type.
 
-Types (Content Type Taxonomy v2.5):
+Types (Content Type Taxonomy v2.8):
 - article: Prose content — essays, blog posts, reports, opinion pieces, academic writing. Published for general readership.
-- entity: Organization, company, collective, project, or initiative homepage. Persistent — no specific event dates.
+- homepage: Clipped web page of one organization, company, collective, project, or initiative (about, mission, programs). Persistent - no specific event dates.
 - event: A clipped event listing page — gathering, conference, festival with specific dates, location, and agenda. Time-bounded.
 - person: Individual's personal page, bio, portfolio, LinkedIn profile.
 - document: Purposefully constructed working doc — proposals, pitches, strategy docs, plans. Not published prose; constructed toward a specific goal or audience.
@@ -302,18 +328,20 @@ Types (Content Type Taxonomy v2.5):
 - video: Video page — YouTube/Vimeo with description/metadata. Transcript may be appended.
 - companion: AI-generated summary of a source note. Has source: field in YAML pointing to another note.
 
+Do NOT answer entity: it is reserved for core records and is never a valid answer here. A clipped organization page is homepage.
+
 NOTE: AI-written/AI-generated content is NOT a content type. If a note was generated by AI, classify it by what it actually IS (resource, document, article, etc.) and the pipeline will add an `ai-generated` tag. Do not classify anything as `AI-written`.
 
 Key signals:
 - YouTube or Vimeo URL → video (always)
 - Podcast/RSS URL → podcast-transcript
 - Fathom URL + speaker emails → meeting-transcript
-- URL + specific dates + venue/tickets/agenda/lineup → event (not entity)
+- URL + specific dates + venue/tickets/agenda/lineup → event (not homepage)
 - No URL + multiple distinct ideas with line breaks → seedpod
 - No URL + 1–3 lines, single idea → seed
 - No URL + single speaker + informal + Whisper artifacts → voice-memo-transcript
 - Directed at specific person + async (voice note, text) → message
-- Homepage with "about us", mission, programs, no specific dates → entity
+- Homepage with "about us", mission, programs, no specific dates → homepage
 - Proposal, pitch, strategy doc, plan → document (not article)
 - List of 5+ URLs with brief labels → resource-list
 - Framework/methodology/reference material → resource
@@ -322,16 +350,16 @@ Key signals:
 - AI-generated content → classify by what it IS (resource, document, article, etc.), not by authorship
 
 CRITICAL classification biases:
-- When in doubt between seedpod and document/article/entity, CHOOSE SEEDPOD. Seedpods get harvested for ideas later; misclassifying as document/article means they may never be reviewed. Err toward seedpod.
-- No URL is a STRONG signal against entity and article. Entity pages almost always have a URL (clipped from a website). If there is no URL and the title sounds like an organization name, it is most likely a seedpod containing personal notes ABOUT that organization — not the entity's homepage.
+- When in doubt between seedpod and document/article/homepage, CHOOSE SEEDPOD. Seedpods get harvested for ideas later; misclassifying as document/article means they may never be reviewed. Err toward seedpod.
+- No URL is a STRONG signal against homepage and article. Homepages almost always have a URL (clipped from a website). If there is no URL and the title sounds like an organization name, it is most likely a seedpod containing personal notes ABOUT that organization - not the organization's homepage.
 - No URL is also a strong signal against article. Articles are published prose clipped from the web — they have URLs. No URL + prose = more likely seedpod or document.
 - person type REQUIRES the person's actual name as the note title (e.g., "John Smith", "Jane Doe"). A note listing someone's projects or work is NOT a person note — it's a seedpod or resource-list. If the title contains multiple words that are not a person's name (e.g., "Syntony Times - Togetherland - Transmedium Productions"), it is NOT a person note.
-- Notes dominated by [[wikilinks]] to other vault notes (double-bracket links) are likely seedpod or personal index, not entity/article/person.
+- Notes dominated by [[wikilinks]] to other vault notes (double-bracket links) are likely seedpod or personal index, not homepage/article/person.
 - seedpod vs document: The distinction is INTENT, not quality of writing. A document has a specific external audience and purpose (pitch deck for investors, strategy doc for a team, proposal for a funder). A seedpod is personal thinking/notes, regardless of how polished, dense, or organized the writing is. If there is no clear external audience, it's a seedpod.
 - STRUCTURAL FORMATTING signals document or resource, NOT seedpod. Notes with numbered sections ("1. ...", "2. ..."), markdown headers (## Section Name), formal outlines, or structured formatting are more likely `resource` or `document`. Seedpods are informal — bullet points, line breaks between ideas, freeform notes. If the note looks like it was organized with an intentional structure, it is probably not a seedpod.
 
 IMPORTANT distinctions:
-- event vs entity: event has specific dates + location + agenda; entity is persistent with no event dates
+- event vs homepage: event has specific dates + location + agenda; homepage is persistent with no event dates
 - seed vs seedpod: seed is 1–3 lines, one idea; seedpod has multiple ideas with line breaks
 - document vs article: document is a working doc with a specific goal/audience (pitch, proposal, plan); article is published prose for general readership
 - voice-memo-transcript vs seedpod: voice-memo-transcript is transcribed audio (single speaker, informal speech patterns); seedpod is typed personal notes
@@ -428,6 +456,9 @@ def classify_with_llm(rel_path, fields, body, ollama_url, model):
                 predicted_type = type_map[predicted_type]
             else:
                 return None, None, f"Invalid type '{predicted_type}' from LLM (raw: {raw_response})"
+
+        # entity is never classifier output (core records only)
+        predicted_type = to_assignable_type(predicted_type)
 
         # Validate confidence
         if confidence not in ('high', 'medium', 'low'):
@@ -539,6 +570,7 @@ def run_classification(vault_path, targets, ollama_url, model, confidence_thresh
 
         # Try rules first
         rule_type, rule_desc = classify_by_rules(rel_path, fields, body)
+        rule_type = to_assignable_type(rule_type)
 
         if rule_type:
             results["rules"].append({
@@ -699,7 +731,7 @@ def parse_log_classifications(log_content):
             note_title = match.group(1)
             predicted_type = match.group(2)
             if predicted_type in VALID_V2_TYPES:
-                classifications.append((note_title, predicted_type))
+                classifications.append((note_title, to_assignable_type(predicted_type)))
 
     return classifications
 
@@ -765,6 +797,12 @@ def apply_from_log(vault_path, log_path_str):
             # Skip if already has this exact type
             if current_type == predicted_type:
                 already_set += 1
+                continue
+
+            # Never rewrite a core record (type entity), whatever the log says
+            if current_type == "entity":
+                print(f"  SKIP CORE: {file_path.relative_to(vault_path)} (type entity is never rewritten)")
+                skipped += 1
                 continue
 
             new_content = add_type_to_frontmatter(content, predicted_type)

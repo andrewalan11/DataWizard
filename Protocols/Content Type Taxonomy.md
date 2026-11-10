@@ -2,9 +2,9 @@
 title: Content Type Taxonomy
 type: project-doc
 created: '2026-03-02'
-updated: 2026-11-02
+updated: 2026-11-10
 origin: DW-S179 2026-06-12
-version: v2.7
+version: v2.8
 status: active
 operator: Andrew
 edit_log:
@@ -18,9 +18,10 @@ edit_log:
   - 'DW-S422 2026-10-18 - +protocol-section, +skill-reference (Registry and session-closer sectioning)'
   - 'DW-S449 2026-11-01 - infrastructure types gain coordination-board-targets (board well-known targets file; no version bump)'
   - 'DW-S455 2026-11-02 - infrastructure types gain coordination-board-inbox (one inbox per project beside the board index; no version bump)'
+  - 'DW-S496 2026-11-10 - v2.8: new homepage type for a clipped organization page; entity narrowed to core records only (never classifier-assigned); person and event lines and the decision tree follow'
 ---
 
-# Content Type Taxonomy v2.7
+# Content Type Taxonomy v2.8
 
 > The canonical reference for all YAML `type:` values. Used by the enrichment pipeline classifier, review queues, and human editors. Machine-readable canon: `Seed/Config/taxonomy.yaml` (type validity, fold map, instance overlay mechanism) -- scripts consume the YAML; this doc carries the prose signals and decision tree.
 
@@ -36,7 +37,9 @@ edit_log:
 
 ---
 
-## Active Types (19)
+## Active Types (20)
+
+`entity` is listed here but is never assigned by the classifier: it marks a core record only (see below).
 
 ---
 
@@ -48,14 +51,23 @@ Prose content — essays, blog posts, reports, opinion pieces, speculative ficti
 ---
 
 ### entity
-Organization, company, collective, project, or initiative homepage. **Persistent** — not time-bounded. Distinguish from `event` (which has specific dates). A core org record (one project-agnostic note per entity, with `entity_kind` and `core_id`) is also `entity` - see YAML Schema, "Holonic Records".
+A core record only: the one canonical record for an organization, person, tool or other subject, kept in the owning vault's `_Entities/` folder, with `entity_kind` and `core_id` - see YAML Schema, "Holonic Records". Made by the federating skill or its batch twin, never by the classifier. A clipped web page is never `entity`: a clipped organization page is `homepage`, a clipped page about one person is `person`.
 
-**Signals**: "About us" language, mission statement, team listings, programs/services, calls to action (join, donate, partner). No specific event dates.
+**Signals**: None for the classifier - it never assigns this type. A note is a core by its `type: entity` plus `entity_kind` and `core_id`.
+
+---
+
+### homepage
+A clipped web page of one organization, company, collective, project, or initiative - about, mission, programs, team. **Persistent** - not time-bounded. Distinguish from `event` (which has specific dates). Lives in `_Clippings/`, where the web clipper saves it.
+
+**Signals**: URL, "About us" language, mission statement, team listings, programs/services, calls to action (join, donate, partner). No specific event dates.
+**YAML additions**: `core_id:` when that organization has a core record (`type: entity`). Never `hid` or `entity_kind` - those belong to the core.
+**Link to the core**: the homepage points at the core through `core_id`; the core does not list its clippings. The classifier never writes `core_id`. YAML Schema, "Holonic Records" does not describe this pointer yet; until it does, do not add `core_id` to a clipping by hand.
 
 ---
 
 ### event
-A clipped event listing page — gathering, conference, festival, or convergence with specific dates, location, and program. Would otherwise be misclassified as `entity`. **Time-bounded**.
+A clipped event listing page — gathering, conference, festival, or convergence with specific dates, location, and program. Would otherwise be misclassified as `homepage`. **Time-bounded**.
 
 **Signals**: URL + specific dates + physical location + agenda, lineup, or speaker list. Ticket/registration links common.
 **YAML additions**: `event_date:`, `event_location:`.
@@ -63,9 +75,10 @@ A clipped event listing page — gathering, conference, festival, or convergence
 ---
 
 ### person
-Individual's personal page, LinkedIn profile, bio, portfolio.
+A note about one person that is not a core - a clipped personal page, profile, bio, portfolio, or a people-folder note. A person core record is not this type: it is `type: entity` with `entity_kind: person` (see `entity`).
 
 **Signals**: First-person or biographical language, headshot, role/title, personal projects.
+**YAML additions**: `core_id:` when that person has a core record. Never `hid` or `entity_kind`. The classifier never writes `core_id`. YAML Schema, "Holonic Records" does not describe this pointer yet; until it does, do not add `core_id` to a clipping by hand.
 
 ---
 
@@ -264,7 +277,7 @@ Biographical language, headshot, role/title?
   → YES → person
 
 Homepage with "about us", mission, programs, no specific dates?
-  → YES → entity
+  → YES → homepage
 
 Constructed working doc — proposal, pitch, strategy, plan?
   → YES → document
@@ -279,4 +292,6 @@ Numbered title, part of a series?
   → YES → multi-part
 
 Default → article
+
+Never → entity (core records only; made by the federating skill or its batch twin, not the classifier)
 ```
