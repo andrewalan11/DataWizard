@@ -7,8 +7,8 @@ description: >-
   report is ready for review. Also triggered when the scheduled review
   automation has left a pending report.
 type: skill
-updated: 2026-10-21
-version: '1.5.6'
+updated: '2026-11-11'
+version: '1.5.7'
 edit_log:
   - DW-S159 2026-06-08 RP-8 effort note in Step 4.5
   - DW-S185 2026-06-15 - platform/environment learnings homing note (Step 3
@@ -43,6 +43,7 @@ edit_log:
   - 'DW-S330 2026-09-04 - v1.5.4: Step 1 read-path example moved to the infrastructure folder Learning Reports (Weave FR WV_2026-09-02_AA_01; single home = Review Automation guide)'
   - 'DW-S400 2026-10-12 - v1.5.5: Step 4.5 recipes-are-not-learnings line'
   - 'DW-S433 2026-10-21 - v1.5.6: Step 2 item 2 - a tracked-in claim must resolve to a quoted line on disk, else the item is ready to plant (points at session-closer Step 3.5)'
+  - 'DW-S502 2026-11-11 - 1.5.7: Step 2 item 2 - a verifier sub-agent errs both ways on long paragraphs; the lead re-checks every not-planted and already-removed claim on the live line (meta-learning review S479-S493)'
 ---
 
 # Meta-Learning Review Skill
@@ -98,6 +99,7 @@ This is the critical step that separates useful planting from noise. For each su
 
 1. **Read the target document** (skill, design doc, protocol section) that the learning would be planted into
 2. **Check whether it's already there.** S97 found 2 of 10 suggestions were already implemented and 4 of 6 external validations already planted. Expect a significant already-done rate, especially in active projects. A report's or outcome's "tracked in X" or "already on the Backlog" claim counts only when the line resolves on disk: find it and quote its title. A claim that does not resolve means the item is not homed - classify it "ready to plant", never "already done" (the canonical rule: session-closer Step 3.5, "Tracking-claim verification").
+   If a verifier sub-agent does this check, its answer is a claim. It errs both ways on long paragraphs: it reports a planted fact as missing, and it reports a stale line as already removed while the line is still live. Re-check every "not planted" and every "already removed" claim on the live line before you write the plan (Working Principles - continued, "A delegated agent's verdict is a claim until the lead reads the line"). (DataWizard, 2026-11)
 3. **Check whether the learning is still accurate.** A learning from 8 sessions ago about tool behavior may have been superseded by a tool update or a subsequent session's finding.
 
 4. **When a learning supersedes a prior claim, check the rest of the vault.** For any learning with a "use X over Y", "Y was wrong", or "Y is deprecated" shape, verifying that the plant landed in its target doc is not enough -- search the vault for other docs still asserting the old claim, and either fix them in the same pass or file an action item per doc. A plant can succeed while other docs keep teaching the superseded thing for many sessions afterward.

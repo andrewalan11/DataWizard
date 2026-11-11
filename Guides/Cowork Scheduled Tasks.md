@@ -3,7 +3,7 @@ title: Cowork Scheduled Tasks
 type: guide
 scope: seed
 created: '2026-06-15'
-updated: 2026-11-08
+updated: '2026-11-11'
 operator: Andrew
 edit_log:
   - 'DW-S479 2026-11-08 - classifier blocks disabling a task; audit tasks of quiet projects'
@@ -24,6 +24,8 @@ edit_log:
     on-demand/backstop trigger pattern (S261) (meta-learning review S256-S266)
   - "WV_2026-09-07_AA_03 2026-09-09 - added: the report lives only in the run's own session (verify content by paste; persist via a Project state doc)"
   - 'DW-S484 2026-11-08 - tool behaviors B-0347, B-0359 (local tasks, scheduled run limits; Lane B plants P18, P19, P20, P21)'
+  - 'DW-S502 2026-11-11 - launchd protected-folder bullet extended (isdir passes, first open fails Errno 1; Terminal inherits access; only Full Disk Access); create_trigger takes no model choice'
+  - 'DW-S502 2026-11-11 - review fixes: create_trigger: how to give a task a second model is not known yet'
 ---
 
 # Cowork Scheduled Tasks
@@ -39,6 +41,8 @@ Operational guidance for running DataWizard automation as Cowork scheduled tasks
 ## One model per run: no mid-run switching
 
 A scheduled task runs on a single model for its entire run; it cannot switch models partway through. Mixed-model workflows (for example a Sonnet extraction pass plus an Opus review pass) must be split into a two-task architecture: one task per model, each on its own cadence. The corpus-enrichment skill's Sonnet-batch-plus-separate-Opus-review pattern is the worked example. (S160)
+
+`create_trigger` takes no model choice: a task created with it runs on the default model. How to give a task a second model is not known yet. (DataWizard, 2026-11)
 
 ## Cron jitter: expect up to ~8 minutes
 
@@ -87,7 +91,7 @@ A task that runs without a human in the loop needs all of:
 
 An unattended macOS job started by launchd or cron inherits neither the shell profile (`.zshrc`, `.bash_profile`) nor the GUI-login PATH, so the `python3`, `node`, or Homebrew binary that works in Terminal is not found when the job fires - the job fails silently or runs a different interpreter. In the job's script, pin the concrete interpreter path (a pyenv or system python by absolute path) and export the toolchain PATH explicitly (`/opt/homebrew/bin`, the pyenv shims, whatever the script needs) before any command runs; never rely on the environment the job "should" have. Verify by running the script through the scheduler once (a `launchctl start` or a near-future fire) rather than from Terminal, since Terminal is exactly the environment the job does not get. (DataWizard, 2026-08)
 
-**launchd jobs cannot read `~/Documents`, `~/Desktop` or `~/Downloads`.** macOS privacy protection grants those folders to Terminal but not to background jobs, and no prompt appears: a launchd-run service serving a static file from there fails (the browser sees `ERR_EMPTY_RESPONSE`; the traceback lands in the job's error log). Keep files a launchd service reads elsewhere, e.g. inside the vault. Under `KeepAlive`, `kill` just restarts the service (and a hand-started copy loses the port race); reload it with `launchctl kickstart -k gui/$(id -u)/<label>`. (Holonic Canvas, 2026-10)
+**launchd jobs cannot read `~/Documents`, `~/Desktop` or `~/Downloads`.** macOS privacy protection grants those folders to Terminal but not to background jobs, and no prompt appears: a launchd-run service serving a static file from there fails (the browser sees `ERR_EMPTY_RESPONSE`; the traceback lands in the job's error log). The folder test does not show the block: `os.path.isdir` on the folder still returns True, and the first file open fails with `PermissionError: [Errno 1] Operation not permitted`. A process started from Terminal inherits Terminal's access, so a script that works from Terminal can fail under launchd. Files and Folders access cannot be added to a background Python by hand; only Full Disk Access grants it. (DataWizard, 2026-11) Keep files a launchd service reads elsewhere, e.g. inside the vault. Under `KeepAlive`, `kill` just restarts the service (and a hand-started copy loses the port race); reload it with `launchctl kickstart -k gui/$(id -u)/<label>`. (Holonic Canvas, 2026-10)
 
 ## Hybrid trigger: on-demand primary plus an idempotent scheduled backstop
 

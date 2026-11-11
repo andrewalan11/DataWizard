@@ -2,9 +2,9 @@
 title: Published Artifacts and ArtifactData Behaviors
 type: guide
 created: 2026-10-12
-updated: 2026-11-08
+updated: 2026-11-11
 operator: Andrew
-origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects); backfilled DW-S428; DW-S484 2026-11-08 - sectioned into a shell and two section files in Published Artifacts and ArtifactData Behaviors/ (Conventions Registry 7.0); the edit_log up to the split is in the pre-split copy, xArchive - DataWizard/Seed/Guides/Published Artifacts and ArtifactData Behaviors.md.pre-S484.bak'
+origin: 'DW-S398 2026-10-12 - created (board intake: eleven artifact behaviors consolidated from four projects)'
 scope: seed
 status: active
 ---

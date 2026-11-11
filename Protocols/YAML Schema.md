@@ -2,8 +2,8 @@
 title: YAML Schema
 type: protocol
 created: '2026-06-13'
-updated: 2026-11-08
-origin: 'DW-S182 2026-06-13; DW-S484 2026-11-08 - sectioned into a shell and four section files in YAML Schema/ (Conventions Registry 7.0); the edit_log up to the split is in the pre-split copy, xArchive - DataWizard/Seed/Protocols/YAML Schema.md.pre-S484.bak'
+updated: 2026-11-11
+origin: DW-S182 2026-06-13
 operator: Andrew
 priority: high
 maturity: working

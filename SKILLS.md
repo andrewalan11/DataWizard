@@ -2,7 +2,7 @@
 title: DataWizard Skills
 type: project-doc
 created: '2026-03-26'
-updated: 2026-11-09
+updated: '2026-11-11'
 origin: DW-S250 2026-08-06
 edit_log:
   - 'DW-S492 2026-11-09 - supervised-build row -> v1.6.4 (reported results are pointers); model-casting row -> v1.2 (lead to reviewer handoff)'
@@ -90,6 +90,7 @@ edit_log:
   - DW-S374 2026-09-23 - supervised-build row -> v1.3.4 (reviewer-lands-cheap-guards)
   - DW-S388 2026-10-06 - session-closer row -> v4.10.0 (board rule at Step 3.14; row had missed v4.9.0)
   - 'DW-S391 2026-10-08 - Workshop table: org-federate row -> v1.2 (T19 Chunk 4 skill; catalog sync in T19 Chunk 7)'
+  - 'DW-S502 2026-11-11 - meta-learning-review row -> v1.5.7 (Step 2 verifier re-check)'
 ---
 
 # DataWizard Skills
@@ -112,7 +113,7 @@ For how skills work in DW's architecture, see the [Agent and Skills Architecture
 | **design-harvest** (v1.2.2) | Technique | Turning research findings into design doc updates, skill refinements, roadmap additions, and guideline improvements. The interpretive bridge between research (facts) and living docs (architecture). Includes target-section overlap check before planting. Completes the research lifecycle: tools-research (evaluate) -> research-tracking (track) -> design-harvest (integrate). |
 | **insight-capture** (v1.0) | Technique | Capture and plant insights from loaded context mid-session. When rich context is loaded after deep work, side quests, or design discussions, synthesizes patterns, plants them in the right permanent homes (design docs, build plans, action items, skills, protocol, MOC, decision log), and cross-references for discoverability. Includes a protocol nudge for instances to offer at the right moment. Triggers on: "capture insights," "insight capture," "let's capture," "capture," "squeeze the juice." |
 | **garden-synthesis** (v1.1) | Technique | Synthesizing a cluster of related seeds and seedpods into a coherent project concept -- a garden (taxonomy `type: garden`). Reads the seeds, synthesizes vision/model/offerings, researches allies across operator-configured knowledge layers, captures strategic insights (via insight-capture), and tags constituent seeds so membership is queryable vault-wide, with optional planter script and companion Base. Source locations resolve from `Vault Config.md`'s `## Garden Sources` block (git-ignored, per-operator), never hardcoded in a tracked Seed file. Triggers on: 'build a garden', 'synthesize a garden', 're-synthesize the [X] garden'. |
-| **meta-learning-review** (v1.5.6) | Technique | Review accumulated session learnings and plant them into skills, design docs, and protocol. Complements design-harvest: design-harvest plants external research findings, meta-learning-review plants operational learnings from session history. Triggered when a pending report is waiting, or on demand. |
+| **meta-learning-review** (v1.5.7) | Technique | Review accumulated session learnings and plant them into skills, design docs, and protocol. Complements design-harvest: design-harvest plants external research findings, meta-learning-review plants operational learnings from session history. Triggered when a pending report is waiting, or on demand. |
 | **meta-learning-scan** (v1.4.3) | Technique | Automated scan of session log Learnings sections that produces a structured report for human review. Generates the report; meta-learning-review handles the planting. Use for scheduled meta-learning tasks or on demand before a review. |
 | **content-interests-review** (v1.4.2) | Technique | Reviewing and updating a project's Content Interests section in its 0.0 Project Guidelines. Detects drift between what the 0.0 says and what the project is actually doing. Includes outsider readability and consolidation passes to ensure routing-agent-friendly output. Handles shell+sections session logs for mature projects, quest-aware for trajectory signals, and young-project guidance for speculative interests. Feeds the dynamic Vault Project Map. |
 | **transcript-harvest** (v0.10.0) | Technique | Harvesting content from transcripts (video, podcast, meeting, voice memo) into project documents: segmentation, chunk-and-route, block citations, batch mode. Accept a hub section: the target-side step that places a hub-harvested section and closes the project's own harvest_log line. |

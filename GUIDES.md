@@ -2,7 +2,7 @@
 title: DataWizard Guides
 type: project-doc
 created: '2026-06-22'
-updated: 2026-11-08
+updated: '2026-11-11'
 origin: 'DW-S195 2026-06-22 - backfilled from the earliest edit_log entry (D127)'
 operator: Andrew
 edit_log:
@@ -47,6 +47,7 @@ edit_log:
   - 'DW-S449 2026-11-01 - Coordination Board template row: targets file, seen_by, third example'
   - 'DW-S455 2026-11-02 - Coordination Board template row: index plus one inbox per project'
   - 'DW-S484 2026-11-08 - Published Artifacts row: sectioned, publish_files UUID slug, Docs-type birth (Lane B plants)'
+  - 'DW-S502 2026-11-11 - review fixes: row for Working Principles - continued'
 ---
 # DataWizard Guides
 
@@ -88,6 +89,7 @@ These learnings rot faster than any other kind because they have no design-doc h
 | **Harvest Workflow Guide** | The harvest pipeline end to end: routing, provenance, and execution. |
 | **Obsidian Bases Reference** | Using Obsidian Bases for DW dashboards and filtered views. |
 | **Working Principles** | The reasoning behind the Working Rules - the "why" under the behavioral contract. |
+| **Working Principles - continued** | Interim continuation of Working Principles; new additional principles go here. |
 | **Review Automation** | The three periodic reviews (health audit, meta-learning, Content Interests): the pending-report model, the cadence table (single home), and how scheduled automation detects staleness so the session-closer only surfaces waiting reports. |
 | **Orientation Flag Sweep - Query Spec** | The mechanism behind the PI orientation sweep (Step 6): the filesystem-primary `flag_for` query (with MCP fallback and the silent-`{}` parse-failure caveat), the stale-stub, intake and board (d) sub-checks, named constants, and the read-only-sweep decision. Referenced by the PI. |
 | **Team Attention Rollout** | Activating the flag system on a multi-operator project: the five-step activation recipe, preconditions (Seed version, PI loaded per surface), the per-person canary live test, the four-branch diagnosis tree for undelivered flags (incl. shipped-is-not-loaded), the executor chain for `flag_default`, first-render expectations, and the reader-path principle. |

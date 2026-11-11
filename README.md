@@ -277,7 +277,10 @@ This downloads the latest Seed and overwrites only the Seed files. Your project 
 _DataWizard/Seed/
   README.md              - This file
   VERSION.md             - Version numbers and update instructions
-  VERSION History.md     - Older What's New entries and retired notices (1.0.0 to 1.9.5 in VERSION History - 1.0.0 to 1.9.5.md)
+  VERSION History.md     - Older What's New entries (1.11.4 to 1.11.15) and retired notices
+  VERSION History - 1.11.16 to 1.13.5.md - Closed part of the version history
+  VERSION History - 1.10.0 to 1.11.3.md  - Closed part of the version history
+  VERSION History - 1.0.0 to 1.9.5.md    - Closed part of the version history
   DataWizard Project Instructions.md - Instructions to paste into Claude (or @import for Claude Code)
   Project Instructions - Changelog.md - What changed in each Project Instructions version
   PI.md                  - One-line import target for Claude Code (imports the Project Instructions)

@@ -2,7 +2,7 @@
 title: Browser and File System Access Behaviors
 type: guide
 created: 2026-08-05
-updated: 2026-10-18
+updated: 2026-11-11
 operator: Andrew
 status: active
 edit_log:
@@ -10,6 +10,7 @@ edit_log:
   - 'DW-S398 2026-10-12 - DOM gotcha: script element id equal to a library global shadows it (inlined d3 breaks)'
   - 'DW-S408 2026-10-15 - board intake plant: DOM/CSS gotchas fixed corner button covers content on a phone, visibility hidden vs opacity for Tab and Find (LocationScout, Evolutionary Media Commons)'
   - DW-S421 2026-10-18 - B0153-3
+  - 'DW-S500 2026-11-11 - hidden bullet: test computed style, not the attribute; new bullet: scope .list > li (board B-0419, LocationScout)'
 ---
 
 # Browser and File System Access Behaviors
@@ -32,7 +33,8 @@ Runtime gotchas for a **single self-contained HTML tool** that reads and writes 
 
 ## DOM / CSS gotchas
 
-- **The `hidden` attribute loses to a class that sets `display`.** The user-agent rule `[hidden] { display: none }` is a plain element selector; any class rule that sets `display` on the same element overrides it, so the element stays visible despite `hidden`. Fix: add an explicit `.yourclass[hidden] { display: none }` rule for any element you toggle with `hidden` that also carries a `display`-setting class.
+- **The `hidden` attribute loses to a class that sets `display`.** The user-agent rule `[hidden] { display: none }` is a plain element selector; any class rule that sets `display` on the same element overrides it, so the element stays visible despite `hidden`. Fix: add an explicit `.yourclass[hidden] { display: none }` rule for any element you toggle with `hidden` that also carries a `display`-setting class. A DOM test that only checks the `hidden` attribute passes while the element is still visible; check the computed style (`getComputedStyle(el).display`) instead. (LocationScout, 2026-11)
+- **An unscoped `.list li` rule also styles the items of nested lists.** Scope it with `.list > li` when a list item holds another list. (LocationScout, 2026-11)
 - **`color-scheme` makes native form controls legible in dark mode.** Set `color-scheme: light` / `color-scheme: dark` (per theme) so native `<input type="date">`, `<select>`, and scrollbars follow the theme. Without it, native controls render light-on-light (or dark-on-dark) and become unreadable when the surrounding UI is themed.
 - **A script element whose `id` matches a library global shadows that global.** Named window access returns elements by `id`, so with an inlined library held in `<script id="d3">`, d3's UMD header looks up `d3` on the window, gets the script element, and adopts it as its namespace - `d3.text` then overwrites the element's text and the library breaks (`window.d3.tagName` is `SCRIPT`). Never give a script tag an `id` equal to a library's global name; use `d3-lib` or similar. (Holonic Canvas, 2026-10)
 - **A `position: fixed` corner button can cover content on a phone.** A theme button fixed top-right covered card action buttons at 400 px width once the page scrolled; `position: absolute` keeps it at the page top instead. (LocationScout, 2026-10)

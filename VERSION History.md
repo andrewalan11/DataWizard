@@ -2,7 +2,7 @@
 title: VERSION History
 type: guide
 created: 2026-10-18
-updated: 2026-11-08
+updated: '2026-11-11'
 operator: Andrew
 origin: DW-S421 2026-10-18 - What's New entries 1.0.0 to 1.5.0 moved from VERSION.md word for word (size rotation, archivist rule)
 edit_log:
@@ -23,11 +23,13 @@ edit_log:
   - DW-S422 2026-10-18 - What's New 1.6.0 to 1.6.2 moved in from VERSION.md word for word (size rotation before 1.11.0)
   - DW-S421 2026-10-18 - created
   - 'DW-S460 2026-11-02 - What''s New 1.11.9 and 1.11.8 moved in from VERSION.md word for word (size rotation before 1.12.2)'
+  - 'DW-S502 2026-11-11 - intro names the new closed part VERSION History - 1.11.16 to 1.13.5.md (size rotation of VERSION.md)'
+  - 'DW-S502 2026-11-11 - review fixes: next rotation starts a new closed part named by its version range'
 ---
 
 # VERSION History
 
-Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newer entries are in `VERSION.md`. When `VERSION.md` passes about 50 KB again, move its oldest entries to the top of the list below, newest first, and leave the pointer in `VERSION.md`. Entries 1.10.0 to 1.11.3 are in `VERSION History - 1.10.0 to 1.11.3.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md`; when this file passes about 50 KB, start the next part the same way.
+Older "What's New" entries of the Seed, moved here from `VERSION.md` word for word. The current version and the newest entries are in `VERSION.md`; entries 1.11.16 to 1.13.5 are in `VERSION History - 1.11.16 to 1.13.5.md`. When `VERSION.md` passes about 50 KB again, the next rotation starts a new closed part, as 1.11.16 to 1.13.5 did: a file named by its version range (`VERSION History - <oldest> to <newest>.md`), listed here, with the pointer left in `VERSION.md`. Entries 1.10.0 to 1.11.3 are in `VERSION History - 1.10.0 to 1.11.3.md`, and 1.0.0 to 1.9.5 are in `VERSION History - 1.0.0 to 1.9.5.md`; when this file passes about 50 KB, start the next part the same way.
 
 ## What's New in 1.11.15
 
