@@ -1,5 +1,5 @@
 
-seed: 1.14.4
+seed: 1.14.5
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,15 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.5
+
+**Patch release (2026-11-11): the device-shell session disk has two full forms.** Docs only; no script changes. The session disk inside the shell VM can fill by inodes (seen 2026-10) or by space (seen 2026-11: 22 MB free of 9.8 GB, inodes at 39%). Both stop the device shell; the fix is the same swap of `sessiondata.img`. Shipped in the Seed:
+
+- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: the session-disk bullet names both forms; the watch runs `df -h /sessions; df -i /sessions` and plans the swap when either passes 80% (it was `df -i` only, at 100%).
+- `Guides/Cowork Build Environment/8.1 Device Bridge - Staging, Commits and Transport.md`: new bullet - the space-full form (low space was seen twice and only worked around before the shell failed; a low-space sighting needs a swap date); after the swap only chats started after it get a device shell - a pre-swap chat keeps only the MCP tools, so verify in a new chat with a folder connected.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.14.4
 
