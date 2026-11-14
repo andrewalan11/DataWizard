@@ -65,7 +65,7 @@ operator: Andrew
 scope: seed
 title: Cowork Build Environment
 type: guide
-updated: 2026-10-26
+updated: 2026-11-14
 ---
 # Cowork Build Environment
 
@@ -96,6 +96,8 @@ Field provenance: the core cluster was re-learned session after session across a
 ![[8.1 Device Bridge - Staging, Commits and Transport]]
 
 ![[8.2 Device Bridge - Sub-agents and Orchestration]]
+
+![[8.3 Device Bridge - Outages and Recovery]]
 
 ![[9.0 Verification Discipline for Builds]]
 

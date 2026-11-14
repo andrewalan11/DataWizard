@@ -1,5 +1,5 @@
 
-seed: 1.14.5
+seed: 1.14.6
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,16 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.6
+
+**Patch release (2026-11-14): a new continuation of the Device Bridge guide, with the 503 outage behavior.** Docs only; no script changes. Guide 8.0 passed the 30 KB soft size, so a continuation was started and nothing was cut. Shipped in the Seed:
+
+- `Guides/Cowork Build Environment/8.3 Device Bridge - Outages and Recovery.md` (new): when every `remote-devices` call returns 503 "Service Unavailable" (other connectors too; `get_device_info` may still answer), it is neither the full-disk fault nor a bridge drop. How to tell the three apart by what still works, the after-check (`df` about 1% used), that it cleared on its own after about five hours, and the caution that a sub-agent's saved output must be checked and hashed by the lead before the commit. Links to the existing outage bullets in 8.0, 8.1 and MCP Reliability.
+- `Guides/MCP Reliability and Write Verification/3.0 Bridge Drops and Hangs (Remote Transport).md`: one pointer paragraph to 8.3.
+- `Guides/Cowork Build Environment.md`: embed line for 8.3 after 8.2. `Guides/Cowork Build Environment/8.0 Device Bridge.md`: the intro line points to 8.3.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.14.5
 
