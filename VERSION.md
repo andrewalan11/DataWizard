@@ -1,5 +1,5 @@
 
-seed: 1.14.6
+seed: 1.14.7
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,15 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.7
+
+**Patch release (2026-11-15): two plants from a meta-learning review.** Docs only; no script changes. Shipped in the Seed:
+
+- `Guides/Script Portability.md`, "Case-insensitive disks": a test's fixture folder, not the test file's location, decides which disk the test really runs on. A suite run from the mounted folder still passes on the container's case-sensitive disk if the fixtures go to a temp folder there. `Guides/Cowork Build Environment/9.0`: one clause points to it.
+- `Guides/Git Guide/5.5 DW Save.md`: new section "Pausing Both Auto-Committers". For a step that must land as one commit, pause the Obsidian Git plugin and the DW Save job. Quitting Obsidian stops only the plugin. `Guides/Git Guide/3.0` and `7.0`: a pointer each. The unload command is linked from its home in `6.0`, not restated.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.14.6
 

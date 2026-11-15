@@ -2,7 +2,7 @@
 title: Script Portability
 type: guide
 created: '2026-09-23'
-updated: '2026-11-11'
+updated: '2026-11-15'
 operator: Andrew
 status: active
 edit_log:
@@ -16,6 +16,7 @@ edit_log:
   - "DW-S443 2026-10-28 - new section The macOS temp folder is a symlink (realpath in tests; board B-0269, Mesocosm)"
   - "DW-S456 2026-11-02 - 1.12.1: Shell dialect - set -e does not stop inside an && chain; guard each step (B-0267, Rootland)"
   - 'DW-S500 2026-11-11 - Case-insensitive disks: the cloud container is case-sensitive; run file-creating tests on the Mac (fm_edit 0.3.0)'
+  - 'DW-S510 2026-11-15 - Case-insensitive disks: the fixture folder, not the test file location, decides the disk'
 ---
 
 # Script Portability
@@ -43,6 +44,8 @@ In zsh an unmatched glob is an error, not an empty list. `CAP="$(ls -t ~/Downloa
 ## Case-insensitive disks
 
 A default macOS disk treats `Out/data` and `out/DATA` as one folder. Linux treats them as two. A test that creates case-variant paths in one repo passes on Linux and fails on the Mac. Give each case variant its own folder, or its own repo. Run the test suite on a Mac once before the script ships. (DataWizard, 2026-10) The cloud container's disk is case-sensitive, so a passing container run does not prove the Mac result: a new-file twin test passed there and failed on the Mac, because on the Mac the plain exists check already matched the twin and refused with a different message (the refusal itself was right). Run any test that creates files on the Mac before the build counts as done. (DataWizard, 2026-11)
+
+The test's fixture folder, not the test file's location, decides which disk the test really runs on. Running the suite from the mounted folder does not help if the test creates its fixtures in a temp folder on the cloud container's case-sensitive disk: a case-twin test then passes there and fails on the Mac. Create the fixtures in a folder on the Mac disk, or run the suite on the Mac, before calling the build done. (DataWizard, 2026-11)
 
 ## The macOS temp folder is a symlink
 
