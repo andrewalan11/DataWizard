@@ -10,9 +10,9 @@ description: >-
   planting. Also use when the user wants to set up automated learning extraction
   for any DW project.
 type: skill
-version: '1.4.3'
+version: '1.4.4'
 created: '2026-06-01'
-updated: 2026-10-21
+updated: 2026-11-15
 edit_log:
   - DW-S185 2026-06-15 - platform/environment routing hint (Step 4 Deferred)
   - "DW-S243 2026-08-05 - v1.3: Step 3 header-variant note (### Findings treated
@@ -30,6 +30,7 @@ edit_log:
     trigger language replaced; stray cadence number dropped (S312 Seed review)"
   - 'DW-S330 2026-09-04 - v1.4.2: Step 5 write path moved to the infrastructure folder Learning Reports (Weave FR WV_2026-09-02_AA_01; single home = Review Automation guide)'
   - 'DW-S433 2026-10-21 - v1.4.3: Step 4 Already planted - a tracked-in claim names the file and quotes the line, else "no tracking line found" (points at session-closer Step 3.5)'
+  - 'DW-S511 2026-11-15 - v1.4.4: Step 2 missing stamp - add it once (baseline only) or flag, plus report scan_baseline field (B-0346, KO S93 FR); Step 4 check earlier Review Outcomes before reporting a family as new (confirm-home)'
 ---
 
 # Meta-Learning Scan
@@ -38,7 +39,7 @@ edit_log:
 
 Automated scan of session log Learnings sections that produces a structured report for human review. This is the report-generation half of the meta-learning workflow. The companion skill, meta-learning-review, handles the human-in-the-loop review-and-plant step that consumes this report.
 
-The scan is designed to run as a Cowork scheduled task without user interaction, but can also be triggered manually. It never modifies vault files other than writing its report -- all planting decisions require human review.
+The scan is designed to run as a Cowork scheduled task without user interaction, but can also be triggered manually. It never modifies vault files other than writing its report (one exception: adding a missing `last_meta_learning_review` field, Step 2) -- all planting decisions require human review.
 
 ## When to Use
 
@@ -84,7 +85,7 @@ If neither 0.0 nor 0.2 can be found in either location, abort with a clear error
 
 ### Step 2: Determine scan range
 
-Parse the session number from `last_meta_learning_review`. If the field is missing, treat the entire session log as unscanned (use session 0 as the start).
+Parse the session number from `last_meta_learning_review`. If the field is missing, do not just guess. Take the baseline from the newest `status: reviewed` report in the project's Learning Reports folder (the end of its `scan_range`), else `none` (start at session 0). Add the field once to 0.0 frontmatter with that value; if this run may not edit 0.0, post a one-line flag to the operator instead. Either way, write the baseline into the report's `scan_baseline:` field (Step 5), never as free text in `last_review_session:`. (Six Kosmosis reports each guessed a different start while the field stayed absent; Kosmosis, 2026-11.)
 
 **Sectioned session logs:** List all files in the Session Log sections folder. Extract session numbers from filenames (pattern: `N.0 Session NNN - ...`). Identify all sessions with numbers greater than the last-reviewed session.
 
@@ -134,6 +135,8 @@ When a deferred learning is a platform or environment behavior (scheduled-task q
 
 **Pattern families.** After grouping by theme, make a second pass across *all* themes for learnings that are instances of the same unnamed practice - a way of working the project keeps rediscovering without having named it (a coordination role, a review habit, a scoping test). Platform facts self-plant into standing guides and design facts self-plant into design docs; the residue that needs a human to act on it is exactly these unnamed practices, and they hide because each instance is filed under a different theme. For each family found, give it a provisional name, list its instances (session + one line each), and count them; where prior reports in the folder are cheap to grep, include instances from them too. Write the families as their own section (template below). Three or more instances is the review skill's threshold for naming the practice in a standing doc rather than planting the instances one by one. (Two families with six and four instances went unnamed across two reports until a reviewer noticed them in prose; DataWizard, 2026-08.)
 
+**Check earlier rulings before calling a family new.** Before reporting a recurring family as a new top recurrence, read the Review Outcome sections of earlier reports in the Learning Reports folder and the homes they name. A family a review already named or ruled on (for example "confirm-home") is reported as `confirm-home: <family>, ruled <review>`, not as new. (The S479-S493 review ruled the "independent reviewer / third seat" family confirm-home, yet the next scan listed it again as a top recurrence; DataWizard, 2026-11.)
+
 ### Step 5: Write report
 
 Write the report to the project's infrastructure folder (canonical location: the Review Automation guide's "Report locations" section):
@@ -154,6 +157,7 @@ scan_range: "S{start}-S{end}"
 sessions_scanned: {count}
 learnings_extracted: {count}
 last_review_session: "{Abbrev}-S{last_reviewed}"
+scan_baseline: "{Abbrev}-S{n}"  # the start point used (Step 2): the 0.0 stamp, the fallback report end, or none
 status: pending-review
 ```
 
@@ -215,7 +219,7 @@ Suggested home if named: {Working Principles block | Conventions Registry entry 
 
 ### Step 6: Signal completion
 
-Do NOT update `last_meta_learning_review` in 0.0 frontmatter -- that's the review skill's job after planting is complete.
+Do NOT update `last_meta_learning_review` in 0.0 frontmatter -- that's the review skill's job after planting is complete. The one exception is Step 2: when the field is absent, the scan adds it once with the baseline value, never a later session.
 
 If running as a scheduled task, the report's existence with `status: pending-review` signals that a review is ready. The meta-learning-review skill checks for pending reports in its Step 1 (primary path).
 
@@ -237,7 +241,7 @@ If the scan threshold isn't met (fewer than 10 sessions), note that and stop.
 ## Common Mistakes
 
 - **Planting during the scan.** The scan produces a report, nothing more. Planting requires human review via meta-learning-review. This separation exists because disposition classification from session log snapshots has a significant error rate (S97 found 2/10 items already done that the report didn't catch).
-- **Updating last_meta_learning_review.** Only the review skill updates this field, after planting is complete. Updating it during the scan would cause the review to think no scan is needed.
+- **Updating last_meta_learning_review.** Only the review skill updates this field, after planting is complete. Updating it during the scan would cause the review to think no scan is needed. Adding a missing field (Step 2) is the one exception, and it sets only the baseline.
 - **Reading full session files.** Most session files are 3,000-8,000 words. The Learnings section is typically 200-500 words. Reading only what's needed preserves context for the analysis step.
 - **Forcing a fixed taxonomy.** Different projects generate different kinds of learnings. A pipeline-focused project produces tool-behavior and architecture-signal learnings. A team-workflow project produces process and coordination learnings. Let the themes emerge.
 - **Scanning too few sessions.** Reports from 3-5 sessions are noise -- not enough signal for cross-cutting patterns. The 10-session threshold exists for a reason.

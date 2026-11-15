@@ -7,8 +7,8 @@ description: >-
   report is ready for review. Also triggered when the scheduled review
   automation has left a pending report.
 type: skill
-updated: '2026-11-11'
-version: '1.5.7'
+updated: '2026-11-15'
+version: '1.5.8'
 edit_log:
   - DW-S159 2026-06-08 RP-8 effort note in Step 4.5
   - DW-S185 2026-06-15 - platform/environment learnings homing note (Step 3
@@ -44,6 +44,7 @@ edit_log:
   - 'DW-S400 2026-10-12 - v1.5.5: Step 4.5 recipes-are-not-learnings line'
   - 'DW-S433 2026-10-21 - v1.5.6: Step 2 item 2 - a tracked-in claim must resolve to a quoted line on disk, else the item is ready to plant (points at session-closer Step 3.5)'
   - 'DW-S502 2026-11-11 - 1.5.7: Step 2 item 2 - a verifier sub-agent errs both ways on long paragraphs; the lead re-checks every not-planted and already-removed claim on the live line (meta-learning review S479-S493)'
+  - 'DW-S511 2026-11-15 - 1.5.8: Step 5 item 3 - create the reviewed-through stamp when 0.0 lacks it (B-0346, KO S93 FR)'
 ---
 
 # Meta-Learning Review Skill
@@ -196,7 +197,7 @@ After planting is complete:
 
 1. **Append a Review Outcome section** to the report (if one exists), in this shape: a `## Review Outcome (SESSION, YYYY-MM-DD)` heading; one line of counts (how many non-already-planted items, how many planted / already done / superseded / not planted); then a **Planted** list (learning -> target doc and section), **Already done** (with where it already lives), **Superseded** (with what superseded it), **Not planted** (with the reason), **Deferred** (with the action item or home), and a closing **Stamp** line stating what the reviewed-through field moved from and to - or that it did not move, and why. This is the disposition record the next reviewer reads first.
 2. **Update the report's frontmatter**: `status: reviewed`, `last_review_session:` set to the current session identifier, `updated:` and an `edit_log` entry.
-3. **Update the reviewed-through stamp.** The scheduled review-status check reads `last_meta_learning_review:` in the project's 0.0 frontmatter to determine when the next review is due. Set it to the reviewed report's **end-of-scan-range session** (the reviewed-through point), not the current session -- the next scan picks up immediately after the reviewed range, so stamping the current session silently skips everything between the range end and the review session. The pending-report trigger is what nudges the next review, so the accurate stamp does not silence it. With a backlog reviewed oldest-first, each review advances the stamp one report at a time. A report reviewed out of order - newest-first, or a gap behind the current stamp - does **not** move the stamp; note that in the Review Outcome's Stamp line so the next reviewer does not "correct" it. (Order guidance: Cadence > Backlog Mode.)
+3. **Update the reviewed-through stamp.** The scheduled review-status check reads `last_meta_learning_review:` in the project's 0.0 frontmatter to determine when the next review is due. Set it to the reviewed report's **end-of-scan-range session** (the reviewed-through point), not the current session -- the next scan picks up immediately after the reviewed range, so stamping the current session silently skips everything between the range end and the review session. The pending-report trigger is what nudges the next review, so the accurate stamp does not silence it. With a backlog reviewed oldest-first, each review advances the stamp one report at a time. A report reviewed out of order - newest-first, or a gap behind the current stamp - does **not** move the stamp; note that in the Review Outcome's Stamp line so the next reviewer does not "correct" it. If 0.0 has no `last_meta_learning_review:` field, create it with this value; do not only update an existing one. (Order guidance: Cadence > Backlog Mode.)
 
 ### Step 6: Summarize
 

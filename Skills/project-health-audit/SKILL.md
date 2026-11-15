@@ -6,9 +6,9 @@ description: >-
   narrative order, and routes findings. Triggers on: 'DW review', 'audit this
   project', 'check project health', or when the review-automation cadence flags an audit due.
 type: skill
-version: '2.1.2'
+version: '2.1.3'
 created: '2026-05-23'
-updated: '2026-10-31'
+updated: '2026-11-15'
 operator: Andrew
 edit_log:
   - "DW-S179 2026-06-12 - v2.0: consumes dw_lint report (P2), judgment checks
@@ -23,6 +23,7 @@ edit_log:
     references repointed to the Review Automation guide (S312 Seed review)"
   - 'DW-S400 2026-10-12 - v2.1.1: Step 0 cross-project --config / --vault-root note (C9/G4 false positives)'
   - 'DW-S446 2026-10-31 - v2.1.2: Action Items required once the first item is filed (matches the 0.x slot rule)'
+  - 'DW-S511 2026-11-15 - v2.1.3: J1 - a 0.0 without a last_meta_learning_review stamp is a finding (B-0346, KO S93 FR)'
 ---
 
 # Project Health Audit Skill
@@ -82,6 +83,8 @@ Lint's G2 checks slot NAMING; this check asks whether the project HAS what it ne
 - Judgment call: a project doing harvesting without a 0.4, or a team project without a 0.10, is a gap; a solo project without a 0.10 is fine.
 
 Frontmatter on infrastructure files: `updated:` and `edit_log:` present. (Do NOT require `datawizard_protocol_version` — retired per D93; drop the pin when touching a file that has one.)
+
+A 0.0 without a `last_meta_learning_review:` field (`none` before the first review) is a finding: without it every meta-learning scan guesses its own start point.
 
 ### J2: MOC Regeneration Freshness (D92)
 

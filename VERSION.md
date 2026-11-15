@@ -1,5 +1,5 @@
 
-seed: 1.14.7
+seed: 1.14.8
 protocol: 1.8
 project_instructions: 4.10
 
@@ -23,12 +23,28 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
 
+## What's New in 1.14.8
+
+**Patch release (2026-11-15): the meta-learning stamp always exists, scans check earlier rulings, and three tool behaviors from partner projects (Kosmosis).** Docs and skill text only; no script changes. Shipped in the Seed:
+
+- `Skills/project-guidelines/SKILL.md` v1.6.1: the 0.0 frontmatter template carries `last_meta_learning_review: none`, so the field always exists (Kosmosis, EM and ReWoven each had a 0.0 without it, and every scan guessed its own start point).
+- `Skills/meta-learning-scan/SKILL.md` v1.4.4: Step 2 - when the stamp is absent, the scan adds it once with a baseline value (the end of the newest reviewed report, else `none`) or posts a one-line flag, and writes the start point it used into a new report field `scan_baseline:`; the no-update rule stays, with this one named exception. Step 4 - before reporting a recurring family as new, read earlier Review Outcomes; a family already named or ruled is reported as `confirm-home: <family>, ruled <review>`.
+- `Skills/meta-learning-review/SKILL.md` v1.5.8: Step 5 creates the reviewed-through stamp when 0.0 lacks it. `Skills/project-health-audit/SKILL.md` v2.1.3: a 0.0 without the stamp is a finding (J1). `SKILLS.md`: four rows updated.
+- `Protocols/Conventions Registry/26.0 Coordination board.md`: the board script's `seen` command works only on awareness asks; it refuses an action ask, and an action ask to `all` stays open after one project does the work - read its `resolution:` line before acting (seen once).
+- `Guides/Git Guide/9.0 Troubleshooting.md`: a check script fails after an interrupted `git fetch` because HEAD stays on the old commit; compare `git log -1` with the expected head before reading the failure (seen once).
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
+
 ## What's New in 1.14.7
 
-**Patch release (2026-11-15): two plants from a meta-learning review.** Docs only; no script changes. Shipped in the Seed:
+**Patch release (2026-11-15): two plants from a meta-learning review, and a batch of tool behaviors from partner projects (Common Woods, ReWoven, LocationScout, Flow Funding, Kosmosis, Tech Tools).** Docs only; no script changes. Shipped in the Seed:
 
 - `Guides/Script Portability.md`, "Case-insensitive disks": a test's fixture folder, not the test file's location, decides which disk the test really runs on. A suite run from the mounted folder still passes on the container's case-sensitive disk if the fixtures go to a temp folder there. `Guides/Cowork Build Environment/9.0`: one clause points to it.
 - `Guides/Git Guide/5.5 DW Save.md`: new section "Pausing Both Auto-Committers". For a step that must land as one commit, pause the Obsidian Git plugin and the DW Save job. Quitting Obsidian stops only the plugin. `Guides/Git Guide/3.0` and `7.0`: a pointer each. The unload command is linked from its home in `6.0`, not restated.
+- `Guides/Chrome MCP and Web Tool Behaviors/7.0 Google Docs via Chrome.md`: the Drive-connector line now says only the Drive connector cannot edit a Doc; new bullets - the Google Docs connector edits a Doc in place and `addDocumentTab` works; `read_doc` of a tabbed Doc is very large, always saved to a file, with no per-tab read, and each write needs a fresh `revisionId`; a new table's multi-line cells work but bullets need a second pass; a one-page check by PDF export. A scope line says the section also covers the Docs connector.
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0 web_fetch Behaviors.md`: Kleinanzeigen location ids from `/s-ort-empfehlungen.json`; Zenodo PDFs - WebFetch returns only binary, so download with curl in the cloud container, one record at a time.
+- `Guides/Published Artifacts and ArtifactData Behaviors/1.0`: `list_files` and `read_file` refuse an artifact someone else has written to. `2.0`: the chat `db_*` tools cannot patch inside a large nested document (use a small inbox doc); Chrome sends no mouseup after an HTML5 drag; an internal drag can type its id into a text field.
+- `Guides/Cowork Build Environment/8.1`: pass `timeout_ms` for a loop of slow scripts; a Dropbox (File Provider) folder may fail to mount in `device_bash`. `8.2`: for a verbatim import, a script copies and reports a diff. `11.0`: account skills are synced read-only in the cloud container. `4.0`: the 45000 `timeout_ms` cap is the sandbox's `bash`, not `device_bash`.
 
 **Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 

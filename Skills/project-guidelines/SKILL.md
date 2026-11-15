@@ -6,12 +6,13 @@ description: >-
   migration', 'write project guidelines', 'set up a new project', or any mention
   of 0.0 files needing creation or updates.
 type: skill
-version: '1.6.0'
-updated: '2026-10-31'
+version: '1.6.1'
+updated: '2026-11-15'
 edit_log:
   - "DW-S349 2026-09-08 - v1.5.1: Working Conventions template gains the recommended Reader-Facing Prose Style line (edit_log added this session as Step 3.8 fallback; prior history predates the field)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v1.5.2 0.0 template birth fields'
   - 'DW-S447 2026-10-31 - v1.6.0: shared git repos get a path-free tracked CLAUDE.md template and a CLAUDE.local.md gitignore line'
+  - 'DW-S511 2026-11-15 - v1.6.1: 0.0 frontmatter template carries last_meta_learning_review: none (B-0346, KO S93 FR)'
 ---
 
 # Project Guidelines Skill
@@ -81,6 +82,7 @@ edit_log:
 seed_version: "[seed: from VERSION.md]"
 status: active
 last_content_interests_review: YYYY-MM-DD  # set to created date if Content Interests written at creation
+last_meta_learning_review: none  # the meta-learning review sets the reviewed-through session
 ```
 
 **Filename:** `0.0 Project Guidelines - [Project Name].md` — always include the `- ProjectName` suffix to avoid wikilink ambiguity across projects. The dynamic Vault Project Map depends on unique filenames for its embed references. If an existing 0.0 uses a different suffix than the project's folder name (e.g., an abbreviation or informal name), match the existing convention. Check other infrastructure files (0.2, action items) for the project's established naming pattern. Don't rename without asking.
