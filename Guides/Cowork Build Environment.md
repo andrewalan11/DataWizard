@@ -65,7 +65,7 @@ operator: Andrew
 scope: seed
 title: Cowork Build Environment
 type: guide
-updated: 2026-11-14
+updated: 2026-11-16
 ---
 # Cowork Build Environment
 

@@ -29,7 +29,7 @@ operator: Andrew
 scope: seed
 title: Chrome MCP and Web Tool Behaviors
 type: guide
-updated: 2026-10-15
+updated: 2026-11-16
 ---
 # Chrome MCP and Web Tool Behaviors
 
