@@ -1,5 +1,5 @@
 
-seed: 1.14.8
+seed: 1.14.9
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,17 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.9
+
+**Patch release (2026-11-16): four tool behaviors from partner projects (ReWoven, Flow Funding), and two out-of-date warnings.** Docs only; no script or skill changes. Shipped in the S512 session.
+
+- `Guides/Cowork Build Environment/8.1 Device Bridge - Staging, Commits and Transport.md`: `device_commit_files` takes `stagedPath` under `/mnt/user-data/outputs/` (or `/mnt/project-files/` in a project thread); a file under `/home/claude/` or the uploads path from `device_stage_files` is refused - copy it into outputs first, then commit (ReWoven). New bullet: `zip` cannot write straight into a vault folder ("Operation not permitted", it leaves its temp file behind); zip into the device shell's `$HOME`, then `cp` the zip in (Flow Funding).
+- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: the auto mode classifier can block a `mv` to a destination the operator did not name; ask the operator to name it, and do not work around the block (Flow Funding).
+- `Guides/Published Artifacts and ArtifactData Behaviors/2.0 Published Artifacts - Store, Sharing, Comments, Rendering and Runtime.md`: the `obsidian://` link bullet names the tested link form (ReWoven).
+- `Protocols/Conventions Registry/18.0 Tech tool evaluations.md` and `Protocols/YAML Schema/3.0 ...` (Tool Evaluation Notes): a warning at the top says the text is out of date in part. D169 (one note per tool; a project's fit is a section; the Tech Tools note is the core; an id only when a join needs one) wins until the rewrite lands.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.14.8
 
