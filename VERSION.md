@@ -1,5 +1,5 @@
 
-seed: 1.14.9
+seed: 1.14.10
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,21 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.14.10
+
+**Patch release (2026-11-16): tool behaviors from partner projects (Earth Changes, Flow Funding, Slide Canvas).** Docs only; no script or skill changes.
+
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0 web_fetch Behaviors.md`: publisher pages (Nature, Science, PNAS, Wiley, some ScienceDirect, PMC) block WebFetch - fallback routes, and mark each fact opened, abstract only or could not open (Earth Changes). WebFetch summarizes HTML pages too and caps quotes near 125 characters; `curl` plus `pandoc` gives verbatim text (Flow Funding).
+- `Guides/Chrome MCP and Web Tool Behaviors/5.0 WebSearch Behaviors.md`: an empty `site:` result is not evidence that a small static site lacks a page (Flow Funding).
+- `Guides/Cowork Build Environment/5.0 Network and GitHub Data.md`: `web.archive.org` is blocked from the container but the Wayback availability API answers; snapshots open from the device shell (Flow Funding, DataWizard).
+- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: a chat open before a session-disk swap keeps no device shell after it (Slide Canvas).
+- `Guides/Cowork Build Environment/8.1 Device Bridge - Staging, Commits and Transport.md`: build a large file in the container and commit it instead of typing it into a heredoc; sizes seen once (Earth Changes, Slide Canvas). `4.0 Shell and File-Tool Quirks.md`: a cross-link to it.
+- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: `run_in_background: false` did not hold for parallel sub-agents (Earth Changes); the restart bullet names a session-server restart (Slide Canvas).
+- `Guides/Published Artifacts and ArtifactData Behaviors/1.0 Published Artifacts - Publishing and Reading.md`: `upload_asset` refuses a file under `/tmp` (Slide Canvas).
+- `Guides/Published Artifacts and ArtifactData Behaviors/2.0 Published Artifacts - Store, Sharing, Comments, Rendering and Runtime.md`: a refused `db_write` can return `not-found`; external links must be real `<a href>`; the two publish paths differ on a page fragment (Slide Canvas).
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.14.9
 
