@@ -2,12 +2,13 @@
 title: Conventions Registry
 type: protocol
 created: '2026-06-13'
-updated: 2026-11-08
+updated: 2026-11-18
 origin: DW-S181 2026-06-13
 operator: Andrew
 priority: high
 maturity: working
 edit_log:
+  - 'Seed 1.15.0 2026-11-18 - 38.0 Project looks - the ledger line embedded (D183)'
   - 'DW-S417 2026-10-17 - Tech tool evaluations entry added (three notes per tool, look there first, who writes, core trigger, adopt on touch, tool note naming; D153 TT1-TT5 + S417 rulings); Holonic records sync rule 5 points at it for tools'
   - 'DW-S408 2026-10-15 - board intake plant: Model routing gains the build-round shape - top tier plans and reviews, default tier builds and owns visual design, review falls to the default tier rather than being dropped (Evolutionary Media Commons)'
   - 'DW-S403 2026-10-13 - Coordination board: interim intent/seen clause removed (board.py schema 6 live, G-059); optional resolution line; ID families hand-path id wording aligned with the board header'
@@ -171,3 +172,5 @@ Entries live as section files in the `Conventions Registry/` folder beside this 
 ![[36.0 Attention requests live in the flag cluster, not banners]]
 
 ![[37.0 Intake capture placement]]
+
+![[38.0 Project looks - the ledger line]]

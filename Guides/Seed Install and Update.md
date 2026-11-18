@@ -18,12 +18,13 @@ edit_log:
   - 'DW-S447 2026-10-31 - new section: Claude Code and Obsidian sidebar plugins (per-person PI pointer, PI.md, import facts, external-import dialog, checks)'
   - 'DW-S456 2026-11-02 - depersonalized examples (names replaced with neutral placeholders)'
   - 'DW-S493 2026-11-09 - flat-clone support in both update scripts (--print-paths / -PrintPaths); new sections Nesting a flat clone and Bugs and requests'
+  - 'Seed 1.15.0 2026-11-18 - new section Look ledgers: add your project to holon_lens_map before its first look (D183)'
 operator: Andrew
 purpose: Canonical guide for installing, manually updating, and auto-syncing the
   DataWizard Seed
 title: Seed Install and Update
 type: guide
-updated: 2026-11-09
+updated: 2026-11-18
 ---
 # Seed Install and Update
 
@@ -387,6 +388,12 @@ Obsidian sidebar plugins (which run Claude Code inside Obsidian) usually start C
 ### Several worktrees
 
 A gitignored `CLAUDE.local.md` exists only in the worktree where you made it. Make one in each worktree. The Claude Code docs suggest an import from `~/.claude/` for people with several worktrees. Do not use that route if you also use Cowork (see "Cowork users").
+
+---
+
+## Look ledgers: add your project before its first look
+
+The line writer (`Scripts/look_write.py`) and the ledger rules (Conventions Registry 38.0) need your project in the Vault Config row `holon_lens_map`. Open `Vault Config.md` (untracked, yours), find the `holon_lens_map` row in the Paths table, and append `; <project folder>/=<ABBR>` inside the backticks. `<project folder>` is the folder under the vault root that holds the project, for example `_Alpha`. `<ABBR>` is a capital letter followed by up to nine capitals or digits, for example `AL`. The row is the one owner of the abbreviation: the ledger flag `look_ledger: <ABBR>` and the For cell of a look line must name an abbreviation from it, and the writer refuses one that is not there. Add your row before your first look and before you run the writer's `init` to make your ledger. If your Vault Config has no `holon_lens_map` row, add a Paths row with that key and your one entry.
 
 ---
 
