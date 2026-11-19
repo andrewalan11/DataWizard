@@ -21,6 +21,10 @@
 #   ~/docling-env/bin/pip install docling pymupdf4llm
 #
 # Canonical location: _DataWizard/Seed/Scripts/convert_to_md.sh
+#
+# Changes:
+#   2026-11  PDF output now honours output_dir (passes --output-dir to
+#            batch_pdf_convert.py); trailing slash stripped from output_dir.
 
 set -e
 
@@ -238,8 +242,8 @@ convert_pdf() {
     echo -e "${GREEN}Converting PDF with Docling (via batch_pdf_convert.py)...${NC}"
     echo "  Typical speed: ~27s per PDF on M3."
 
-    # batch_pdf_convert.py accepts both single files and directories
-    $DOCLING_PYTHON "$BATCH_PDF_SCRIPT" "$input" --force
+    # Single PDF here; --output-dir puts the .md, PDF Sections/ and log in $outdir
+    "$DOCLING_PYTHON" "$BATCH_PDF_SCRIPT" "$input" --force --output-dir "$outdir"
 
     local basename=$(basename "$input" .pdf)
     local md_file="$outdir/$basename.md"
@@ -315,6 +319,10 @@ if [ $# -ge 2 ]; then
 else
     OUTPUT_DIR=$(dirname "$INPUT")
 fi
+# Strip trailing slashes (keep a bare "/") so joined paths have no "//"
+while [ "${#OUTPUT_DIR}" -gt 1 ] && [ "${OUTPUT_DIR%/}" != "$OUTPUT_DIR" ]; do
+    OUTPUT_DIR="${OUTPUT_DIR%/}"
+done
 mkdir -p "$OUTPUT_DIR"
 
 # Check tools

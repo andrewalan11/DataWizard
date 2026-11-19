@@ -3,7 +3,7 @@ title: Cowork Scheduled Tasks
 type: guide
 scope: seed
 created: '2026-06-15'
-updated: '2026-11-11'
+updated: '2026-11-19'
 operator: Andrew
 edit_log:
   - 'DW-S479 2026-11-08 - classifier blocks disabling a task; audit tasks of quiet projects'
@@ -26,6 +26,7 @@ edit_log:
   - 'DW-S484 2026-11-08 - tool behaviors B-0347, B-0359 (local tasks, scheduled run limits; Lane B plants P18, P19, P20, P21)'
   - 'DW-S502 2026-11-11 - launchd protected-folder bullet extended (isdir passes, first open fails Errno 1; Terminal inherits access; only Full Disk Access); create_trigger takes no model choice'
   - 'DW-S502 2026-11-11 - review fixes: create_trigger: how to give a task a second model is not known yet'
+  - 'DW-S523 2026-11-19 - device-bound task: model change refused, prompt edit accepted'
 ---
 
 # Cowork Scheduled Tasks
@@ -43,6 +44,8 @@ Operational guidance for running DataWizard automation as Cowork scheduled tasks
 A scheduled task runs on a single model for its entire run; it cannot switch models partway through. Mixed-model workflows (for example a Sonnet extraction pass plus an Opus review pass) must be split into a two-task architecture: one task per model, each on its own cadence. The corpus-enrichment skill's Sonnet-batch-plus-separate-Opus-review pattern is the worked example. (S160)
 
 `create_trigger` takes no model choice: a task created with it runs on the default model. How to give a task a second model is not known yet. (DataWizard, 2026-11)
+
+For a task bound to a computer, `update_trigger` also cannot change the model; see Managing tasks below.
 
 ## Cron jitter: expect up to ~8 minutes
 
@@ -67,6 +70,7 @@ A task that runs without a human in the loop needs all of:
 
 - **Scheduled tasks are account-level, not per-project.** `list_triggers`, `update_trigger` and `delete_trigger` see and edit every task on the account, across all projects. Filter by name or prompt before acting; never delete or disable a task by its position in the list. (DataWizard, 2026-10)
 - **`update_trigger` with a new prompt on a computer-bound task re-signs the prompt through the desktop app and needs the linked computer online.** Send schedule, name and enabled changes in a promptless call - those apply immediately without the computer. Change the prompt only while the computer is linked. (DataWizard, 2026-10)
+- **A device-bound task accepts prompt edits from a session but refuses a model change.** `update_trigger` failed with "model cannot be patched directly on a device-bound routine". Change the model in the desktop app. Seen once. (DataWizard, 2026-11)
 - **`list_triggers` returns every task's full prompt inline** - enough to overflow the tool-result cap on an account with many tasks. Query the saved tool-result file with `jq` or Python instead of reading it inline. (DataWizard, 2026-10)
 - **A task created with `requires_local_device` binds to that computer at creation and defaults to `permission_mode: auto`** (the create result says so). Decide at creation whether the task needs the computer; for what happens when it is absent at fire time, see Other known failure modes. (Holonic Canvas, 2026-10)
 - **A task created without `folders` gets no folders, even when the creating conversation has folders connected.** The create result shows `folders_state: FOLDERS_STATE_NONE`; the run can still reach the vault through the Obsidian MCP, but a file write to another folder (`device_commit_files`, the device shell) has no target. Pass `folders` explicitly at creation (with `requires_local_device`) and check the result says `FOLDERS_STATE_PRESENT`. (DataWizard, 2026-10)

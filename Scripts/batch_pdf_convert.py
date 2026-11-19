@@ -21,11 +21,18 @@ Usage:
     ~/docling-env/bin/python3 batch_pdf_convert.py "/path/to/pdf/folder"
     ~/docling-env/bin/python3 batch_pdf_convert.py "/path/to/pdf/folder" --dry-run
     ~/docling-env/bin/python3 batch_pdf_convert.py "/path/to/pdf/folder" --force
+    ~/docling-env/bin/python3 batch_pdf_convert.py "/path/to/doc.pdf" --output-dir "/path/to/out"
 
 Options:
     --dry-run   List PDFs that would be converted, don't actually convert
     --force     Re-convert even if .md already exists
-    --log-dir   Directory for log file (default: same as input directory)
+    --log-dir   Directory for log file (default: the output folder if
+                --output-dir is given, else the input directory)
+    --output-dir  Folder for the .md and its PDF Sections/ folder (default:
+                the PDF's own folder). Single-PDF input only.
+
+Changes:
+    2026-11  --output-dir added; convert_to_md.sh passes its output folder.
 
 Canonical location: _DataWizard/Seed/Scripts/batch_pdf_convert.py
 """
@@ -453,12 +460,18 @@ def _split_by_word_count(md_text: str, title: str, source_file: str,
 # ---------------------------------------------------------------------------
 
 def convert_single_pdf(pdf_path: Path, logger: ConversionLogger,
-                       force: bool = False) -> None:
-    """Convert a single PDF, with fallback and shell+sections logic."""
+                       force: bool = False, output_dir: Path = None) -> None:
+    """Convert a single PDF, with fallback and shell+sections logic.
+
+    output_dir: where the .md and PDF Sections/ go (default: the PDF's folder).
+    """
 
     pdf_name = pdf_path.name
     stem = pdf_path.stem
-    output_dir = pdf_path.parent
+    if output_dir is None:
+        output_dir = pdf_path.parent
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
     output_md = output_dir / f"{stem}.md"
 
     # Skip if already converted (unless --force)
@@ -564,8 +577,13 @@ def main():
     parser.add_argument("--force", action="store_true",
                         help="Re-convert even if .md exists")
     parser.add_argument("--log-dir", default=None,
-                        help="Directory for log file (default: input directory)")
+                        help="Directory for log file (default: output folder "
+                             "if --output-dir is given, else input directory)")
+    parser.add_argument("--output-dir", default=None,
+                        help="Folder for the .md output (default: the PDF's "
+                             "folder). Single-PDF input only.")
     args = parser.parse_args()
+    output_dir = Path(args.output_dir).resolve() if args.output_dir else None
 
     input_path = Path(args.input_path).resolve()
 
@@ -578,6 +596,11 @@ def main():
         input_dir = input_path.parent
         print(f"\nSingle file mode: {input_path.name}\n")
     elif input_path.is_dir():
+        if output_dir is not None:
+            print("Error: --output-dir works with a single PDF only, not a "
+                  "directory (names found by the recursive scan could collide "
+                  "in one flat folder).")
+            sys.exit(2)
         input_dir = input_path
         pdfs = sorted(input_dir.rglob("*.pdf"))
         print(f"\nFound {len(pdfs)} PDFs under {input_dir}\n")
@@ -591,18 +614,27 @@ def main():
 
     # Dry run mode
     if args.dry_run:
+        def _md_for(p):
+            return (output_dir or p.parent) / f"{p.stem}.md"
+
         for i, pdf in enumerate(pdfs, 1):
             rel = pdf.relative_to(input_dir)
-            md_exists = pdf.with_suffix(".md").exists()
+            md_exists = _md_for(pdf).exists()
             status = " [SKIP - .md exists]" if md_exists and not args.force else ""
             print(f"  {i:3d}. {rel}{status}")
 
-        to_convert = len([p for p in pdfs if not p.with_suffix(".md").exists() or args.force])
+        to_convert = len([p for p in pdfs if not _md_for(p).exists() or args.force])
         print(f"\nWould convert: {to_convert} / {len(pdfs)} PDFs")
         return
 
     # Set up logging
-    log_dir = Path(args.log_dir) if args.log_dir else input_dir
+    if args.log_dir:
+        log_dir = Path(args.log_dir)
+    elif output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        log_dir = output_dir
+    else:
+        log_dir = input_dir
     timestamp = datetime.now().strftime("%Y-%m-%d_%H%M")
     log_path = log_dir / f"conversion_log_{timestamp}.md"
     logger = ConversionLogger(log_path)
@@ -610,6 +642,7 @@ def main():
     logger.log(f"Input: {input_path}")
     logger.log(f"Total PDFs found: {len(pdfs)}")
     logger.log(f"Force mode: {args.force}")
+    logger.log(f"Output folder: {output_dir or 'beside each PDF'}")
     logger.log(f"Log file: {log_path}\n")
 
     # Convert each PDF
@@ -618,7 +651,8 @@ def main():
         logger.log(f"\n[{i}/{len(pdfs)}] {rel}")
 
         try:
-            convert_single_pdf(pdf, logger, force=args.force)
+            convert_single_pdf(pdf, logger, force=args.force,
+                               output_dir=output_dir)
         except KeyboardInterrupt:
             logger.log("\nInterrupted by user!", "WARN")
             logger.write_summary()

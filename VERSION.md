@@ -1,5 +1,5 @@
 
-seed: 1.15.0
+seed: 1.15.2
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,33 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.15.2
+
+**Patch release (2026-11-19): a harvest hub reads documents, and PDF conversion honours the output folder.** One script fix with a new test; canon and skill wording.
+
+- `Scripts/batch_pdf_convert.py`: new `--output-dir` (one PDF only; a folder input with it exits with an error). The .md, `PDF Sections/` and the log go there; without it, nothing changes. `Scripts/convert_to_md.sh` now passes the output folder for PDFs and strips a trailing slash (no more `//` in paths). `Scripts/test_batch_pdf_convert.py` (new): 9 tests, standard library only, no PDF engine needed.
+- `Protocols/YAML Schema/2.0 YAML Schema - Harvest and Federation.md`, Harvest Tracking: new "Document sources" block (`received_from`, `source_origin`, `source_file`, optional `source_path`, `author`, `source_url`; on the synth note `source_format` and `source_origin`).
+- `Protocols/Conventions Registry/9.0 Harvest via embeddable synth note.md`: document synth notes go in `_Companions/_Docs/`. `11.0 Citation format.md`: a hub reading of a document cites by section heading (a third named exception to the block default).
+- Skills: `harvest-router` v1.3.1 (Hub mode: a Documents bullet; the Content Interests digest is an aid - check it against each project's 0.0 on disk), `document-harvest` v0.5.4 and `content-interest-scan` v0.1.3 (a "Not for" pointer to hub reading). `SKILLS.md` rows synced.
+
+**What to do:** nothing breaks. Run `update_seed.sh`. Web-page sources in a hub reading are provisional (tested once).
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
+
+## What's New in 1.15.1
+
+**Patch release (2026-11-19): tool behaviors from partner projects (Earth Changes, Mesocosm, DataWizard).** Docs only; no script or Seed skill changes.
+
+- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: a folder refusal is not constant (the vault root was refused in one session and granted in a later one); a folder added in the project settings did not reach an open chat (Mesocosm). A folder granted at project level can be missing in a new session; check `ls $HOME/mnt/` first (Earth Changes).
+- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: a message to a running sub-agent is queued; a finished agent returned its report on `SendMessage` (seen once); `run_in_background: false` did not hold for a single sub-agent either - plan every Agent call as background; new bullet: token counts are in the task notification, not visible to the agent (seen once) (Earth Changes).
+- `Guides/Cowork Build Environment/4.0 Shell and File-Tool Quirks.md`: overwrite in place and `os.replace` work on the vault mount, only delete is refused; `cp -p` backups keep the source mtime, so `find -newer` misses them (DataWizard).
+- `Guides/MCP Reliability and Write Verification/12.0 Obsidian Behavioral Gotchas.md`: the git bullet no longer says overwrite fails (it contradicted the same guide).
+- `Guides/Cowork Scheduled Tasks.md`: a device-bound task accepts prompt edits but refuses a model change from a session (seen once) (DataWizard).
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0 web_fetch Behaviors.md`: more routes for blocked papers (institutional repositories, OpenAlex); PMC was blocked in one run and worked in another; "the exact sentence that contains X" gave verbatim text in 13 of 13 checks (seen once) (Earth Changes).
+- `SKILLS.md`: the intake-handoff Workshop row synced to v1.0.8.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.15.0
 

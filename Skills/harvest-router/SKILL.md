@@ -9,8 +9,8 @@ description: >-
   correct folders, sets routing YAML, and appends action items to target
   projects.
 type: skill
-version: '1.3.0'
-updated: '2026-11-06'
+version: '1.3.1'
+updated: '2026-11-19'
 origin: 'DW-S312 2026-09-06 - backfilled DW-S448 from the earliest edit_log entry (D127)'
 operator: Andrew
 edit_log:
@@ -18,6 +18,7 @@ edit_log:
   - 'DW-S448 2026-10-31 - example project name made generic (Media Project); no behavior change'
   - 'DW-S456 2026-11-02 - v1.2.1: depersonalized examples (names replaced with neutral placeholders)'
   - 'DW-S470 2026-11-06 - v1.3.0: Fathom paragraph rewritten to the connector path (no export tool); harvest-handoff marker on the Step 6 line; new Hub mode section (D167, D168)'
+  - 'DW-S523 2026-11-19 - v1.3.1: Hub mode notes for document sources; Content Interests digest is an aid (D186)'
 ---
 # Harvest Router Skill
 
@@ -329,7 +330,8 @@ harvest a call itself, and the hub then backfills the other projects.
 - **Second pass.** After the reading, run a checklist pass over the
   Content Interests digest: for each project, check each Content Interests
   line's names, projects and key terms against the call. One reading
-  alone tends to miss a project per call.
+  alone tends to miss a project per call. The digest is an aid: check its
+  date against each project's 0.0 on disk, and read full lines.
 - **A name hit with no Content Interests.** A project named directly in
   the call gets a short section even when its 0.0 has no Content
   Interests list, and the hub posts that project a board ask to write
@@ -347,6 +349,15 @@ harvest a call itself, and the hub then backfills the other projects.
   points at that harvest and adds only the evidence the first harvest did
   not carry; its line is `harvested` only when the section is pointer-only
   ([[YAML Schema]], Harvest Tracking, backfill rule).
+- **Documents.** A hub reads a document (a PDF or other converted
+  document) as it reads a call: the `companion:` claim, the `harvest_log`
+  lines and the Embed Map apply to the `_Docs/` source the same way. The
+  converted document goes in `_Docs/`;
+  its synth note goes in `_Companions/_Docs/c_<document name>.md`. The hub
+  stewards only the files it files there. Cite by the source's section
+  heading, not by timestamp or speaker. End a bullet with the author when
+  the author is known. Source fields: YAML Schema, Harvest Tracking.
+  Web pages are provisional: tested once.
 (DataWizard, 2026-11)
 
 ## After the Scan

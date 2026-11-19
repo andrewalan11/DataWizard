@@ -9,12 +9,13 @@ description: >-
   per-project (default) and cross-project. Two scales: backlog (chunked,
   multi-session) and maintenance (incremental nightly).
 type: skill
-version: '0.1.2'
+version: '0.1.3'
 updated: '2026-11-19'
 status: draft
 edit_log:
   - 'DW-S456 2026-11-02 - v0.1.1: depersonalized examples (names replaced with neutral placeholders)'
   - 'Seed 1.15.0 2026-11-19 - v0.1.2: dedup uses look_write.py find (Conventions Registry 38.0) instead of research_items; scan_state still uses dw_ops.db'
+  - 'DW-S523 2026-11-19 - v0.1.3: Not-for pointer to the hub reading (D186)'
 ---
 # Content Interest Scan Skill
 
@@ -39,6 +40,7 @@ Two operational scales: backlog mode for large unscanned pools (chunked, multi-s
 - Routing individual files that just arrived (use harvest-router)
 - Evaluating external tools or repos (use tools-research)
 - Reviewing Content Interests themselves (use content-interests-review)
+- Reading one source for all projects (that is the hub reading of a harvest hub project; see harvest-router, Hub mode)
 - Harvesting matched content into project documents (use transcript-harvest or document-harvest after this skill surfaces the matches)
 
 ## Before You Start

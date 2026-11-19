@@ -7,8 +7,8 @@ description: >-
   pending, or hand-highlighted documents. NOT for transcripts - use
   transcript-harvest instead.
 type: skill
-updated: '2026-11-02'
-version: '0.5.3'
+updated: '2026-11-19'
+version: '0.5.4'
 edit_log:
   - "MMM meta-learning plant 2026-06-09: added Step 3 (triage before fetching),
     renumbered"
@@ -22,6 +22,7 @@ edit_log:
     Reader-Facing Prose Style guide when the destination is read-aloud-class)"
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v0.5.2 Harvest Log name'
   - 'DW-S456 2026-11-02 - v0.5.3: depersonalized example (a guest name replaced)'
+  - 'DW-S523 2026-11-19 - v0.5.4: Not-for pointer to the hub reading (D186)'
 ---
 
 # Document Harvest Skill
@@ -44,6 +45,7 @@ Harvest content from non-transcript sources — articles, clippings, research do
 - Harvesting from transcripts (use transcript-harvest)
 - Researching external content via web (use research skill)
 - Classifying or routing content (use classify.py)
+- Reading one source for all projects (that is the hub reading of a harvest hub project; see harvest-router, Hub mode)
 
 ## Workflow
 
