@@ -8,8 +8,8 @@ description: >-
   of flagged items, or any link or resource that needs investigation. Covers
   both single-target deep dives and batch triage passes.
 type: skill
-updated: '2026-10-12'
-version: '1.4.2'
+updated: '2026-11-19'
+version: '1.5.0'
 edit_log:
   - "DW-S243 2026-08-05 - v1.3: Parallel Fan-Out section (mandatory spot-verify,
     roster batching, research-before-tiering) + Common Mistakes bullet"
@@ -18,6 +18,7 @@ edit_log:
   - "DW-S349 2026-09-08 - v1.4.1: Reader-Facing Output rule added (load the
     Reader-Facing Prose Style guide for read-aloud-class deliverables)"
   - 'DW-S400 2026-10-12 - v1.4.2: Deep-Read Mode - rewrite/classic split check; run the comparison peer while warm'
+  - 'Seed 1.15.0 2026-11-19 - v1.5.0: tracking is written as look lines (look_write.py add); depth words mapped to the look Depth words; duplicate-check pointer'
 ---
 
 # Tools Research
@@ -49,6 +50,10 @@ This skill separates information gathering (Phase 1) from assessment
 **REQUIRED BACKGROUND:** research-tracking (check tracking before
 starting, update tracking after finishing)
 
+The duplicate check is `find` in research-tracking (Before Research). Until
+your project's old index is converted, also look in that old index for the
+subject, reading it by name (not a grep).
+
 ## Three Modes
 
 ### Single-Target Mode
@@ -67,8 +72,8 @@ Working through a list of flagged items. The rhythm is different:
 4. During reading, harvest standout details (see below)
 5. Assess depth for each item in the cluster
 6. After the cluster, do a batch synthesis step
-7. Write outputs (notes for moderate/deep, inline verdicts for light)
-8. Update tracking for the whole batch at once
+7. Write outputs (notes for moderate/deep; for light, the verdict goes in the look line's Finding)
+8. Write the look lines for the batch at once (`add`)
 9. Plant synthesis findings in target design docs (see below)
 
 Batch mode lets you cross-reference items and spot patterns that
@@ -87,7 +92,7 @@ have harvest potential if the batch is large; their domain knowledge
 is the best filter.
 
 **Two-speed processing.** Within a cluster, switch between sweep
-speed (quick verdict, inline tracking entry, move on) and harvest
+speed (quick verdict, one look line, move on) and harvest
 speed (extract patterns, identify target design docs, preserve
 specific formulations) based on what you find. A sweep item can
 escalate to harvest if the source reveals unexpected depth. A
@@ -169,7 +174,7 @@ research-tracking skill (After Fan-Out -- Route Each Output). (Source: Weave, 20
 4. **Harvest standout details.** While reading, flag specific phrases,
    formulations, failure modes, numbers, or examples that are sharper
    or more concrete than the surrounding text. These go into the
-   research note or tracking entry as preserved details, separate from
+   research note or the look line's Finding as preserved details, separate from
    the summary. The goal is to keep the gems that would otherwise get
    flattened into a generic assessment.
 
@@ -187,11 +192,11 @@ credibility risk.
 ### Phase 2 -- Assess (now form your opinion)
 
 5. **Calibrate depth** (see below) and decide whether to write a full
-   research note or an inline tracking verdict.
+   research note or a look line only.
 6. **Write the output.** See `references/output-template.md` for the
-   research note structure. For light evaluations, write an inline
-   verdict in the tracking index that captures the assessment plus
-   any standout details.
+   research note structure. For light evaluations, write a look line
+   (see research-tracking); the verdict and any standout details go in
+   `--finding`.
 7. **Batch synthesis** (batch mode only). After processing a cluster,
    step back and ask: what patterns emerged across these items? Write
    the pattern where it belongs architecturally -- a design doc, a
@@ -200,7 +205,7 @@ credibility risk.
 8. **Plant findings in target design docs** (batch mode only). After
    synthesis, identify which design docs each finding is relevant to.
    Write a short dated subsection in each target doc with the specific
-   findings and pointers to tracking entries, repos, or source material.
+   findings and pointers to look lines (line id), repos, or source material.
    This is what makes batch research findable when it becomes relevant
    -- a future instance working on that system will read the design doc
    and find the findings waiting there. Without this step, synthesis
@@ -214,14 +219,16 @@ credibility risk.
 
 **Deep** -- High relevance or novel architecture. Read everything
 including source code. Follow all promising links. If it's a goldmine,
-note what remains unread for future passes.
+note what remains unread for future passes. Record the look Depth as
+`deep` when you read the source, or `tested` when you ran it.
 
 **Moderate** -- Adjacent space, interesting but not immediately
 actionable. Full post plus docs, follow 1-2 links. Write a structured
-research note.
+research note. Record the look Depth as `moderate`.
 
 **Light** -- Different domain or clearly not applicable. 1-2 key points.
-Log in tracking with an inline verdict. No full note needed.
+Write a look line. No full note needed. Record the look Depth as
+`light`; if you saw only the title or a listing, record `listed`.
 
 Even at light depth, record the evaluation. A brief verdict saying
 "evaluated, not relevant because X" prevents future re-investigation.

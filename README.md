@@ -278,6 +278,7 @@ _DataWizard/Seed/
   README.md              - This file
   VERSION.md             - Version numbers and update instructions
   VERSION History.md     - Older What's New entries (1.11.4 to 1.11.15) and retired notices
+  VERSION History - 1.14.0 to 1.14.4.md  - Closed part of the version history
   VERSION History - 1.11.16 to 1.13.5.md - Closed part of the version history
   VERSION History - 1.10.0 to 1.11.3.md  - Closed part of the version history
   VERSION History - 1.0.0 to 1.9.5.md    - Closed part of the version history
@@ -290,7 +291,7 @@ _DataWizard/Seed/
   GUIDES.md              - Guides catalog (the list of all guides, by cluster)
   Protocols/             - Operating rules: Conventions Registry, YAML Schema, Editorial Principles, Anti-Patterns, Content Type Taxonomy, Quest Lifecycle
   Skills/                - One folder per skill; SKILLS.md is the catalog
-  Scripts/               - Classification, segmentation, routing, sync, and converter scripts
+  Scripts/               - Classification, segmentation, routing, sync, converter and look line (look_write.py) scripts
   Config/                - Default configuration (enrichment_defaults.yaml)
   Templates/             - Templates for shared files (Coordination Board, Operator Gate Queue)
   Guides/                - Setup and reference guides (Git Guide, Vault Structure Guide, Filename Safety, Federation Guide, Seed Install and Update, MCP Reliability, Cowork Scheduled Tasks, and more)

@@ -9,11 +9,12 @@ description: >-
   per-project (default) and cross-project. Two scales: backlog (chunked,
   multi-session) and maintenance (incremental nightly).
 type: skill
-version: '0.1.1'
-updated: '2026-11-02'
+version: '0.1.2'
+updated: '2026-11-19'
 status: draft
 edit_log:
   - 'DW-S456 2026-11-02 - v0.1.1: depersonalized examples (names replaced with neutral placeholders)'
+  - 'Seed 1.15.0 2026-11-19 - v0.1.2: dedup uses look_write.py find (Conventions Registry 38.0) instead of research_items; scan_state still uses dw_ops.db'
 ---
 # Content Interest Scan Skill
 
@@ -43,13 +44,13 @@ Two operational scales: backlog mode for large unscanned pools (chunked, multi-s
 ## Before You Start
 
 1. Read this skill fully.
-2. Confirm `dw_ops.db` exists at `_DataWizard/_Infrastructure - DataWizard/dw_ops.db`. The scanner depends on the operational database for scan state tracking and research item dedup. If the DB doesn't exist, stop and tell the user it needs to be built first. See `Workshop/Design/Research Tracking Database.md`.
+2. Confirm `dw_ops.db` exists at `_DataWizard/_Infrastructure - DataWizard/dw_ops.db`. The scanner depends on the operational database for scan state tracking (dedup does not use it; it uses `find`, see Dedup check below). If the DB doesn't exist, stop and tell the user it needs to be built first. See `Workshop/Design/Research Tracking Database.md`.
 3. Determine the mode: per-project or cross-project.
 4. Determine the scale: backlog (large unscanned pool) or maintenance (incremental new files).
 
 ## Dependencies
 
-- **dw_ops.db**: Required. The `scan_state` table tracks what's been scanned. The `research_items` table enables dedup checks ("has this already been evaluated?"). Without the DB, the skill cannot track progress across sessions or avoid re-scanning.
+- **dw_ops.db**: Required. The `scan_state` table tracks what's been scanned. Dedup checks ("have we already looked at this?") use `find`, not this database. Without the DB, the skill cannot track progress across sessions or avoid re-scanning.
 - **0.0 Project Guidelines**: Required. The full 0.0 provides project context and Content Interests for matching.
 - **Vault Project Map**: Required for cross-project mode only. `_DataWizard/Workshop/Vault Project Map.md`.
 
@@ -153,7 +154,14 @@ For files that survived Passes 1-2 as likely or possibly relevant, read the cont
 - Which Content Interest category it matches (e.g., "production models", "community governance", "local LLM tools")
 - One-line relevance note explaining why it matched
 
-**Dedup check:** Before recording a match, query `research_items` in dw_ops.db by URL (if the file has one) or by name. If the resource has already been evaluated as a research item, note this in the scan results rather than re-flagging it.
+**Dedup check:** Before recording a match, run `find` by URL (if the file has one) or by name ($V is your vault root):
+
+```
+python3 -I -B "$V/_DataWizard/Seed/Scripts/look_write.py" find --vault "$V" --url "<URL>"
+python3 -I -B "$V/_DataWizard/Seed/Scripts/look_write.py" find --vault "$V" --name "<name>"
+```
+
+A printed line means a project already looked at it; note this in the scan results rather than re-flagging it. `find` writes nothing. On Windows, use `python` or `py` instead of `python3`. If your project still keeps a `research_items` table, query it too until your cutover. Until your project's old index is converted, also look in that old index for the subject, reading it by name (not a grep). See research-tracking (Before Research).
 
 ## Recording Results
 
@@ -240,7 +248,7 @@ matches_medium: N
 - **Files scanned this batch:** N
 - **Matches:** N high, N medium
 - **Files remaining in pool:** M (backlog mode only)
-- **Dedup hits:** N files already in research_items (skipped)
+- **Dedup hits:** N files already looked at (skipped)
 ```
 
 For cross-project mode, organize by project first, then by content interest category within each project.
@@ -255,7 +263,7 @@ Scan complete (backlog batch 3 of ~7).
 - Files scanned: 75
 - High relevance: 8
 - Medium relevance: 12
-- Already evaluated (dedup): 3
+- Already looked at (dedup): 3
 - Remaining in pool: ~150
 
 Report written to: _Infrastructure - ReWoven/...
@@ -307,7 +315,7 @@ Use Obsidian MCP tools (`list_directory`, `read_note`, `get_frontmatter`) for Re
 - **Reading only Content Interests, not the full 0.0.** The project description, architecture decisions, and current state all inform what's relevant. A clipping about "shell + sections patterns" won't match a Content Interest keyword but is clearly DW-relevant.
 - **Blasting through a large backlog too fast.** Slow and thorough beats fast and shallow. If you're processing 200+ files in a single run, you're in backlog mode and should be chunking.
 - **Skipping the YAML pass.** Frontmatter tags, type fields, and existing routing metadata are strong signals that the title alone misses.
-- **Not checking dw_ops.db for dedup.** A file might already be in `research_items` because it was evaluated in a previous research session. Don't re-flag it.
+- **Not running the duplicate check.** A file might already have a look line because it was looked at in a previous research session. Don't re-flag it.
 - **Writing frontmatter on non-matches.** Only touch files that matched. The DB tracks everything; the file only needs to know if it matched.
 - **Forgetting to update the scan shell.** After writing a new section file, add the embed to the scan log shell if it's not already there.
 - **Running cross-project mode on multi-operator projects.** Per-project mode is the default for a reason. Cross-project mode is for solo operators only.
