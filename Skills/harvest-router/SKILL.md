@@ -9,8 +9,8 @@ description: >-
   correct folders, sets routing YAML, and appends action items to target
   projects.
 type: skill
-version: '1.3.1'
-updated: '2026-11-19'
+version: '1.3.2'
+updated: '2026-11-22'
 origin: 'DW-S312 2026-09-06 - backfilled DW-S448 from the earliest edit_log entry (D127)'
 operator: Andrew
 edit_log:
@@ -19,6 +19,7 @@ edit_log:
   - 'DW-S456 2026-11-02 - v1.2.1: depersonalized examples (names replaced with neutral placeholders)'
   - 'DW-S470 2026-11-06 - v1.3.0: Fathom paragraph rewritten to the connector path (no export tool); harvest-handoff marker on the Step 6 line; new Hub mode section (D167, D168)'
   - 'DW-S523 2026-11-19 - v1.3.1: Hub mode notes for document sources; Content Interests digest is an aid (D186)'
+  - 'DW-S525 2026-11-22 - v1.3.2: Hub mode name check reads the spelling list first; new variants are added as register lines with the operator''s yes (D187, Registry 39.0)'
 ---
 # Harvest Router Skill
 
@@ -337,10 +338,14 @@ harvest a call itself, and the hub then backfills the other projects.
   Interests list, and the hub posts that project a board ask to write
   them (content-interests-review skill).
 - **Check the spelling of names.** Before writing a person's or an
-  organisation's name, check `_Entities/` and existing vault notes for the
-  spelling in use. Transcription hears one name many ways, and a new
-  spelling mints a duplicate entity across projects. Note the variants
-  once in the Synopsis.
+  organisation's name, read the spelling list (the file named by
+  `spelling_list` in `Vault Config.md`; skip if unset), then check
+  `_Entities/` and existing vault notes for the spelling in use.
+  Transcription hears one name many ways, and a new spelling mints a
+  duplicate entity across projects. Note the variants once in the
+  Synopsis. A new variant goes on the list as a new line at the end,
+  with the operator's yes (shared add-only register, Conventions
+  Registry 39.0).
 - **Sensitivity marks are mandatory** when any target is a shared layer:
   mark candid remarks about named people inline (Conventions Registry,
   Harvest via embeddable synth note, step 3). A very candid call may stay

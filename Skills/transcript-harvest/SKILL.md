@@ -6,8 +6,8 @@ description: >-
   transcripts with harvest_status: pending, or any transcript with harvest_for
   YAML set. Covers video, podcast, meeting, and voice memo transcripts.
 type: skill
-updated: '2026-11-06'
-version: '0.10.0'
+updated: '2026-11-22'
+version: '0.10.1'
 edit_log:
   - DW-S158 2026-06-08
   - "MMM meta-learning plant 2026-06-09: added Step 4 (check existing vault
@@ -27,6 +27,7 @@ edit_log:
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v0.9.3 Harvest Log name'
   - 'DW-S456 2026-11-02 - v0.9.4: depersonalized examples (names replaced with neutral placeholders)'
   - 'DW-S470 2026-11-06 - v0.10.0: Step 8 harvest_status is a roll-up on multi-project sources; new Accept a hub section step; speaker-label slip line in Segmentation; Step 2 stops pointing at the Fathom Meeting Index (D167, D168)'
+  - 'DW-S525 2026-11-22 - v0.10.1: Step 5 reads the spelling list before naming people (Vault Config spelling_list, Registry 39.0); three-case speaker rule after Speaker labels slip (D187)'
 ---
 
 # Transcript Harvest Skill
@@ -55,7 +56,7 @@ Harvest content from transcripts (video, podcast, meeting, voice memo) into proj
 2. **Check project assignment** — look for `harvest_for` in the transcript's YAML. If a harvest hub has already read the call for several projects (the transcript has a `companion:` synth note with an Embed Map and your project has a `harvest_log` line), do not re-harvest: work your section ("Accept a hub section" below). If `harvest_for` is missing and the transcript sits in a project folder, the project is implicit; otherwise ask the user which project this transcript belongs to. Do not harvest without knowing the destination project.
 3. **Check segmentation** — look for `segmented: true` in YAML. If missing, the transcript needs `##` section headers first. Either run `segment_transcript.py` or add headers manually.
 4. **Check for existing vault sources** -- before declaring any referenced source inaccessible (paywalled, offline, video-only), search `_Clippings/` and `_Transcripts/` for existing copies. YouTube auto-transcripts, previously clipped articles, and federated documents are easy to overlook and may already be in the vault. In MMM S07, a DISI talk initially dismissed as "YouTube-only" was already in `_Clippings/` as a full transcript and turned out to be the most project-relevant source of the entire batch.
-5. **Read the transcript** — understand the full content before extracting anything.
+5. **Read the transcript** — understand the full content before extracting anything. **Read the spelling list first**, before you name any speaker, person or group: the file named by `spelling_list` in `Vault Config.md` (Conventions Registry 39.0). Use its `correct` spelling for each `heard` form. If `spelling_list` is not set, skip this silently. A new misheard name goes on the list as a new line at the end, with the operator's yes (Registry 39.0).
 6. **Triage multi-topic sources** -- if the transcript covers multiple topics or threads, surface the topic list to the user and offer to skip stale or low-relevance items before writing. This keeps the harvest lean and avoids over-capturing content the user has already moved past. Especially valuable for chat-style transcripts and multi-meeting catch-up conversations where some threads may be outdated by harvest time.
 7. **Harvest into destination docs** — synthesize relevant content into project documents. Use citation format: `([[NoteTitle#Section Header|YYYY-MM-DD — Section Name]])`. Don't transcribe — synthesize.
 8. **Update source YAML** -- set `harvested_into` (with section-level anchors), `harvest_date`, and `harvest_notes`. For re-harvests, append to `harvested_into` and convert `harvest_date` to an array (most recent last). **Single-project source:** also set `harvest_status` (`harvested`, or `reviewed` with `harvest_notes` explaining why nothing was harvested). **Source routed to two or more projects** (`harvest_for` lists two or more): add your own `harvest_log` line instead and never hand-set `harvest_status` - it is a roll-up of every project's latest line (grammar, roll-up and backfill rule: [[YAML Schema]], Harvest Tracking).
@@ -86,6 +87,8 @@ Bad headers (too generic):
 Add headers on a first read-through, before extracting content. For very short transcripts (under ~1,000 words) headers may not be necessary - use judgment.
 
 **Speaker labels slip.** Automatic transcription (Fathom especially) often swaps speaker labels at turn changes. Credit a point to the speaker by what was said - the content, who the call is about, who answers whom - not by the label alone, and note the slip where you correct a label (for example "label shows B; the content is A's"). (DataWizard, 2026-11)
+
+**Most of the time the speaker does not matter.** It matters in three cases only: (1) an idea is being developed that someone may later claim as their own work; (2) a decision or an agreement is made; (3) someone takes on a task (an action item needs its owner). For an uncertain label outside these cases, do not guess: write the point with no name and mark it "speaker not important". In the three cases, ask the operator, and give the turn's time so the recording can settle it. Who said something in the call is not always who had the idea first; credit an origin only when the call shows it. (ReWoven, 2026-11)
 
 ## Chunk and Route
 

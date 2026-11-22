@@ -2,12 +2,13 @@
 title: Conventions Registry
 type: protocol
 created: '2026-06-13'
-updated: 2026-11-18
+updated: 2026-11-22
 origin: DW-S181 2026-06-13
 operator: Andrew
 priority: high
 maturity: working
 edit_log:
+  - 'DW-S525 2026-11-22 - 39.0 Shared add-only registers embedded (D187)'
   - 'Seed 1.15.0 2026-11-18 - 38.0 Project looks - the ledger line embedded (D183)'
   - 'DW-S417 2026-10-17 - Tech tool evaluations entry added (three notes per tool, look there first, who writes, core trigger, adopt on touch, tool note naming; D153 TT1-TT5 + S417 rulings); Holonic records sync rule 5 points at it for tools'
   - 'DW-S408 2026-10-15 - board intake plant: Model routing gains the build-round shape - top tier plans and reviews, default tier builds and owns visual design, review falls to the default tier rather than being dropped (Evolutionary Media Commons)'
@@ -174,3 +175,5 @@ Entries live as section files in the `Conventions Registry/` folder beside this 
 ![[37.0 Intake capture placement]]
 
 ![[38.0 Project looks - the ledger line]]
+
+![[39.0 Shared add-only registers]]

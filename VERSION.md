@@ -1,5 +1,5 @@
 
-seed: 1.15.2
+seed: 1.15.4
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,33 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.15.4
+
+**Patch release (2026-11-22): seven tool behaviors planted in the platform guides.** Guide wording only; no script changes.
+
+- `Guides/Cowork Build Environment/8.1 Device Bridge - Staging, Commits and Transport.md`: a copy longer than the call limit runs in parts with `dd` (`skip`, `seek`, `conv=notrunc`, then `md5sum`); the Dropbox mount bullet notes that the failure is not constant.
+- `Guides/Cowork Build Environment/3.0 Python and Packages.md`: packages installed with `pip install --break-system-packages` in the device shell stay for the session.
+- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: a builder can be resumed several times with `SendMessage` and a short brief; reviewers stay fresh agents.
+- `Guides/Chrome MCP and Web Tool Behaviors/6.0 Scripted Downloads from the Shells (Container and Device).md`: a large download as repeated resumable foreground `curl` calls, because a background download dies with the `device_bash` call.
+- `Guides/Chrome MCP and Web Tool Behaviors/10.0 Claude-in-Chrome Extension from a Cowork Cloud Session.md`: Chrome screenshots are files in the cloud container and can be archived; `browser_batch` stops at a site change; a scroll can zoom a canvas app.
+
+**What to do:** nothing breaks. Run `update_seed.sh`.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
+
+## What's New in 1.15.3
+
+**Patch release (2026-11-22): a shared spelling list for harvests, and three small harvest rules.** Canon and skill wording; no script changes.
+
+- `Protocols/Conventions Registry/39.0 Shared add-only registers.md` (new): a shared register is a data file that sessions of several projects may add lines to. Only files listed under `shared_registers:` in your `Vault Config.md` count. Add a line at the end, with the operator's yes and your session id; never edit or delete another session's line; the latest line wins; the owning project tidies by rotating to an archive. Data, not canon: the canon write gate (15.0) is unchanged. First register type: the spelling list, line form `- heard | correct | project | core_id | session | note`. `Conventions Registry.md` embeds it.
+- `Protocols/Conventions Registry/28.0 ID families.md`: a row for harvest point ids (`h<YYMMDD>-NNN`, prefix claimed in the transcript's frontmatter; pilot).
+- `Protocols/Conventions Registry/7.0 Shell and section architecture.md`: a large non-markdown data file beside a source (for example a harvest trace in JSON) is exempt from the 50 KB split rule.
+- Skills: `transcript-harvest` v0.10.1 (Step 5 reads the spelling list before naming people; the speaker matters in three cases only: an idea someone may claim, a decision or agreement, a task taken on), `harvest-router` v1.3.2 (Hub mode name check reads the spelling list; new variants are added as register lines). `SKILLS.md` rows synced.
+
+**What to do:** nothing breaks. Run `update_seed.sh`. To use a spelling list, add `spelling_list:` (the file's vault-relative path) and `shared_registers:` (the same path) to the Paths table of your `Vault Config.md`. Without them, harvests skip the step.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.15.2
 
