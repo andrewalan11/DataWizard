@@ -1,5 +1,5 @@
 
-seed: 1.15.5
+seed: 1.15.6
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,18 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.15.6
+
+**Patch release (2026-11-22): harvest point ids when several projects harvest one call.** Registry and YAML Schema wording only; no script changes.
+
+- `Protocols/Conventions Registry/28.0 ID families.md`: the Harvest point ids row. One call has one id space, kept on the transcript. Whoever files the transcript writes `point_id_prefix:`. Each project that harvests the call claims its own number block there, in the new list field `point_id_blocks:` (one line per block, with `project` and `range`; blocks are 001-999, then 1000-1999, and so on). A claim is checked by a re-read; on a clash, the later line moves to the next free block. A retired id stays in its harvest note as a line marked retired. A planted passage cites its point with a normal block citation. The row is still a pilot.
+- `Protocols/Conventions Registry/11.0 Citation format.md`: new paragraph "Harvest point ids" - a harvest point id is a valid block anchor, a planting link is a normal citation, and a passage gets its own `^bN` only when something cites it.
+- `Protocols/YAML Schema/2.0 YAML Schema - Harvest and Federation.md`: new section "Harvest point ids (pilot)" - the form of the two transcript fields `point_id_prefix:` and `point_id_blocks:`; the rules stay in Registry 28.0.
+
+**What to do:** nothing breaks. Run `update_seed.sh`. Projects that do not harvest calls need no change. A project that already mints point ids on a call adds `point_id_prefix:` and its block line to the transcript before its next id.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.15.5
 
