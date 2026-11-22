@@ -7,10 +7,11 @@ description: >-
   pick up where we left off' in a new thread and there's no log entry for the
   previous session.
 type: skill
-updated: '2026-11-08'
+updated: '2026-11-22'
 origin: 'DW-S158 2026-06-08 - backfilled from the earliest edit_log entry (D127)'
-version: '4.11.6'
+version: '4.11.7'
 edit_log:
+  - 'DW-S530 2026-11-22 - decision status words (B-0478): v4.11.7: Step 2 a proposed Decision Log entry names its status (Binding or Working approach)'
   - 'DW-S480 2026-11-08 - v4.11.6: Step 3.14 branch for a hub-project session that edited files of a solo project (Registry 15.0 exception; D173)'
   - 'DW-S456 2026-11-02 - v4.11.5: Pre-close reflection - dead link to a maintainer-only note replaced with its two-sentence rationale (release smoke test blocker; Fable-reviewed)'
   - 'DW-S446 2026-10-31 - Seed error-check fixes: v4.11.4 gate rows, board ids, Harvest Log'
@@ -91,7 +92,7 @@ Scan the conversation for:
 
 Follow the output format below. Write the close artifacts directly to the vault -- there is no pre-write approval gate for routine closes. The chat deliverable is exactly two things: the **files touched** (created / updated / moved) and **What's next**. Everything else -- log-entry composition, frontmatter stamping, edit_logs, ledger updates -- happens in the vault, not in chat.
 
-**Always stop and ask first, before writing, for judgment-class items:** a Decision Log entry (it binds future sessions), a status change on someone else's work (you are speaking for another operator), or a claim about what a third party said (misattribution risk). A blanket gate everyone silently skips erodes the rules that matter (ceremony diet, S196); this restatement concentrates the gate where the write is genuinely irreversible or speaks for others. Scope: this governs the close ceremony only -- the PI Working Rules (share plan first, show edits) still govern live working sessions.
+**Always stop and ask first, before writing, for judgment-class items:** a Decision Log entry or a change note to one (it guides future sessions), a status change on someone else's work (you are speaking for another operator), or a claim about what a third party said (misattribution risk). A blanket gate everyone silently skips erodes the rules that matter (ceremony diet, S196); this restatement concentrates the gate where the write is genuinely irreversible or speaks for others. Scope: this governs the close ceremony only -- the PI Working Rules (share plan first, show edits) still govern live working sessions. When proposing a Decision Log entry, ask the operator: Binding or Working approach (optional; Conventions Registry 13.0).
 
 **A proposed Decision Log entry is written down before close.** When a Decision Log entry still waits for approval at close, write its proposed text into the session entry (a "Proposed decision" block) or into a working doc the entry links, so the next session can approve it as written. Text shown only in chat is gone when the thread ends; one project had to rebuild a proposed decision from the records a session later. (Community Stack, 2026-10)
 

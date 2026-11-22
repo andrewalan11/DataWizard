@@ -1,5 +1,5 @@
 
-seed: 1.15.4
+seed: 1.15.5
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,21 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.15.5
+
+**Patch release (2026-11-22): seven tool behaviors planted in the guides, and optional status words for decision-log entries.** Guide, Registry and skill wording only; no script changes.
+
+- `Guides/Chrome MCP and Web Tool Behaviors/4.0 web_fetch Behaviors.md`: parallel WebFetch calls to one site are rate limited - groups of at most 4, no two links of one site; YouTube video pages mostly fail.
+- `Guides/Chrome MCP and Web Tool Behaviors/6.0 Scripted Downloads from the Shells (Container and Device).md`: a `device_bash` curl loop over many links can be denied by the auto-mode classifier; use WebFetch in small groups or the operator's Terminal.
+- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: a sub-agent has a large fixed token cost; size link-reading batches at 30 or more.
+- `Guides/Git Guide/5.5 DW Save.md`: `launchctl unload` without `-w` lasts until logout (RunAtLoad syncs at the next login), `launchctl load` starts one sync; the hotkey is an Obsidian Shell Commands binding (works with the job unloaded, not with Obsidian closed).
+- `Protocols/Conventions Registry/13.0 Decision-log conventions.md`: optional decision status - `Status: Binding` or `Status: Working approach - test and revise` with `Revisit when:`, a `Guardrail (binding):` line, and four guards. Entries without a Status line are unchanged.
+- `Skills/session-closer/SKILL.md` (v4.11.7): Step 2 asks whether a proposed Decision Log entry is Binding or Working approach.
+
+**What to do:** nothing breaks. Run `update_seed.sh`. Existing decision logs need no edits; use the status words on new entries if you want them.
+
+**Propagation:** `update_seed.sh`. The session-closer change is in the skill file, so it takes effect at the next close. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.15.4
 
