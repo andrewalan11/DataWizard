@@ -1,5 +1,5 @@
 
-seed: 1.15.6
+seed: 1.15.7
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,19 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.15.7
+
+**Patch release (2026-11-26): browser tests in the cloud workspace first, and no tool kit copied into each chat's home.** Guide wording only; no script or skill changes.
+
+- `Guides/Cowork Build Environment/8.1 Device Bridge - Staging, Commits and Transport.md`, the session-disk bullet: a new session disk filled by space in one day, because a browser-test kit (about 1.2 GB) was copied into the home of each chat that ran browser tests. New rules: never copy a tool kit into each chat's home; use one copy in place by full path (tested recipe, and its limit: the other home must be readable); before an install or copy above 100 MB in the device shell, run `df -h /sessions` and stop if less than 3 GB is free; a sub-agent does not install or copy tool setups. Whether a chat open before a disk swap keeps a device shell is now marked not constant, with both sightings.
+- `Guides/Cowork Build Environment/9.0 Verification Discipline for Builds.md`: new bullet - run browser tests in the cloud workspace first, where Playwright and Chromium are preinstalled, so they use no session disk. Use the device shell only when a test needs WebKit or Firefox, and then one shared kit in place.
+- `Guides/Cowork Build Environment/8.0 Device Bridge.md`: the session-disk bullet points to 8.1 for the one-day fill; the no-shell bullet says a pre-swap chat may keep or lose its shell (not constant).
+- `Guides/Cowork Build Environment/8.2 Device Bridge - Sub-agents and Orchestration.md`: the device-shell worker bullet points to the 8.1 rule.
+
+**What to do:** nothing breaks. Run `update_seed.sh`. If a project has a test setup script that copies a browser kit into each chat's home, change it to run Chromium tests in the cloud workspace, and to use one shared kit in place when a test truly needs WebKit or Firefox.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.15.6
 
