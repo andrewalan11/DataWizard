@@ -14,12 +14,13 @@ edit_log:
   - 'DW-S449 2026-11-01 - sub-check (d): skip an awareness ask whose seen_by holds this project; lapsed asks no longer show'
   - 'DW-S455 2026-11-02 - sub-check (d): read the index Board.md plus your own Inbox/<ABBR>.md; claims in the index; trace format unchanged (lands with PI 4.10)'
   - 'DW-S470 2026-11-06 - sub-check (c): harvest handoffs line - list open <!-- harvest-handoff --> lines in the 0.5, section files included; trace format unchanged (D168)'
+  - 'DW-S543 2026-11-26 - Seed 1.15.7: sub-check (b): device disk line - df on the session disk once at orientation, warn at 70%, plan the swap at 80%, fast fill above 50% on a young disk; trace format unchanged, no PI change'
 maturity: working
 operator: Andrew
 seed_version: 1.2.0
 title: Orientation Flag Sweep - Query Spec
 type: guide
-updated: 2026-11-06
+updated: 2026-11-26
 origin: 'DW-S272 2026-08-18 - backfilled from the earliest edit_log entry (D127)'
 ---
 # Orientation Flag Sweep - Query Spec
@@ -144,6 +145,8 @@ The degradation is not only caps and empty-`{}` results: **the MCP can serve non
 Among the session-log stubs already listed at claim time (PI Step 3a), select those that are `status: in-progress`, owned by the CURRENT operator, older than `STALE_STUB_DAYS`, and NOT claimed today (live-sibling guard). For each, offer to **mark it abandoned with a one-line reason** -- offer only, never auto-author, and never touch another operator's stub.
 
 v1 is detect + offer + mark-abandoned. Backfill-and-close (reconstructing the entry from the stub's git-commit window) is a later build gated on the git-reconstruction helper; a v1 that "closed" a stale stub without it would be a pattern-matched session close, which the lifecycle-skill rule forbids.
+
+**Device disk (one line, same check).** When the session has a device shell, run `df -h /sessions; df -i /sessions` once at orientation. If space or file entries are at 70% or more, tell the operator in the orientation message. At 80% or more, say that the disk swap must be planned now (Cowork Build Environment, 8.0 Device Bridge, the session-disk bullet). If the disk is under about two weeks old and already above 50%, say that something is filling it fast, and point to the session-disk bullets in Cowork Build Environment 8.1. A `device_bash` that fails on every call is itself the signal (8.0). Surfaces without a device shell skip this line. It does not change the trace: report it in the orientation message, not as a new trace fragment. (DataWizard, 2026-11)
 
 ## Sub-check (c) -- intake what's-new [optional, cheap]
 
