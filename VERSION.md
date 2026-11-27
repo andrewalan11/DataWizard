@@ -1,5 +1,5 @@
 
-seed: 1.15.7
+seed: 1.15.8
 protocol: 1.8
 project_instructions: 4.10
 
@@ -22,6 +22,16 @@ On 2026-10-17 the Seed repo's git history was rewritten a second time (privacy a
 **Forks:** a fork made before 2026-10-17 still serves the old commits. Delete it and fork again; re-apply any local work as a new branch on the new `main`. Never merge a pull request that lists hundreds of commits or says "unrelated histories" - that is the old history coming back.
 
 Never use `git pull --allow-unrelated-histories` or any merge to recover. (DataWizard, 2026-10)
+
+## What's New in 1.15.8
+
+**Patch release (2026-11-27): finishing a merge commit from the device shell.** Guide wording only; no script or skill changes.
+
+- `Guides/Git Guide/9.0 Troubleshooting.md`, section "Agent-Left HEAD.lock and maintenance.lock": new paragraph. Request the delete grant before `git commit`; the device shell has no git identity (pass `-c user.name` and `-c user.email` from the last local commit, no config change); the device shell cannot push (no GitHub sign-in), so the operator pushes from the Mac Terminal and checks with `git status -sb`. The narrow exception for git through the device shell does not change.
+
+**What to do:** nothing breaks. Run `update_seed.sh`.
+
+**Propagation:** `update_seed.sh`. No Project Instructions change and no re-paste. (DataWizard, 2026-11)
 
 ## What's New in 1.15.7
 
